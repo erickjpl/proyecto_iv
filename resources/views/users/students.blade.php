@@ -14,7 +14,8 @@
 				                <th>Nombre</th>
 				                <th>Apellido</th>
 				                <th>Email</th>
-				                <th>Activo</th>
+				                <th>Estatus</th>
+                                <th>Activo</th>
 				                <th>Acciones</th>
 				            </tr>
 				        </thead>

@@ -1,9 +1,9 @@
 (function($){
   "use strict";
-  var modStudent = {
+  var modUsers = {
     btoaFieldsAjax:false,
     typeAjax:"GET",
-    table:'#tblstudents',
+    table:'#tblusers',
     data:[],
     launch: function(){
       this.dataTable(this.table);
@@ -26,7 +26,7 @@
     },
     dataTable:function(idtable){
         $(idtable).DataTable( {
-            "ajax": './studentslist',
+            "ajax": './userslist',
             "language": {
               "lengthMenu": "Total de registros:_MENU_ ",
               "zeroRecords": "No se encontraron registros que mostrar",
@@ -52,6 +52,6 @@
     }
   }
   $(document).ready(function(){
-    modStudent.launch();
+    modUsers.launch();
   });
 })(jQuery);

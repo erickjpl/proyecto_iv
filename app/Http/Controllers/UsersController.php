@@ -3,23 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Student;
+use App\User;
+use App\Profile;
 use Illuminate\Http\Request;
 use View;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    
+
+    public function indexStudents()
     {
         return View::make('users.students')->withName('steve');
+    }
+
+    public function indexUsers()
+    {
+        return View::make('users.users')->withName('steve');
     }  
 
     /**
-     * [listStudents retorna lista de estudiantes]
+     * [listStudents retorna lista de estudiantes
+     * renderiza Datatable]
      * @return [json] 
      */
     public function listStudents(){
@@ -28,21 +33,57 @@ class UsersController extends Controller
         if(!empty($data)){
             $resp=array();
             foreach ($data as $key => $value) {
-                $true=($value->active=='true')?'checked':'';
-                $false=($value->active=='false')?'checked':'';
+                $true=($value->active==='true')?'selected':'';
+                $false=($value->active==='false')?'selected':'';
                 $select='<select name="active_profile" data-user="'.$value->id.'" class="acc_profile form-control">
                          <option '.$true.' value="true">Si</option>
                          <option '.$false.' value="false">No</option>
                          </select>';
                 $actions='<button type="button" class="acc_mod btn btn-primary btn-xs" data-user="'.$value->id.'">Modificar</button>
                           <button type="button" class="acc_del btn btn-danger btn-xs" data-user="'.$value->id.'">Eliminar</button>';
-                $value->active=$select;
+                $value->active_select=$select;
+                $value->active=($value->active=='true')?'Si':'No';
                 $value->actions=$actions;
                 $resp["data"][]=$value;
             }
         }
         return response()->json($resp);
     }
+
+    /**
+     * [listUsers retorna lista de usuarios
+     * renderiza Datatable]
+     * @return [json] 
+     */
+    public function listUsers(){
+        $objUser= new User();
+        $objProfile= new Profile();
+        $profiles[]=$objProfile->pro_admin;
+        $profiles[]=$objProfile->pro_teacher;
+        $data=$objUser->getUsers('',$profiles);
+        if(!empty($data)){
+            $resp=array();
+            foreach ($data as $key => $value) {
+                $true=($value->active==='true')?'selected':'';
+                $false=($value->active==='false')?'selected':'';
+                $select='<select name="active_profile" data-user="'.$value->id.'" class="acc_profile form-control">
+                         <option '.$true.' value="true">Si</option>
+                         <option '.$false.' value="false">No</option>
+                         </select>';
+                $actions='<button type="button" class="acc_mod btn btn-primary btn-xs" data-user="'.$value->id.'">Modificar</button>
+                          <button type="button" class="acc_del btn btn-danger btn-xs" data-user="'.$value->id.'">Eliminar</button>';
+                $value->active_select=$select;
+                $value->active=($value->active=='true')?'Si':'No';
+                $value->actions=$actions;
+                $resp["data"][]=$value;
+            }
+        }
+        return response()->json($resp);
+
+    }
+
+
+
     /**
      * Show the form for creating a new resource.
      *

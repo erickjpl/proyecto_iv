@@ -70,11 +70,12 @@ class RegisterController extends Controller
             ['name' => $data['name'],
              'lastname' => $data['lastname'], 
              'email' => $data['email'],
-             'password' => bcrypt($data['password'])
+             'password' => bcrypt($data['password']),
+             'created_at' => date('Y-m-d H:m:s')
             ]
         );
         if(is_int($id)){
-           if(DB::table('user_profile')->insert(['user_id' => $id, 'profile_id' => $data['perfil']])){
+           if(DB::table('users_profiles')->insert(['user_id' => $id, 'profile_id' => $data['perfil']])){
                 return $data_user=$objUser::find($id);
            }else{
                 return false;
