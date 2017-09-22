@@ -12,6 +12,13 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/lib/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('js/lib/datatables.min.js') }}"></script>
+    <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>
 </head>
 <body>
     <div id="app">
@@ -70,11 +77,7 @@
                 </div>
             </div>
         </nav>
-
         @yield('content')
     </div>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

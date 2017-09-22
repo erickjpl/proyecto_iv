@@ -1,5 +1,6 @@
 @extends('layouts.header')
 
+
 @section('content')
 
 <div class="container">
@@ -10,7 +11,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12">
-                            <button type="button" id="registrar" class="btn btn-success">Registrar</button>
+                            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalRegistry" >Registrar</button>
                         </div>
                     </div>
                     <br>
