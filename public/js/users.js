@@ -7,6 +7,9 @@
     data:[],
     launch: function(){
       this.dataTable(this.table);
+      this.selectProfile();
+      this.validateModal();
+      this.sendUser();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -49,9 +52,55 @@
                 { "data": "actions","sClass": 'text-center' }
             ]
         },);
+    },selectProfile:function(){
+      var select=$("#perfil");
+      select.append($('<option>',{'value':''}).text('Seleccione'));
+      var select_profile=this.consult('./profileslist',[],'GET');
+      select_profile.done(function(d){
+          $.each( d, function( i, val ) {
+              select.append($('<option>',{'value':val.id}).text(val.name));
+          });
+      });
+    },validateModal:function(){
+        $("#registro-usuario").validate({
+            validClass: "success"
+        });
+        $( "#nombre" ).rules( "add", {
+            required: true,
+            messages: {
+                required: ""
+            }
+        });
+        $( "#apellido" ).rules( "add", {
+            required: true,
+            messages: {
+                required: ""
+            }
+        });
+        $( "#email" ).rules( "add", {
+            required: true,
+            email:true,
+            messages: {
+                required: "",
+                email:"",
+            }
+        });
+        $( "#perfil" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+    },sendUser:function(){
+      $("#saveuser").click(function() {
+        if($("#registro-usuario").valid()){
+           
+        }
+      });
     }
   }
   $(document).ready(function(){
     modUsers.launch();
+
   });
 })(jQuery);

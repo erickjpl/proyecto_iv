@@ -30,8 +30,8 @@ class UsersController extends Controller
     public function listStudents(){
         $objStudent= new Student();
         $data=$objStudent->getStudents();
+        $resp["data"]=array();
         if(!empty($data)){
-            $resp=array();
             foreach ($data as $key => $value) {
                 $true=($value->active==='true')?'selected':'';
                 $false=($value->active==='false')?'selected':'';
@@ -61,8 +61,8 @@ class UsersController extends Controller
         $profiles[]=$objProfile->pro_admin;
         $profiles[]=$objProfile->pro_teacher;
         $data=$objUser->getUsers('',$profiles);
+        $resp["data"]=array();
         if(!empty($data)){
-            $resp=array();
             foreach ($data as $key => $value) {
                 $true=($value->active==='true')?'selected':'';
                 $false=($value->active==='false')?'selected':'';
@@ -80,6 +80,16 @@ class UsersController extends Controller
         }
         return response()->json($resp);
 
+    }
+
+    /**
+     * [store description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function store(Request $request)
+    {
+        dd($request);
     }
 
 

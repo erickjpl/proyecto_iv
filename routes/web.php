@@ -22,6 +22,7 @@ Route::get('students', 'UsersController@indexStudents');
 Route::get('studentslist', 'UsersController@listStudents');
 Route::get('users', 'UsersController@indexUsers');
 Route::get('userslist', 'UsersController@listUsers');
+Route::get('profileslist', 'ProfilesController@getProfiles');
 
 
 
