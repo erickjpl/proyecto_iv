@@ -3,17 +3,22 @@
   var modUsers = {
     btoaFieldsAjax:false,
     typeAjax:"GET",
-    table:'#tblusers',
+    table_id:'#tblusers',
+    table:'',
     data:[],
+    user:'',
     launch: function(){
-      this.dataTable(this.table);
+      this.dataTable(this.table_id);
       this.selectProfile();
       this.validateModal();
-      this.sendUser();
+      this.saveUser();
+      this.btnRegistry();
+      this.btnModifique();
+      this.modifUser();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
-        var value="", data="", a=(async!=undefined||async==false?false:true), method=(type!=undefined?this.typeAjax:type);
+        var value="", data="", a=(async!=undefined||async==false?false:true), method=(type==undefined?this.typeAjax:type);
         for(var key in params){
           value = (this.btoaFieldsAjax?(btoa!=undefined||btoa==true?params[key]:btoa(params[key])):params[key]);
           data += (data.length<=0?key+'='+value:'&'+key+'='+value);
@@ -23,12 +28,13 @@
           url: url,
           data: data,
           dataType: 'json',
-          async: a
+          async: a,
+          headers: (method=="POST"?{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}:"")
         });
       }
     },
     dataTable:function(idtable){
-        $(idtable).DataTable( {
+        this.table=$(idtable).DataTable( {
             "ajax": './userslist',
             "language": {
               "lengthMenu": "Total de registros:_MENU_ ",
@@ -62,7 +68,7 @@
           });
       });
     },validateModal:function(){
-        $("#registro-usuario").validate({
+        $("#form-create-user").validate({
             validClass: "success"
         });
         $( "#nombre" ).rules( "add", {
@@ -91,16 +97,103 @@
                 required: "",
             }
         });
-    },sendUser:function(){
-      $("#saveuser").click(function() {
-        if($("#registro-usuario").valid()){
-           
+    },saveUser:function(){
+       $("body").on("click","#saveuser", function(){
+        if($("#form-create-user").valid()){
+           var nombre = $("#nombre").val();
+           var apellido = $("#apellido").val(); 
+           var email = $("#email").val();
+           var perfil = $("#perfil").val();
+           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil};
+           var save=modUsers.consult('./saveuser',form,'POST');
+           save.done(function(d){
+              var result=d.original;
+              var msj='Operacion realizada con éxito';
+              var title='Mensaje!';
+              var error='';
+              if(result.oper==false){
+                 msj='Error comuniquese con el Administrador';
+                 title='Error!';
+                 error=result.error;
+              }else{
+                var id=modUsers.table;
+                id.ajax.reload();
+              }
+              $('#modalRegistry').modal('hide');
+              modUsers.Modal('#modal_operacion',msj,title,error);
+           });
         }
       });
-    }
+    },modifUser:function(){
+      $("body").on("click","#moduser", function(){
+        if($("#form-create-user").valid()){
+           var nombre = $("#nombre").val();
+           var apellido = $("#apellido").val(); 
+           var email = $("#email").val();
+           var perfil = $("#perfil").val();
+           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,_method:'PUT'};
+           var update=modUsers.consult('./moduser/'+modUsers.user,form,'POST');
+           update.done(function(d){
+            console.log(d);
+           });
+        }
+      });
+    },Modal:function(modal,msj,title,error,data_user){
+        
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {
+            
+            $(".input-modal").each(function( index ) {
+                $(this).val('').removeClass('error');
+            });
+            if(typeof data_user !== 'undefined' || data_user!='' || data_user!=null ){
+              if(data_user!==undefined){
+                $( ".modalsave" ).each(function( index ) {$(this).attr('id','moduser');});
+                $('#nombre').val(data_user.name);
+                $('#apellido').val(data_user.lastname);
+                $('#email').val(data_user.email);
+                $('#email').val(data_user.email);
+                $('#perfil').val(data_user.profile_id);
+                $("#id-user-modal").val(btoa(data_user.id))
+              }
+              }
+              if(msj!==undefined || msj!='' || msj!=null ){
+                $("#oper_mensaje").text(msj);
+              }
+              if(title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
+        })
+        $(modal).on("hidden.bs.modal", function () {
+            $(".modal-backdrop").each(function(){
+              $(this).remove();
+            });
+        });
+
+    },btnRegistry:function(){
+      $('#btnRegistry').click(function() {
+          $( ".modalsave" ).each(function( index ) {
+              $(this).attr('id','saveuser');
+          });
+          modUsers.Modal('#modalRegistry','','','','');
+      });
+    },btnModifique:function(){
+      $("body").on("click",".acc_mod", function(){
+          modUsers.user=$(this).attr('data-user');
+          modUsers.LoadModalUser(modUsers.user);
+      });
+    },LoadModalUser:function(id){
+        var data=modUsers.consult('./getuser',{'id_user':id},'GET');
+        data.done(function(d){
+          var result=d[0];
+          modUsers.Modal('#modalRegistry','','','',result);
+        });
+    },
   }
   $(document).ready(function(){
     modUsers.launch();
-
   });
 })(jQuery);

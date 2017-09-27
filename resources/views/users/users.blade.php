@@ -9,7 +9,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12">
-                            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalRegistry" >Registrar</button>
+                            <button type="button" class="btn btn-success btn-md" data-toggle="modal" id="btnRegistry" >Registrar Usuario</button>
                         </div>
                     </div>
                     <br>

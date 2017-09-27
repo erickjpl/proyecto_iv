@@ -12,6 +12,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">   
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">   
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
@@ -20,7 +21,6 @@
     <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/lib/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('js/lib/additional-methods.min.js') }}"></script>
-
 </head>
 <body>
     <div id="app">
@@ -53,13 +53,13 @@
                         <!-- Authentication Links -->
                         @guest
                             <li><a href="{{ route('login') }}">Login</a></li>
+                            <li><a href="{{ route('register') }}">Register</a></li>
                         @else
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <a href="#" id="dLabel" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
-
-                                <ul class="dropdown-menu" role="menu">
+                                <ul class="dropdown-menu" aria-labelledby="dLabel">
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -79,5 +79,8 @@
         </nav>
         @yield('content')
     </div>
+    <script>
+        $('.dropdown-toggle').dropdown()
+    </script>
 </body>
 </html>
