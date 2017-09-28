@@ -15,6 +15,8 @@
       this.btnRegistry();
       this.btnModifique();
       this.modifUser();
+      this.btnDelete();
+      this.DelUser();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -64,7 +66,9 @@
       var select_profile=this.consult('./profileslist',[],'GET');
       select_profile.done(function(d){
           $.each( d, function( i, val ) {
-              select.append($('<option>',{'value':val.id}).text(val.name));
+              if(val.active_select=='true'){
+                select.append($('<option>',{'value':val.id}).text(val.name));
+              }
           });
       });
     },validateModal:function(){
@@ -114,13 +118,13 @@
               if(result.oper==false){
                  msj='Error comuniquese con el Administrador';
                  title='Error!';
-                 error=result.error;
+                 error=(result.error!='')?result.error:'';
               }else{
                 var id=modUsers.table;
                 id.ajax.reload();
               }
               $('#modalRegistry').modal('hide');
-              modUsers.Modal('#modal_operacion',msj,title,error);
+              modUsers.Modal('#modal_operacion',msj,title,error,'');
            });
         }
       });
@@ -134,10 +138,44 @@
            var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,_method:'PUT'};
            var update=modUsers.consult('./moduser/'+modUsers.user,form,'POST');
            update.done(function(d){
-            console.log(d);
+                var result=d.original;
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(result.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(result.error!='')?result.error:'';
+                }else{
+                  var id=modUsers.table;
+                  id.ajax.reload();
+                }
+                $('#modalRegistry').modal('hide');
+                modUsers.Modal('#modal_operacion',msj,title,error,'');
            });
         }
       });
+    },DelUser:function(){
+      $("body").on("click","#go_oper", function(){
+         var delet=modUsers.consult('./deluser/'+modUsers.user,{_method:'DELETE'},'POST');
+         delet.done(function(d){
+                var result=d.original;
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(result.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(result.error!='')?result.error:'';
+                }else{
+                  var id=modUsers.table;
+                  id.ajax.reload();
+                }
+                $('#modalRegistry').modal('hide');
+                modUsers.Modal('#modal_operacion',msj,title,error,'');
+           });
+      });
+      
     },Modal:function(modal,msj,title,error,data_user){
         
         $(modal).modal('show');
@@ -146,9 +184,7 @@
             $(".input-modal").each(function( index ) {
                 $(this).val('').removeClass('error');
             });
-            if(typeof data_user !== 'undefined' || data_user!='' || data_user!=null ){
-              if(data_user!==undefined){
-                $( ".modalsave" ).each(function( index ) {$(this).attr('id','moduser');});
+            if(typeof data_user !== 'undefined' || data_user!=='' || data_user!==null ){
                 $('#nombre').val(data_user.name);
                 $('#apellido').val(data_user.lastname);
                 $('#email').val(data_user.email);
@@ -156,14 +192,13 @@
                 $('#perfil').val(data_user.profile_id);
                 $("#id-user-modal").val(btoa(data_user.id))
               }
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").text(msj);
               }
-              if(msj!==undefined || msj!='' || msj!=null ){
-                $("#oper_mensaje").text(msj);
-              }
-              if(title!==undefined || title!='' || title!=null ){
+              if(typeof title!==undefined || title!='' || title!=null ){
                 $("#oper_titulo").text(title);
               }
-              if(error!==undefined || error!='' || error!=null ){
+              if(typeof error!==undefined || error!='' || error!=null ){
                 $("#oper_error").text(error);
               }       
         })
@@ -175,9 +210,7 @@
 
     },btnRegistry:function(){
       $('#btnRegistry').click(function() {
-          $( ".modalsave" ).each(function( index ) {
-              $(this).attr('id','saveuser');
-          });
+          $( ".modalsave" ).each(function( index ) {$(this).attr('id','saveuser');});
           modUsers.Modal('#modalRegistry','','','','');
       });
     },btnModifique:function(){
@@ -185,10 +218,16 @@
           modUsers.user=$(this).attr('data-user');
           modUsers.LoadModalUser(modUsers.user);
       });
+    },btnDelete:function(){
+      $("body").on("click",".acc_del", function(){
+          modUsers.user=$(this).attr('data-user');
+          modUsers.Modal('#modal_confirmacion','¿Desea realizar esta operación?','','','');
+      });
     },LoadModalUser:function(id){
         var data=modUsers.consult('./getuser',{'id_user':id},'GET');
         data.done(function(d){
           var result=d[0];
+          $( ".modalsave" ).each(function() {$(this).attr('id','moduser');});
           modUsers.Modal('#modalRegistry','','','',result);
         });
     },

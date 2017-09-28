@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('profileslist', 'ProfilesController@getProfiles');
 	Route::post('saveuser', 'UsersController@store');
 	Route::get('getuser', 'UsersController@show');
-	Route::put('moduser/{id}', 'UsersController@update');
+	Route::put('moduser/{id}', 'UsersController@updateUser');
+	Route::delete('deluser/{id}', 'UsersController@destroy');
 });
 

@@ -22,7 +22,7 @@ class Profile extends Model
    		$query=DB::table('profiles');
         if(!empty($id_profile))
             $query->where('profiles.id',$id_profile); 
-        $query->select('profiles.id','profiles.name');
+        $query->select('profiles.id','profiles.name','profiles.active_select');
         $data=$query->get();      
         return $data;
 

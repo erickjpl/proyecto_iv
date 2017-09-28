@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Log;
+use Session;
 
 class User extends Authenticatable
 {
@@ -81,10 +82,10 @@ class User extends Authenticatable
         if(is_int($id)){
             $oper=array();
             try {          
-                $update=DB::table('users_profiles')->insert(
+                $insert=DB::table('users_profiles')->insert(
                     ['profile_id' => $data->perfil, 'user_id' => $id]
                 );
-                return $this->returnOper(true);
+                return $this->returnOper($insert);
             } catch(\Illuminate\Database\QueryException $ex){ 
                 Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
                 return $this->returnOper(false,$ex->errorInfo[0]);
@@ -107,19 +108,40 @@ class User extends Authenticatable
         return response()->json($oper);  
     }
 
-
+    /**
+     * [updateUser funcion que updatea los usuarios]
+     * @param  [object] $data [$request]
+     * @param  [int] $id   [id del usuario]
+     * @return [json]       [fn.returnOper ]
+     */
     function updateUser($data,$id){
-        $id='';
-        $oper=array();
         try {          
             $update=DB::table('users')
-                ->where('id', $id)
-                ->update(['name' => $data->nombre
-                          'lastname'=>$data->apellido,
-                          'email'=>$data->email,
-                          'updated_at'=>date("Y-m-d H:i:s")
-            ]);
-            return $this->returnOper(true);
+            ->where('id',$id)
+            ->update(
+                ['name' => $data->nombre,
+                'lastname' => $data->apellido,
+                'lastname' => $data->email,
+                'updated_at' =>date("Y-m-d H:i:s")
+                ]
+            );
+            return $this->returnOper($update);
+        } catch(\Illuminate\Database\QueryException $ex){         
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $this->returnOper(false,$ex->errorInfo[0]); 
+        }
+    }
+
+    /**
+     * [deleteUser funcion que elimina usuarios]
+     * @param  [int] $id [id del usuarios]
+     * @return [json]     [fn.returnOper ]
+     */
+    function deleteUser($id){
+        try {          
+            $update=DB::table('users')->where('id', '=',$id)->delete();
+            Log::info('Usuario ID: '.$id.' eliminado por: '.Session::get('email'));
+            return $this->returnOper($update);
         } catch(\Illuminate\Database\QueryException $ex){         
             Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
             return $this->returnOper(false,$ex->errorInfo[0]); 

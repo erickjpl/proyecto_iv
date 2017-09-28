@@ -98,9 +98,9 @@ class UsersController extends Controller
 
 
     /**
-     * [show description]
-     * @param  Request $request [description]
-     * @return [type]           [description]
+     * [show guarda usuario]
+     * @param  Request $request [object request]
+     * @return [json]           []
      */
     public function show(Request $request)
     {
@@ -110,78 +110,32 @@ class UsersController extends Controller
         return response()->json($data);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * [updateUser modifica usuario]
+     * @param  Request $request [object request]
+     * @param  [type]  $id      [id delusuario]
+     * @return [json]           []
+     */
+    public function updateUser(Request $request, $id)
     {   
-        $id=base64_decode($id;)
-        $user= new User();
+        $id=base64_decode($id);
+        $objUser= new User();
+        $data=$objUser->updateUser($request,$id);
+        return response()->json($data);
 
     }
 
-
-
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * [destroy elimina usuarios]
+     * @param  [int] $id [id del usuario]
+     * @return [json]     []
      */
-    /*public function create()
+    public function destroy($id)
     {
-        //
+        $objUser= new User();
+        $id=base64_decode($id);
+        $data=$objUser->deleteUser($id);
+        return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    /*public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function destroy($id)
-    {
-        //
-    }*/
 }
