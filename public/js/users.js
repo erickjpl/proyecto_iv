@@ -210,11 +210,13 @@
 
     },btnRegistry:function(){
       $('#btnRegistry').click(function() {
+          $(".form-perfil").show();
           $( ".modalsave" ).each(function( index ) {$(this).attr('id','saveuser');});
           modUsers.Modal('#modalRegistry','','','','');
       });
     },btnModifique:function(){
       $("body").on("click",".acc_mod", function(){
+          $(".form-perfil").hide();
           modUsers.user=$(this).attr('data-user');
           modUsers.LoadModalUser(modUsers.user);
       });

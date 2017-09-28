@@ -14,6 +14,9 @@
                           <div class="alert alert-danger">{{ $error }}</div>
                       @endforeach
                     @endif 
+                    @if(Session::has('msg'))
+                        <div class="alert alert-success">{!!Session::get('msg')!!}</div>
+                    @endif
 
                     
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">

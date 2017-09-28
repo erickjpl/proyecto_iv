@@ -5,12 +5,15 @@
     typeAjax:"GET",
     table:'#tblstudents',
     data:[],
+    user:'',
     launch: function(){
       this.dataTable(this.table);
+      this.activar();
+      this.setEstatusUser();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
-        var value="", data="", a=(async!=undefined||async==false?false:true), method=(type!=undefined?this.typeAjax:type);
+        var value="", data="", a=(async!=undefined||async==false?false:true), method=(type==undefined?this.typeAjax:type);
         for(var key in params){
           value = (this.btoaFieldsAjax?(btoa!=undefined||btoa==true?params[key]:btoa(params[key])):params[key]);
           data += (data.length<=0?key+'='+value:'&'+key+'='+value);
@@ -20,7 +23,8 @@
           url: url,
           data: data,
           dataType: 'json',
-          async: a
+          async: a,
+          headers: (method=="POST"?{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}:"")
         });
       }
     },
@@ -49,6 +53,27 @@
                 { "data": "actions","sClass": 'text-center' }
             ]
         },);
+    },activar:function(){
+       $("body").on("change",".acc_profile", function(){
+          modStudent.user=$(this).attr('data-user');
+          modStudent.Modal('#modal_estatus_usuario','','','','');
+       });
+    },Modal:function(modal){
+        
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {
+    
+        })
+        $(modal).on("hidden.bs.modal", function () {
+            $(".modal-backdrop").each(function(){
+              $(this).remove();
+            });
+        });
+    },setEstatusUser:function(){
+       $("#setestatus_user").click(function() {
+          var email_notif=$("#email_notif").val();
+          var data=modUsers.consult('./setuser',{'id_user':modStudent.user,'email_notif':email_notif},'POST');
+       });
     }
   }
   $(document).ready(function(){

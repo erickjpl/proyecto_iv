@@ -36,7 +36,6 @@ trait AuthenticatesUsers
         if(!empty($data_user[0]->active))
             $active=$data_user[0]->active;
 
-        
         $this->validateLogin($request);
         if($active=='true'){
                  // If the class is using the ThrottlesLogins trait, we can automatically throttle

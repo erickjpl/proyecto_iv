@@ -19,7 +19,7 @@
             <label for="email">Email</label>
             <input type="email" class="form-control input-modal" id="email" name="email" placeholder="Email">
           </div>
-          <div class="form-group">
+          <div class="form-group form-perfil">
             <label for="perfil">Perfil</label>
             <select class="form-control input-modal" id="perfil" name="perfil"></select>
           </div>
@@ -66,6 +66,41 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" >No</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" id="go_oper" >Si</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--modal_confirmacion-->
+<div class="modal fade" id="modal_estatus_usuario" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="oper_titulo">Confirmación!</h4>
+      </div>
+      <div class="modal-body">
+        <p class="bold">
+          ¿Desea cambiar el estatus de este usuario?
+        </p>
+        <div class="form-group form-perfil">
+            <div class="row">
+            <div class="col-xs-4 bold">
+              Notificacion por Email
+            </div>
+            <div class="col-xs-8">
+                <select class="form-control input-modal" id="email_notif" name="email_notif">
+                  <option value="0" selected >No</option>
+                  <option value="1">Si</option>
+              </select>
+            </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="setestatus_user" >Aceptar</button>
       </div>
     </div>
   </div>

@@ -29,5 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getuser', 'UsersController@show');
 	Route::put('moduser/{id}', 'UsersController@updateUser');
 	Route::delete('deluser/{id}', 'UsersController@destroy');
+	Route::post('setuser', 'UsersController@setEstatusUser');
+
 });
 

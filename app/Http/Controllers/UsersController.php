@@ -138,4 +138,8 @@ class UsersController extends Controller
         return response()->json($data);
     }
 
+    public function setEstatusUser(Request $request){
+        dd($request);
+    }
+
 }
