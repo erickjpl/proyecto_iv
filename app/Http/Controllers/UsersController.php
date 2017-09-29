@@ -120,7 +120,12 @@ class UsersController extends Controller
     {   
         $id=base64_decode($id);
         $objUser= new User();
-        $data=$objUser->updateUser($request,$id);
+        $data["name"]=$request->nombre;
+        $data["lastname"]=$request->apellido;
+        $data["email"]=$request->email;
+        $data["updated_at"]=date("Y-m-d H:i:s");
+        $obj = (object) $data;
+        $data=$objUser->updateUser($obj,$id);
         return response()->json($data);
 
     }
@@ -138,8 +143,19 @@ class UsersController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * [setEstatusUser description]
+     * @param Request $request [description]
+     */
     public function setEstatusUser(Request $request){
-        dd($request);
+       $objUser= new User();
+       $id=base64_decode($request->user);
+       $active=$request->active;
+       $notif_mail=$request->email_notif;
+       $data["active"]=$active;
+       $obj = (object) $data;
+       $update=$objUser->updateUser($obj,$id);
+       return response()->json($data);
     }
 
 }

@@ -116,15 +116,11 @@ class User extends Authenticatable
      */
     function updateUser($data,$id){
         try {          
-            $update=DB::table('users')
-            ->where('id',$id)
-            ->update(
-                ['name' => $data->nombre,
-                'lastname' => $data->apellido,
-                'lastname' => $data->email,
-                'updated_at' =>date("Y-m-d H:i:s")
-                ]
-            );
+            $update=DB::table('users');
+            $update->where('id',$id);
+            foreach ($data as $key => $value) {
+                $update->update([$key=>$value]);
+            }
             return $this->returnOper($update);
         } catch(\Illuminate\Database\QueryException $ex){         
             Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());

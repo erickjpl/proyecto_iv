@@ -3,11 +3,12 @@
   var modStudent = {
     btoaFieldsAjax:false,
     typeAjax:"GET",
-    table:'#tblstudents',
+    table_id:'#tblstudents',
+    table:'',
     data:[],
-    user:'',
+    user:[],
     launch: function(){
-      this.dataTable(this.table);
+      this.dataTable(this.table_id);
       this.activar();
       this.setEstatusUser();
     },
@@ -29,7 +30,7 @@
       }
     },
     dataTable:function(idtable){
-        $(idtable).DataTable( {
+        this.table=$(idtable).DataTable( {
             "ajax": './studentslist',
             "language": {
               "lengthMenu": "Total de registros:_MENU_ ",
@@ -55,24 +56,46 @@
         },);
     },activar:function(){
        $("body").on("change",".acc_profile", function(){
-          modStudent.user=$(this).attr('data-user');
+          modStudent.user.id=$(this).attr('data-user');
+          modStudent.user.active=$(this).val();
           modStudent.Modal('#modal_estatus_usuario','','','','');
        });
-    },Modal:function(modal){
-        
+    },Modal:function(modal){        
+        $(modal).modal('show');
+    },Modaloper:function(modal,msj,title,error){
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() {
-    
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").text(msj);
+              }
+              if(typeof title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(typeof error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
         })
-        $(modal).on("hidden.bs.modal", function () {
-            $(".modal-backdrop").each(function(){
-              $(this).remove();
-            });
-        });
     },setEstatusUser:function(){
-       $("#setestatus_user").click(function() {
+      $("body").on("click","#setestatus_user", function(){
           var email_notif=$("#email_notif").val();
-          var data=modUsers.consult('./setuser',{'id_user':modStudent.user,'email_notif':email_notif},'POST');
+          var user=modStudent.user.id;
+          var active=modStudent.user.active;
+          var upd=modStudent.consult('./setuser',{'user':user,'active':active,'email_notif':email_notif},'POST');
+          upd.done(function(d){ 
+            var msj='Operacion realizada con éxito';
+            var title='Mensaje!';
+            var error='';
+            if(d.oper==false){
+               msj='Error comuniquese con el Administrador';
+               title='Error!';
+               error=(result.error!='')?result.error:'';
+            }else{
+              var id=modStudent.table;
+              id.ajax.reload();
+            }
+            $('#modal_estatus_usuario').modal('hide');
+            modStudent.Modaloper('#modal_operacion',msj,title,error);
+         });
        });
     }
   }
