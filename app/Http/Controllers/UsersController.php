@@ -131,6 +131,8 @@ class UsersController extends Controller
         $data["lastname"]=$request->apellido;
         $data["email"]=$request->email;
         $data["updated_at"]=date("Y-m-d H:i:s");
+        $data["occupation_id"]=$request->ocupation;
+        $data["identification_document"]=$request->document_i;
         $obj = (object) $data;
         $data=$objUser->updateUser($obj,$id);
         return response()->json($data);

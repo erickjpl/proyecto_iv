@@ -19,6 +19,14 @@
             <label for="email">Email</label>
             <input type="email" class="form-control input-modal" id="email" name="email" placeholder="Email">
           </div>
+          <div class="form-group">
+            <label for="email">Documentación</label>
+            <input type="text" class="form-control input-modal" id="identification_document" name="identification_document" placeholder="Identidad">
+          </div>
+          <div class="form-group">
+            <label for="perfil">Ocupación</label>
+            <select class="form-control input-modal" id="occupation" name="occupation"></select>
+          </div>
           <div class="form-group form-perfil">
             <label for="perfil">Perfil</label>
             <select class="form-control input-modal" id="perfil" name="perfil"></select>

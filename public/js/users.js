@@ -10,6 +10,7 @@
     launch: function(){
       this.dataTable(this.table_id);
       this.selectProfile();
+      this.selectOcupations();
       this.validateModal();
       this.saveUser();
       this.btnRegistry();
@@ -73,6 +74,15 @@
               }
           });
       });
+    },selectOcupations:function(){
+      var select=$("#occupation");
+      select.append($('<option>',{'value':''}).text('Seleccione'));
+      var select_ocupations=this.consult('./ocupationslist',[],'GET');
+      select_ocupations.done(function(d){
+          $.each( d, function( i, val ) {
+                select.append($('<option>',{'value':val.id}).text(val.name));
+          });
+      });
     },validateModal:function(){
         $("#form-create-user").validate({
             validClass: "success"
@@ -98,6 +108,18 @@
             }
         });
         $( "#perfil" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+        $( "#occupation" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+          $( "#identification_document" ).rules( "add", {
             required: true,
             messages: {
                 required: "",
@@ -136,7 +158,9 @@
            var apellido = $("#apellido").val(); 
            var email = $("#email").val();
            var perfil = $("#perfil").val();
-           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,_method:'PUT'};
+           var document_i=$("#identification_document").val();
+           var ocupation=$("#occupation").val();
+           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,document_i:document_i,ocupation:ocupation,_method:'PUT'};
            var update=modUsers.consult('./moduser/'+modUsers.user.id,form,'POST');
            update.done(function(d){
                 var msj='Operacion realizada con éxito';
@@ -209,7 +233,9 @@
                 $('#email').val(data_user.email);
                 $('#email').val(data_user.email);
                 $('#perfil').val(data_user.profile_id);
-                $("#id-user-modal").val(btoa(data_user.id))
+                $("#identification_document").val(data_user.identification_document);
+                $("#occupation").val(data_user.occupation_id);
+
               }
         })
 

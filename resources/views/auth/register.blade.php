@@ -15,7 +15,7 @@
                             <label for="name" class="col-md-4 control-label">Nombre</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                                <input id="name" type="text" placeholder="Nombre" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
 
                                 @if ($errors->has('name'))
                                     <span class="help-block">
@@ -29,7 +29,7 @@
                             <label for="name" class="col-md-4 control-label">Apellido</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="lastname" value="{{ old('lastname') }}" required autofocus>
+                                <input id="name" type="text" placeholder="Apellido" class="form-control" name="lastname" value="{{ old('lastname') }}" required autofocus>
 
                                 @if ($errors->has('lastname'))
                                     <span class="help-block">
@@ -43,7 +43,7 @@
                             <label for="email" class="col-md-4 control-label">E-Mail</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                <input id="email" type="email" placeholder="Email" class="form-control" name="email" value="{{ old('email') }}" required>
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -53,11 +53,41 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('doc_ident') ? ' has-error' : '' }}">
+                            <label for="email" class="col-md-4 control-label">Documentacion</label>
+                            <div class="col-md-6">
+                                <input id="doc_ident" placeholder="Identificacion" type="text" class="form-control" name="doc_ident" value="{{ old('doc_ident') }}" required>
+
+                                @if ($errors->has('doc_ident'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('doc_ident') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('ocupacion') ? ' has-error' : '' }}">
+                            <label for="email" class="col-md-4 control-label">Ocupación</label>
+                            <div class="col-md-6">
+                               <select id="ocupacion" name="ocupacion" class="form-control">
+                                   <option value="">Seleccione</option>
+                                   @foreach($opcupations as $value)
+                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                   @endforeach
+                               </select>
+                                @if ($errors->has('ocupacion'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('ocupacion') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-md-4 control-label">Contraseña</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                                <input id="password" placeholder="Contraseña" type="password" class="form-control" name="password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -70,7 +100,7 @@
                         <div class="form-group">
                             <label for="password-confirm" class="col-md-4 control-label">Confirmar Contraseña</label>
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <input id="password-confirm" placeholder="Confirmar Contraseña" type="password" class="form-control" name="password_confirmation" required>
                             </div>
                         </div>
 

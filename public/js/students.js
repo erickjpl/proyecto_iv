@@ -16,6 +16,8 @@
       this.btnMod();
       this.btnDelete();
       this.DelUser();
+      this.selectProfile();
+      this.selectOcupations();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -33,8 +35,7 @@
           headers: (method=="POST"?{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}:"")
         });
       }
-    },
-    dataTable:function(idtable){
+    },dataTable:function(idtable){
         this.table=$(idtable).DataTable( {
             "ajax": './studentslist',
             "language": {
@@ -59,7 +60,28 @@
                 { "data": "actions","sClass": 'text-center' }
             ]
         },);
-    },validateModal:function(){
+    },selectProfile:function(){
+      var select=$("#perfil");
+      select.append($('<option>',{'value':''}).text('Seleccione'));
+      var select_profile=this.consult('./profileslist',[],'GET');
+      select_profile.done(function(d){
+          $.each( d, function( i, val ) {
+              //if(val.active_select=='true'){
+                select.append($('<option>',{'value':val.id}).text(val.name));
+              //}
+          });
+      });
+    },selectOcupations:function(){
+      var select=$("#occupation");
+      select.append($('<option>',{'value':''}).text('Seleccione'));
+      var select_ocupations=this.consult('./ocupationslist',[],'GET');
+      select_ocupations.done(function(d){
+          $.each( d, function( i, val ) {
+                select.append($('<option>',{'value':val.id}).text(val.name));
+          });
+      });
+    },
+    validateModal:function(){
         $("#form-create-user").validate({
             validClass: "success"
         });
@@ -84,6 +106,18 @@
             }
         });
         $( "#perfil" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+        $( "#occupation" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+          $( "#identification_document" ).rules( "add", {
             required: true,
             messages: {
                 required: "",
@@ -146,7 +180,9 @@
                 $('#email').val(data_user.email);
                 $('#email').val(data_user.email);
                 $('#perfil').val(data_user.profile_id);
-                $("#id-user-modal").val(btoa(data_user.id))
+                $("#id-user-modal").val(btoa(data_user.id));
+                $("#identification_document").val(data_user.identification_document);
+                $("#occupation").val(data_user.occupation_id);
               }
         })
     },btnModifique:function(){

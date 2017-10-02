@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use Session;
+use \App\Occupation;
 
 trait RegistersUsers
 {
@@ -18,7 +19,9 @@ trait RegistersUsers
      */
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        $objOcupation= new Occupation();
+        $data=$objOcupation->listOcupations();
+        return view('auth.register',['opcupations'=>$data]);
     }
 
     /**

@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::get('users', 'UsersController@indexUsers');
 	Route::get('userslist', 'UsersController@listUsers');
 	Route::get('profileslist', 'ProfilesController@getProfiles');
+	Route::get('ocupationslist', 'OccupationController@getOcupations');
 	Route::post('saveuser', 'UsersController@store');
 	Route::get('getuser', 'UsersController@show');
 	Route::put('moduser/{id}', 'UsersController@updateUser');

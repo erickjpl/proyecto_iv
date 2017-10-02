@@ -53,7 +53,8 @@ class User extends Authenticatable
             $query->whereIn('users_profiles.profile_id',$profiles);     
 
         $query->join('users_profiles', 'users.id', '=', 'users_profiles.user_id');
-        $query->select('users.id','users.name', 'users.email', 'users.lastname','users.active','users_profiles.profile_id');
+        $query->select('users.id','users.name', 'users.email', 'users.lastname','users.active','users_profiles.profile_id','users.identification_document',
+        'occupation_id');
         $data=$query->get();      
         return $data; 
     }

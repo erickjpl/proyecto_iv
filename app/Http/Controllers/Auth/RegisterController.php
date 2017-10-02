@@ -53,6 +53,8 @@ class RegisterController extends Controller
             'lastname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'ocupacion' => 'required',
+            'doc_ident' => 'required'
         ]);
     }
 
@@ -71,7 +73,9 @@ class RegisterController extends Controller
              'lastname' => $data['lastname'], 
              'email' => $data['email'],
              'password' => bcrypt($data['password']),
-             'created_at' => date('Y-m-d H:m:s')
+             'created_at' => date('Y-m-d H:m:s'),
+             'occupation_id' => $data['ocupacion'],
+             'identification_document' => $data['doc_ident']
             ]
         );
         if(is_int($id)){
