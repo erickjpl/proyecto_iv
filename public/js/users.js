@@ -6,7 +6,7 @@
     table_id:'#tblusers',
     table:'',
     data:[],
-    user:'',
+    user:[],
     launch: function(){
       this.dataTable(this.table_id);
       this.selectProfile();
@@ -17,6 +17,8 @@
       this.modifUser();
       this.btnDelete();
       this.DelUser();
+      this.activar();
+      this.setEstatusUser();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -108,23 +110,22 @@
            var apellido = $("#apellido").val(); 
            var email = $("#email").val();
            var perfil = $("#perfil").val();
-           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil};
+           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,active:'true'};
            var save=modUsers.consult('./saveuser',form,'POST');
            save.done(function(d){
-              var result=d.original;
               var msj='Operacion realizada con éxito';
               var title='Mensaje!';
               var error='';
-              if(result.oper==false){
+              if(d.oper==false){
                  msj='Error comuniquese con el Administrador';
                  title='Error!';
-                 error=(result.error!='')?result.error:'';
+                 error=(d.error!='')?d.error:'';
               }else{
                 var id=modUsers.table;
                 id.ajax.reload();
               }
               $('#modalRegistry').modal('hide');
-              modUsers.Modal('#modal_operacion',msj,title,error,'');
+              modUsers.Modaloper('#modal_operacion',msj,title,error);
            });
         }
       });
@@ -136,48 +137,66 @@
            var email = $("#email").val();
            var perfil = $("#perfil").val();
            var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,_method:'PUT'};
-           var update=modUsers.consult('./moduser/'+modUsers.user,form,'POST');
+           var update=modUsers.consult('./moduser/'+modUsers.user.id,form,'POST');
            update.done(function(d){
-                var result=d.original;
                 var msj='Operacion realizada con éxito';
                 var title='Mensaje!';
                 var error='';
-                if(result.oper==false){
+                if(d.oper==false){
                    msj='Error comuniquese con el Administrador';
                    title='Error!';
-                   error=(result.error!='')?result.error:'';
+                   error=(d.error!='')?d.error:'';
                 }else{
                   var id=modUsers.table;
                   id.ajax.reload();
                 }
                 $('#modalRegistry').modal('hide');
-                modUsers.Modal('#modal_operacion',msj,title,error,'');
+                modUsers.Modaloper('#modal_operacion',msj,title,error);
            });
         }
       });
     },DelUser:function(){
       $("body").on("click","#go_oper", function(){
-         var delet=modUsers.consult('./deluser/'+modUsers.user,{_method:'DELETE'},'POST');
+         var delet=modUsers.consult('./deluser/'+modUsers.user.id,{_method:'DELETE'},'POST');
          delet.done(function(d){
-                var result=d.original;
                 var msj='Operacion realizada con éxito';
                 var title='Mensaje!';
                 var error='';
-                if(result.oper==false){
+                if(d.oper==false){
                    msj='Error comuniquese con el Administrador';
                    title='Error!';
-                   error=(result.error!='')?result.error:'';
+                   error=(d.error!='')?d.error:'';
                 }else{
                   var id=modUsers.table;
                   id.ajax.reload();
                 }
                 $('#modalRegistry').modal('hide');
-                modUsers.Modal('#modal_operacion',msj,title,error,'');
+                modUsers.Modaloper('#modal_operacion',msj,title,error);
            });
-      });
-      
-    },Modal:function(modal,msj,title,error,data_user){
-        
+      });     
+    },clearInputs:function(){
+        //limpiar campos
+        $('.input-modal').each(function(){
+            $(this).val('');
+        });
+    },Modal:function(modal){
+        $(modal).modal('show');
+    },Modaloper:function(modal,msj,title,error){
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {             
+              modUsers.clearInputs();
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").text(msj);
+              }
+              if(typeof title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(typeof error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
+        })
+    },ModalMod:function(modal,data_user){
+
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() {
             
@@ -192,46 +211,62 @@
                 $('#perfil').val(data_user.profile_id);
                 $("#id-user-modal").val(btoa(data_user.id))
               }
-              if(typeof msj!==undefined || msj!='' || msj!=null ){
-                $(".oper_mensaje").text(msj);
-              }
-              if(typeof title!==undefined || title!='' || title!=null ){
-                $("#oper_titulo").text(title);
-              }
-              if(typeof error!==undefined || error!='' || error!=null ){
-                $("#oper_error").text(error);
-              }       
         })
-        $(modal).on("hidden.bs.modal", function () {
-            $(".modal-backdrop").each(function(){
-              $(this).remove();
-            });
-        });
 
     },btnRegistry:function(){
       $('#btnRegistry').click(function() {
           $(".form-perfil").show();
           $( ".modalsave" ).each(function( index ) {$(this).attr('id','saveuser');});
-          modUsers.Modal('#modalRegistry','','','','');
+          $("#registryLabel").text('Registrar Usuario');
+          modUsers.Modaloper('#modalRegistry','','','');
       });
     },btnModifique:function(){
       $("body").on("click",".acc_mod", function(){
           $(".form-perfil").hide();
-          modUsers.user=$(this).attr('data-user');
-          modUsers.LoadModalUser(modUsers.user);
+          modUsers.user.id=$(this).attr('data-user');
+          modUsers.LoadModalUser(modUsers.user.id);
       });
     },btnDelete:function(){
       $("body").on("click",".acc_del", function(){
-          modUsers.user=$(this).attr('data-user');
-          modUsers.Modal('#modal_confirmacion','¿Desea realizar esta operación?','','','');
+          modUsers.user.id=$(this).attr('data-user');
+          modUsers.Modaloper('#modal_confirmacion','¿Desea realizar esta operación?','','');
       });
     },LoadModalUser:function(id){
         var data=modUsers.consult('./getuser',{'id_user':id},'GET');
         data.done(function(d){
           var result=d[0];
           $( ".modalsave" ).each(function() {$(this).attr('id','moduser');});
-          modUsers.Modal('#modalRegistry','','','',result);
+          $("#registryLabel").text('Modificar Usuario');
+          modUsers.ModalMod('#modalRegistry',result);
         });
+    },activar:function(){
+       $("body").on("change",".acc_profile", function(){
+          modUsers.user.id=$(this).attr('data-user');
+          modUsers.user.active=$(this).val();
+          modUsers.Modal('#modal_estatus_usuario');
+       });
+    },setEstatusUser:function(){
+      $("body").on("click","#setestatus_user", function(){
+          var email_notif=$("#email_notif").val();
+          var user=modUsers.user.id;
+          var active=modUsers.user.active;
+          var upd=modUsers.consult('./setuser',{'user':user,'active':active,'email_notif':email_notif},'POST');
+          upd.done(function(d){ 
+            var msj='Operacion realizada con éxito';
+            var title='Mensaje!';
+            var error='';
+            if(d.oper==false){
+               msj='Error comuniquese con el Administrador';
+               title='Error!';
+               error=(d.error!='')?d.error:'';
+            }else{
+              var id=modUsers.table;
+              id.ajax.reload();
+            }
+            $('#modal_estatus_usuario').modal('hide');
+            modUsers.Modaloper('#modal_operacion',msj,title,error);
+         });
+       });
     },
   }
   $(document).ready(function(){

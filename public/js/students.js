@@ -9,8 +9,13 @@
     user:[],
     launch: function(){
       this.dataTable(this.table_id);
+      this.validateModal();
       this.activar();
       this.setEstatusUser();
+      this.btnModifique();
+      this.btnMod();
+      this.btnDelete();
+      this.DelUser();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -54,6 +59,36 @@
                 { "data": "actions","sClass": 'text-center' }
             ]
         },);
+    },validateModal:function(){
+        $("#form-create-user").validate({
+            validClass: "success"
+        });
+        $( "#nombre" ).rules( "add", {
+            required: true,
+            messages: {
+                required: ""
+            }
+        });
+        $( "#apellido" ).rules( "add", {
+            required: true,
+            messages: {
+                required: ""
+            }
+        });
+        $( "#email" ).rules( "add", {
+            required: true,
+            email:true,
+            messages: {
+                required: "",
+                email:"",
+            }
+        });
+        $( "#perfil" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
     },activar:function(){
        $("body").on("change",".acc_profile", function(){
           modStudent.user.id=$(this).attr('data-user');
@@ -88,7 +123,7 @@
             if(d.oper==false){
                msj='Error comuniquese con el Administrador';
                title='Error!';
-               error=(result.error!='')?result.error:'';
+               error=(d.error!='')?d.error:'';
             }else{
               var id=modStudent.table;
               id.ajax.reload();
@@ -97,6 +132,87 @@
             modStudent.Modaloper('#modal_operacion',msj,title,error);
          });
        });
+    },ModalMod:function(modal,data_user){
+
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {
+            
+            $(".input-modal").each(function( index ) {
+                $(this).val('').removeClass('error');
+            });
+            if(typeof data_user !== 'undefined' || data_user!=='' || data_user!==null ){
+                $('#nombre').val(data_user.name);
+                $('#apellido').val(data_user.lastname);
+                $('#email').val(data_user.email);
+                $('#email').val(data_user.email);
+                $('#perfil').val(data_user.profile_id);
+                $("#id-user-modal").val(btoa(data_user.id))
+              }
+        })
+    },btnModifique:function(){
+      $("body").on("click",".acc_mod", function(){
+          $(".form-perfil").hide();
+          modStudent.user.id=$(this).attr('data-user');
+          modStudent.LoadModalUser(modStudent.user.id);
+      });
+    },LoadModalUser:function(id){
+        var data=modStudent.consult('./getuser',{'id_user':id},'GET');
+        data.done(function(d){
+          var result=d[0];
+          $( ".modalsave" ).each(function() {$(this).attr('id','moduser');});
+          $("#registryLabel").text('Modificar Usuario');
+          modStudent.ModalMod('#modalRegistry',result);
+        });
+    },btnMod:function(){
+      $("body").on("click","#moduser", function(){
+        if($("#form-create-user").valid()){
+           var nombre = $("#nombre").val();
+           var apellido = $("#apellido").val(); 
+           var email = $("#email").val();
+           var perfil = $("#perfil").val();
+           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,_method:'PUT'};
+           var update=modStudent.consult('./moduser/'+modStudent.user.id,form,'POST');
+           update.done(function(d){
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }else{
+                  var id=modStudent.table;
+                  id.ajax.reload();
+                }
+                $('#modalRegistry').modal('hide');
+                modStudent.Modaloper('#modal_operacion',msj,title,error);
+           });
+        }
+      });
+    },btnDelete:function(){
+      $("body").on("click",".acc_del", function(){
+          modStudent.user.id=$(this).attr('data-user');
+          modStudent.Modaloper('#modal_confirmacion','¿Desea realizar esta operación?','','');
+      });
+    },DelUser:function(){
+      $("body").on("click","#go_oper", function(){
+         var delet=modStudent.consult('./deluser/'+modStudent.user.id,{_method:'DELETE'},'POST');
+         delet.done(function(d){
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }else{
+                  var id=modStudent.table;
+                  id.ajax.reload();
+                }
+                $('#modalRegistry').modal('hide');
+                modStudent.Modaloper('#modal_operacion',msj,title,error);
+           });
+      });     
     }
   }
   $(document).ready(function(){

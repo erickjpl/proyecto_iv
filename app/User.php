@@ -72,7 +72,8 @@ class User extends Authenticatable
                 'lastname'=>$data->apellido,
                 'active'=>'false',
                 'email'=>$data->email,
-                'created_at'=>date("Y-m-d H:i:s")
+                'created_at'=>date("Y-m-d H:i:s"),
+                'active'=>$data->active
                 ]
             );
         } catch(\Illuminate\Database\QueryException $ex){         
@@ -85,7 +86,7 @@ class User extends Authenticatable
                 $insert=DB::table('users_profiles')->insert(
                     ['profile_id' => $data->perfil, 'user_id' => $id]
                 );
-                return $this->returnOper($insert);
+                return $this->returnOper(true);
             } catch(\Illuminate\Database\QueryException $ex){ 
                 Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
                 return $this->returnOper(false,$ex->errorInfo[0]);
@@ -101,11 +102,12 @@ class User extends Authenticatable
      * @return [json]         
      */
     function returnOper($bool,$cod_error=null){
+        $oper=array();
         $oper["oper"]=$bool;
         if(!empty($cod_error)){
              $oper["error"]='COD: '.$cod_error;
         }
-        return response()->json($oper);  
+        return $oper;  
     }
 
     /**
@@ -121,7 +123,7 @@ class User extends Authenticatable
             foreach ($data as $key => $value) {
                 $update->update([$key=>$value]);
             }
-            return $this->returnOper($update);
+            return $this->returnOper(true);
         } catch(\Illuminate\Database\QueryException $ex){         
             Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
             return $this->returnOper(false,$ex->errorInfo[0]); 
@@ -137,7 +139,7 @@ class User extends Authenticatable
         try {          
             $update=DB::table('users')->where('id', '=',$id)->delete();
             Log::info('Usuario ID: '.$id.' eliminado por: '.Session::get('email'));
-            return $this->returnOper($update);
+            return $this->returnOper(true);
         } catch(\Illuminate\Database\QueryException $ex){         
             Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
             return $this->returnOper(false,$ex->errorInfo[0]); 

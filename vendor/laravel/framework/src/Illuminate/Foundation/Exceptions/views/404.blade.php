@@ -2,4 +2,4 @@
 
 @section('title', 'Page Not Found')
 
-@section('message', 'Sorry, the page you are looking for could not be found.')
+@section('message', 'Lo sentimos, la página que busca no se pudo encontrar.')

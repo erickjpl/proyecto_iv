@@ -8,9 +8,12 @@ use App\Profile;
 use Illuminate\Http\Request;
 use View;
 
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+
 class UsersController extends Controller
 {
     
+    use SendsPasswordResetEmails;
 
     public function indexStudents()
     {
@@ -93,7 +96,11 @@ class UsersController extends Controller
     {   
         $objUser= new User();
         $save=$objUser->saveUser($request);
-        return response()->json($save);
+        $resp=response()->json($save);
+        if($save["oper"]==true){
+            $this->sendResetLinkEmail($request);
+        }
+        return $resp;
     }
 
 
@@ -152,6 +159,12 @@ class UsersController extends Controller
        $id=base64_decode($request->user);
        $active=$request->active;
        $notif_mail=$request->email_notif;
+       
+       if($notif_mail==1){
+        dd('aqio');
+       }
+
+       dd('alla');
        $data["active"]=$active;
        $obj = (object) $data;
        $update=$objUser->updateUser($obj,$id);

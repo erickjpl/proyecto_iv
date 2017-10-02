@@ -17,9 +17,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-/**Modulo de Usuarios**/
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/home', 'HomeController@index')->name('home');
+ Route::get('/home', 'HomeController@index')->name('home');
+});
+
+/**Modulo de Usuarios**/
+Route::group(['middleware' => ['auth','validmoduser']], function () {
+   
 	Route::get('students', 'UsersController@indexStudents');
 	Route::get('studentslist', 'UsersController@listStudents');
 	Route::get('users', 'UsersController@indexUsers');

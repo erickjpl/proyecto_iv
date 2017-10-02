@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Redirect;
+use Session;
+use \App\User;
 
 trait AuthenticatesUsers
 {
@@ -30,7 +32,7 @@ trait AuthenticatesUsers
     public function login(Request $request)
     {   
 
-        $dataUser=new \App\User();
+        $dataUser=new User();
         $data_user=$dataUser->getUsers('','',$request->email);
         $active='true';
         if(!empty($data_user[0]->active))
@@ -56,7 +58,7 @@ trait AuthenticatesUsers
 
                 return $this->sendFailedLoginResponse($request);
         }else{
-           return Redirect::back()->withErrors(['email'=>'Usuario Inactivo']);
+           return Redirect::back()->withErrors(['email'=>'Su cuenta sera habilitada en un lapso de 2h']);
         }       
     }
 
@@ -123,7 +125,15 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-        //
+        $objUser=new User();
+        $data_user=$objUser->getUsers($user->id);
+        $data_user=(object)$data_user[0];
+        Session::put('name',$data_user->name);
+        Session::put('lastname',$data_user->lastname);
+        Session::put('email',$data_user->email);
+        Session::put('profile_id',$data_user->profile_id);
+        Session::put('id',$data_user->id);
+        Session::put('active',$data_user->active);
     }
 
     /**
