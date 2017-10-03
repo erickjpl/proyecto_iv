@@ -24,12 +24,12 @@ class UsersController extends Controller
 
     public function indexStudents()
     {
-        return View::make('users.students')->withName('steve');
+        return View::make('users.students');
     }
 
     public function indexUsers()
     {
-        return View::make('users.users')->withName('steve');
+        return View::make('users.users');
     }  
 
     /**

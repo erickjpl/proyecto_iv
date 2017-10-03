@@ -22,7 +22,7 @@ class UsersMiddleware
         if($request->session()->get('profile_id')==$adm){
             return $next($request);
         }else{
-            \App::abort(404);
+            \App::abort(403);
         }
     }
 }

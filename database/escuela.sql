@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `escuela` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `escuela`;
--- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: escuela
 -- ------------------------------------------------------
--- Server version	5.7.5-m15-log
+-- Server version	5.6.28-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,6 +16,94 @@ USE `escuela`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `courses`
+--
+
+DROP TABLE IF EXISTS `courses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `courses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `temary` text NOT NULL,
+  `streaming` enum('true','false') NOT NULL DEFAULT 'false',
+  `exams` enum('true','false') NOT NULL DEFAULT 'false',
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `courses`
+--
+
+LOCK TABLES `courses` WRITE;
+/*!40000 ALTER TABLE `courses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `courses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `courses_teachers`
+--
+
+DROP TABLE IF EXISTS `courses_teachers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `courses_teachers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `course_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_courses_teachers_users1_idx` (`user_id`),
+  KEY `fk_courses_teachers_courses1_idx` (`course_id`),
+  CONSTRAINT `fk_courses_teachers_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_courses_teachers_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `courses_teachers`
+--
+
+LOCK TABLES `courses_teachers` WRITE;
+/*!40000 ALTER TABLE `courses_teachers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `courses_teachers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `files_multimedia`
+--
+
+DROP TABLE IF EXISTS `files_multimedia`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `files_multimedia` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name_file` varchar(45) NOT NULL,
+  `active` enum('true','false') NOT NULL DEFAULT 'false',
+  `type_file_id` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_files_multimedia_types_files1_idx` (`type_file_id`),
+  KEY `fk_files_multimedia_courses1_idx` (`course_id`),
+  CONSTRAINT `fk_files_multimedia_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_files_multimedia_types_files1` FOREIGN KEY (`type_file_id`) REFERENCES `types_files` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `files_multimedia`
+--
+
+LOCK TABLES `files_multimedia` WRITE;
+/*!40000 ALTER TABLE `files_multimedia` DISABLE KEYS */;
+/*!40000 ALTER TABLE `files_multimedia` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `migrations`
@@ -116,6 +204,29 @@ INSERT INTO `profiles` VALUES (1,'Estudiantes','false'),(2,'Admistrador','true')
 UNLOCK TABLES;
 
 --
+-- Table structure for table `types_files`
+--
+
+DROP TABLE IF EXISTS `types_files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `types_files` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `types_files`
+--
+
+LOCK TABLES `types_files` WRITE;
+/*!40000 ALTER TABLE `types_files` DISABLE KEYS */;
+/*!40000 ALTER TABLE `types_files` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -148,7 +259,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (30,'Carla','carlos@gmail.com','$2y$10$QTtP6Q8JFBZPK7TNdVWP0uHCWuGc/komLNHN9r.B1V35XNNF/m26u','wSMo2FUw3RfGjGR5qiBujB1OVDQgl2GmM3MAdGptpowhT4nKAR36wLmkv0gR','2017-09-29 00:09:09','2017-10-03 07:19:56','Ramirez','true',1,'18713843');
+INSERT INTO `users` VALUES (30,'Carlos','carlos@gmail.com','$2y$10$QTtP6Q8JFBZPK7TNdVWP0uHCWuGc/komLNHN9r.B1V35XNNF/m26u','wSMo2FUw3RfGjGR5qiBujB1OVDQgl2GmM3MAdGptpowhT4nKAR36wLmkv0gR','2017-09-29 00:09:09','2017-10-03 07:19:56','Ramirez','true',1,'18713843');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,4 +309,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-02 23:26:05
+-- Dump completed on 2017-10-03 16:59:11
