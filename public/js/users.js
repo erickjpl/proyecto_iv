@@ -132,7 +132,10 @@
            var apellido = $("#apellido").val(); 
            var email = $("#email").val();
            var perfil = $("#perfil").val();
-           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,active:'true'};
+           var docid = $("#identification_document").val();
+           var occupation = $("#occupation").val();
+           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,active:'true',occupation:
+            occupation,docid:docid};
            var save=modUsers.consult('./saveuser',form,'POST');
            save.done(function(d){
               var msj='Operacion realizada con éxito';
@@ -158,9 +161,9 @@
            var apellido = $("#apellido").val(); 
            var email = $("#email").val();
            var perfil = $("#perfil").val();
-           var document_i=$("#identification_document").val();
-           var ocupation=$("#occupation").val();
-           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,document_i:document_i,ocupation:ocupation,_method:'PUT'};
+           var docid = $('#identification_document').val()
+           var occupation = $("#occupation").val();
+           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,docid:docid,occupation:occupation,_method:'PUT'};
            var update=modUsers.consult('./moduser/'+modUsers.user.id,form,'POST');
            update.done(function(d){
                 var msj='Operacion realizada con éxito';

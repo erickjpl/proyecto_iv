@@ -92,14 +92,14 @@
         <p class="bold">
           ¿Desea cambiar el estatus de este usuario?
         </p>
-        <div class="form-group form-perfil">
+        <div class="form-group">
             <div class="row">
             <div class="col-xs-4 bold">
               Notificacion por Email
             </div>
             <div class="col-xs-8">
-                <select class="form-control input-modal" id="email_notif" name="email_notif">
-                  <option value="0" selected >No</option>
+                <select class="form-control" id="email_notif" name="email_notif">
+                  <option value="0" selected>No</option>
                   <option value="1">Si</option>
               </select>
             </div>

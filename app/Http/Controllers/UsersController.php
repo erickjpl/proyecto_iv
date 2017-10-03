@@ -7,12 +7,19 @@ use App\User;
 use App\Profile;
 use Illuminate\Http\Request;
 use View;
-
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Support\Facades\Mail;
+use \App\Mail\SendMail;
+use Log;
+use Session;
+
 
 class UsersController extends Controller
 {
     
+    //plantilla email
+    private $mail_active='msg_useractive';
+
     use SendsPasswordResetEmails;
 
     public function indexStudents()
@@ -131,8 +138,8 @@ class UsersController extends Controller
         $data["lastname"]=$request->apellido;
         $data["email"]=$request->email;
         $data["updated_at"]=date("Y-m-d H:i:s");
-        $data["occupation_id"]=$request->ocupation;
-        $data["identification_document"]=$request->document_i;
+        $data["occupation_id"]=$request->occupation;
+        $data["identification_document"]=$request->docid;
         $obj = (object) $data;
         $data=$objUser->updateUser($obj,$id);
         return response()->json($data);
@@ -157,20 +164,37 @@ class UsersController extends Controller
      * @param Request $request [description]
      */
     public function setEstatusUser(Request $request){
+       
        $objUser= new User();
        $id=base64_decode($request->user);
+       $data_user=$objUser::find($id);
+       $email=$data_user->email;
+       $name=$data_user->name.' '.$data_user->lastname;
        $active=$request->active;
        $notif_mail=$request->email_notif;
-       
-       if($notif_mail==1){
-        dd('aqio');
-       }
-
-       dd('alla');
        $data["active"]=$active;
        $obj = (object) $data;
+       $data_mail=array();
+       $data_mail["name"]=$name;
+       $data_mail["email"]=$email;
+       $data_mail["active"]=$active;
+       
        $update=$objUser->updateUser($obj,$id);
-       return response()->json($data);
+       if($update["oper"]==true){
+            if($notif_mail==1){      
+                try {
+                     Mail::to($email,$name)->send(new SendMail($data_mail,$this->mail_active));
+                     Log::info('Cambio de Estatus val:'.$active.' al usuario '.$email.' realizado por: '.Session::get('email'));
+                }catch (Exception $e) {
+                    Log::error('COD: Falla Mail LINE: '.$ex->getLine().' FILE: '.$ex->getFile());   
+                    $error['cod']='Falla Mail';
+                    $error['oper']=false;
+                    return response()->json($error);
+                }
+            }
+       }
+       return response()->json($update);
+
     }
 
 }

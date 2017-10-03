@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','lastname','identification_document',
     ];
 
     /**
@@ -71,10 +71,11 @@ class User extends Authenticatable
             $id = DB::table('users')->insertGetId(
                 ['name' => $data->nombre,
                 'lastname'=>$data->apellido,
-                'active'=>'false',
+                'active'=>$data->active,
                 'email'=>$data->email,
                 'created_at'=>date("Y-m-d H:i:s"),
-                'active'=>$data->active
+                'identification_document'=>$data->docid,
+                'occupation_id'=>$data->occupation
                 ]
             );
         } catch(\Illuminate\Database\QueryException $ex){         

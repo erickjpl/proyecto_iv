@@ -1,8 +1,10 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+CREATE DATABASE  IF NOT EXISTS `escuela` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `escuela`;
+-- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: escuela
 -- ------------------------------------------------------
--- Server version	5.6.28-log
+-- Server version	5.7.5-m15-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -49,8 +51,7 @@ DROP TABLE IF EXISTS `occupations`;
 CREATE TABLE `occupations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `occupations_ibfk_1` FOREIGN KEY (`id`) REFERENCES `users` (`occupation_id`) ON UPDATE CASCADE
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -136,8 +137,9 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `id` (`id`) USING BTREE,
-  KEY `occupation_id` (`occupation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `occupation_id` (`occupation_id`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`occupation_id`) REFERENCES `occupations` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +148,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (22,'carla','carla.ramirez.rojas@gmail.com','$2y$10$NVjsfpuexuUVaS/kdlT5BePU1mgHvbBizZaMgcUQCXHFqPY.I8H5e','AqsZ40gX0jtCoILHSfKXQae6l5qSzzfhVUzuHYifQGHi2PGEd99aDqpF6S1l','2017-09-28 21:09:19',NULL,'ramirez','true',1,'hola'),(30,'Carla','carlos@gmail.com','$2y$10$QTtP6Q8JFBZPK7TNdVWP0uHCWuGc/komLNHN9r.B1V35XNNF/m26u','ISZqNElUqekya7Mq4Fg7ZpRO7EUh06oJ5dVlLaSJ1cQRdYmqdEPOLR77ZwZv','2017-09-29 00:09:09','2017-10-03 00:46:42','Ramirez','true',1,'43213b'),(34,'Solange','solange@gmail.com','$2y$10$gbv46W8tvuuG3UWAnemaD.jVYGqKzGw.ewRSVnmQfWKYnCkh1r75.',NULL,'2017-10-03 00:10:00','2017-10-03 00:57:27','Ramirez','false',1,'V123456');
+INSERT INTO `users` VALUES (30,'Carla','carlos@gmail.com','$2y$10$QTtP6Q8JFBZPK7TNdVWP0uHCWuGc/komLNHN9r.B1V35XNNF/m26u','wSMo2FUw3RfGjGR5qiBujB1OVDQgl2GmM3MAdGptpowhT4nKAR36wLmkv0gR','2017-09-29 00:09:09','2017-10-03 07:19:56','Ramirez','true',1,'18713843');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,7 +168,7 @@ CREATE TABLE `users_profiles` (
   KEY `users_profiles_ibfk_1` (`user_id`),
   CONSTRAINT `users_profiles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `users_profiles_ibfk_2` FOREIGN KEY (`profile_id`) REFERENCES `profiles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,7 +177,7 @@ CREATE TABLE `users_profiles` (
 
 LOCK TABLES `users_profiles` WRITE;
 /*!40000 ALTER TABLE `users_profiles` DISABLE KEYS */;
-INSERT INTO `users_profiles` VALUES (1,18,22),(2,26,30),(1,27,34);
+INSERT INTO `users_profiles` VALUES (2,26,30);
 /*!40000 ALTER TABLE `users_profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-02 17:02:37
+-- Dump completed on 2017-10-02 23:26:05

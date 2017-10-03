@@ -127,7 +127,7 @@
        $("body").on("change",".acc_profile", function(){
           modStudent.user.id=$(this).attr('data-user');
           modStudent.user.active=$(this).val();
-          modStudent.Modal('#modal_estatus_usuario','','','','');
+          modStudent.Modal('#modal_estatus_usuario');
        });
     },Modal:function(modal){        
         $(modal).modal('show');
@@ -206,7 +206,9 @@
            var apellido = $("#apellido").val(); 
            var email = $("#email").val();
            var perfil = $("#perfil").val();
-           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,_method:'PUT'};
+           var docid = $('#identification_document').val()
+           var occupation = $("#occupation").val();
+           var form={nombre:nombre,apellido:apellido,email:email,perfil:perfil,docid:docid,occupation:occupation,_method:'PUT'};
            var update=modStudent.consult('./moduser/'+modStudent.user.id,form,'POST');
            update.done(function(d){
                 var msj='Operacion realizada con éxito';
