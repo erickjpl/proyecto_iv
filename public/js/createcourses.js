@@ -4,15 +4,12 @@
     btoaFieldsAjax:false,
     typeAjax:"GET",
     launch: function(){
-     
      this.fnSummernote();
      this.fnClockpicker();
      this.fnDatepicker();
      this.selectTeacher();
      this.validateModal();
      this.saveCourse();
-
-
     },fnSummernote:function(){
       $('.summernote').summernote({
           height: 150,
