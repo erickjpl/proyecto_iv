@@ -1,11 +1,13 @@
 /**errores formulario**/
 label.error{ color: #a94442; }
 
-input.error,select.error{
+input.error,select.error,textarea.error{
     border-color: #a94442;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
 }
 
-.bold{
-	font-weight: bold;
+.bold{ font-weight: bold; }
+
+.requerido{
+    color: #a94442;
 }

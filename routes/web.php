@@ -39,6 +39,9 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 
 	/*Modulo de Cursos*/
 	Route::get('create', 'CoursesController@index');
+	Route::get('teacherslist', 'CoursesController@listTeachers');
+
+	
 
 });
 

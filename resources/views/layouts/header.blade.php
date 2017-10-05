@@ -7,17 +7,19 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Escuela del Software</title>
+    
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">   
+    <!--<link href="{{ asset('css/app.css') }}" rel="stylesheet">-->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">   
     <link rel="stylesheet" href="{{ asset('css/datepicker.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-clockpicker.min.css') }}">
-    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">   
-
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-clockpicker.min.css') }}"> 
+    <link href="{{ asset('css/summernote/summernote.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+          
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <!--<script src="{{ asset('js/app.js') }}"></script>-->
     <script src="{{ asset('js/lib/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('js/lib/datatables.min.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>
@@ -25,12 +27,8 @@
     <script src="{{ asset('js/lib/additional-methods.min.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap-clockpicker.min.js') }}"></script>
-
-    <link rel="stylesheet" href="{{ asset('css/summernote/summernote-bs4.css') }}">
-    <script src="{{ asset('js/lib/summernote/summernote-bs4.js') }}"></script>
+    <script src="{{ asset('js/lib/summernote/summernote.js') }}"></script>
     <script src="{{ asset('js/lib/summernote/summernote-es-ES.js') }}"></script>
-    
-
 
 </head>
 <body>

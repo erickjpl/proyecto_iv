@@ -8,27 +8,27 @@
       <div class="modal-body">
         <form id="form-create-user">
           <div class="form-group">
-            <label for="nombre">Nombre</label>
+            <label for="nombre">Nombre: <span class="requerido">(*)</span></label>
             <input type="text" class="form-control input-modal" id="nombre" name="nombre_user" placeholder="Nombre">
           </div>
           <div class="form-group">
-            <label for="apellido">Apellido</label>
+            <label for="apellido">Apellido: <span class="requerido">(*)</span></label>
             <input type="text" class="form-control input-modal" id="apellido" name="apellido" placeholder="Apellido">
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">Email: <span class="requerido">(*)</span></label>
             <input type="email" class="form-control input-modal" id="email" name="email" placeholder="Email">
           </div>
           <div class="form-group">
-            <label for="email">Documentación</label>
+            <label for="email">Documentación: <span class="requerido">(*)</span></label>
             <input type="text" class="form-control input-modal" id="identification_document" name="identification_document" placeholder="Identidad">
           </div>
           <div class="form-group">
-            <label for="perfil">Ocupación</label>
+            <label for="perfil">Ocupación: <span class="requerido">(*)</span></label>
             <select class="form-control input-modal" id="occupation" name="occupation"></select>
           </div>
           <div class="form-group form-perfil">
-            <label for="perfil">Perfil</label>
+            <label for="perfil">Perfil: <span class="requerido">(*)</span></label>
             <select class="form-control input-modal" id="perfil" name="perfil"></select>
           </div>
       </div>
@@ -94,10 +94,10 @@
         </p>
         <div class="form-group">
             <div class="row">
-            <div class="col-xs-4 bold">
-              Notificacion por Email
+            <div class="col-xs-6 bold">
+              Notificacion por Email: <span class="requerido">(*)</span>
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-6">
                 <select class="form-control" id="email_notif" name="email_notif">
                   <option value="0" selected>No</option>
                   <option value="1">Si</option>

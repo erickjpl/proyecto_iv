@@ -2,7 +2,7 @@
  * Super simple wysiwyg editor v0.8.8
  * http://summernote.org/
  *
- * summernote-bs4.js
+ * summernote.js
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license./
  *
@@ -1908,11 +1908,11 @@
     }
   };
 
-  var editor = renderer.create('<div class="note-editor note-frame card"/>');
-  var toolbar = renderer.create('<div class="note-toolbar card-header"/>');
+  var editor = renderer.create('<div class="note-editor note-frame panel panel-default"/>');
+  var toolbar = renderer.create('<div class="note-toolbar panel-heading"/>');
   var editingArea = renderer.create('<div class="note-editing-area"/>');
   var codable = renderer.create('<textarea class="note-codable"/>');
-  var editable = renderer.create('<div class="note-editable card-block" contentEditable="true"/>');
+  var editable = renderer.create('<div class="note-editable panel-body" contentEditable="true"/>');
   var statusbar = renderer.create([
     '<div class="note-statusbar">',
     '  <div class="note-resizebar">',
@@ -1936,21 +1936,21 @@
 
       var dataValue = 'data-value="' + value + '"';
       var dataOption = (option !== undefined) ? ' data-option="' + option + '"' : '';
-      return '<a class="dropdown-item" href="#" ' + (dataValue + dataOption) + '>' + content + '</a>';
+      return '<li><a href="#" ' + (dataValue + dataOption) + '>' + content + '</a></li>';
     }).join('') : options.items;
 
     $node.html(markup);
   });
 
-  var dropdownButtonContents = function (contents) {
-    return contents;
+  var dropdownButtonContents = function (contents, options) {
+    return contents + ' ' + icon(options.icons.caret, 'span');
   };
 
   var dropdownCheck = renderer.create('<div class="dropdown-menu note-check">', function ($node, options) {
     var markup = $.isArray(options.items) ? options.items.map(function (item) {
       var value = (typeof item === 'string') ? item : (item.value || '');
       var content = options.template ? options.template(item) : item;
-      return '<a class="dropdown-item" href="#" data-value="' + value + '">' + icon(options.checkClassName) + ' ' + content + '</a>';
+      return '<li><a href="#" data-value="' + value + '">' + icon(options.checkClassName) + ' ' + content + '</a></li>';
     }).join('') : options.items;
     $node.html(markup);
   });
@@ -1994,8 +1994,8 @@
       '  <div class="modal-content">',
       (options.title ?
       '    <div class="modal-header">' +
-      '      <h4 class="modal-title">' + options.title + '</h4>' +
       '      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+      '      <h4 class="modal-title">' + options.title + '</h4>' +
       '    </div>' : ''
       ),
       '    <div class="modal-body">' + options.body + '</div>',
@@ -2022,15 +2022,12 @@
     }
   });
 
-  var checkbox = renderer.create('<label class="custom-control custom-checkbox"></label>', function ($node, options) {
-      if (options.id) {
-          $node.attr('for', options.id);
-      }
+  var checkbox = renderer.create('<div class="checkbox"></div>', function ($node, options) {
       $node.html([
-          ' <input type="checkbox" class="custom-control-input"' + (options.id ? ' id="' + options.id + '"' : ''),
+          ' <label' + (options.id ? ' for="' + options.id + '"' : '') + '>',
+          ' <input type="checkbox"' + (options.id ? ' id="' + options.id + '"' : ''),
           (options.checked ? ' checked' : '') + '/>',
-          ' <span class="custom-control-indicator"></span>',
-          ' <span class="custom-control-description">' + (options.text ? options.text : '') + '</span>',
+          (options.text ? options.text : ''),
           '</label>'
       ].join(''));
   });
@@ -2056,12 +2053,12 @@
     palette: palette,
     dialog: dialog,
     popover: popover,
+    checkbox: checkbox,
     icon: icon,
-    checkbox:checkbox,
     options: {},
 
     button: function ($node, options) {
-      return renderer.create('<button type="button" class="note-btn btn btn-light btn-sm" tabindex="-1">', function ($node, options) {
+      return renderer.create('<button type="button" class="note-btn btn btn-default btn-sm" tabindex="-1">', function ($node, options) {
         if (options && options.tooltip && self.options.tooltip) {
           $node.attr({
             title: options.tooltip
@@ -5882,7 +5879,7 @@
       }
 
       if (agent.isMac) {
-        shortcut = shortcut.replace('CMD', 'âŒ˜').replace('SHIFT', 'â‡§');
+        shortcut = shortcut.replace('CMD', '⌘').replace('SHIFT', '⇧');
       }
 
       shortcut = shortcut.replace('BACKSLASH', '\\')
@@ -7389,8 +7386,8 @@
 
       var body = [
         '<p class="text-center">',
-        '<a href="http://summernote.org/" target="_blank">Summernote 0.8.8</a> Â· ',
-        '<a href="https://github.com/summernote/summernote" target="_blank">Project</a> Â· ',
+        '<a href="http://summernote.org/" target="_blank">Summernote 0.8.8</a> · ',
+        '<a href="https://github.com/summernote/summernote" target="_blank">Project</a> · ',
         '<a href="https://github.com/summernote/summernote/issues" target="_blank">Issues</a>',
         '</p>'
       ].join('');

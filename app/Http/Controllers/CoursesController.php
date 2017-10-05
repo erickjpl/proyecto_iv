@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use View;
+use \App\User;
+use \App\Profile;
 
 class CoursesController extends Controller
 {
@@ -14,6 +16,20 @@ class CoursesController extends Controller
     {
         return View::make('courses.create');
     }
+
+
+    /**
+     * [listTeachers funcion que lista profesores]
+     * @return [json] 
+     */
+    public function listTeachers(){
+        $objUser= new User();
+        $objProfile= new Profile();
+        $profiles[]=$objProfile->pro_teacher;
+        $data_user=$objUser->getUsers('',$profiles);
+        return response()->json($data_user);
+    }
+
 
     /**
      * Show the form for creating a new resource.
