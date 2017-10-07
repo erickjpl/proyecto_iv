@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use View;
 use \App\User;
 use \App\Profile;
+use \App\Course;
 
 class CoursesController extends Controller
 {
@@ -49,7 +50,9 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $objCourse=new Course();
+        $save=$objCourse->saveCourse($request);
+        return response()->json($save);
     }
 
     /**

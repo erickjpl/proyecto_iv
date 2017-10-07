@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('css/datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-clockpicker.min.css') }}"> 
     <link href="{{ asset('css/summernote/summernote.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/chosen/chosen.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
           
     <!-- Scripts -->
@@ -29,6 +30,7 @@
     <script src="{{ asset('js/lib/bootstrap-clockpicker.min.js') }}"></script>
     <script src="{{ asset('js/lib/summernote/summernote.js') }}"></script>
     <script src="{{ asset('js/lib/summernote/summernote-es-ES.js') }}"></script>
+    <script src="{{ asset('js/lib/chosen.jquery.min.js') }}"></script>
 
 </head>
 <body>

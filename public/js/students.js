@@ -82,9 +82,7 @@
       });
     },
     validateModal:function(){
-        $("#form-create-user").validate({
-            validClass: "success"
-        });
+        $("#form-create-user").validate();
         $( "#nombre" ).rules( "add", {
             required: true,
             messages: {
