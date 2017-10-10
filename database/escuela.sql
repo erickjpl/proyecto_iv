@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `escuela` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `escuela`;
--- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: escuela
 -- ------------------------------------------------------
--- Server version	5.7.5-m15-log
+-- Server version	5.6.28-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -34,8 +34,9 @@ CREATE TABLE `courses` (
   `exams` enum('true','false') NOT NULL DEFAULT 'false',
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
+  `status` enum('true','false') DEFAULT 'false',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,6 +45,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
+INSERT INTO `courses` VALUES (3,'Curso Prueba 1','2017-10-11 00:02:40',NULL,'<ol><li>hola','true','true','2017-10-10 12:02:00','2017-10-13 16:00:00','true'),(4,'Curso Prueba 1','2017-10-11 00:03:03',NULL,'<ol><li>hola','true','true','2017-10-10 12:02:00','2017-10-13 16:00:00','true'),(5,'xxcxc','2017-10-11 00:05:21',NULL,'<p>xcxcxcxc</p>','true','true','2017-10-10 12:05:00','2017-10-07 13:05:00','true');
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,9 +63,9 @@ CREATE TABLE `courses_teachers` (
   PRIMARY KEY (`id`),
   KEY `fk_courses_teachers_users1_idx` (`user_id`),
   KEY `fk_courses_teachers_courses1_idx` (`course_id`),
-  CONSTRAINT `fk_courses_teachers_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_courses_teachers_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  CONSTRAINT `courses_teachers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_courses_teachers_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,6 +74,7 @@ CREATE TABLE `courses_teachers` (
 
 LOCK TABLES `courses_teachers` WRITE;
 /*!40000 ALTER TABLE `courses_teachers` DISABLE KEYS */;
+INSERT INTO `courses_teachers` VALUES (3,37,3),(4,37,4),(5,37,5);
 /*!40000 ALTER TABLE `courses_teachers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,7 +202,7 @@ CREATE TABLE `profiles` (
 
 LOCK TABLES `profiles` WRITE;
 /*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (1,'Estudiantes','false'),(2,'Admistrador','true'),(3,'Profesor','true');
+INSERT INTO `profiles` VALUES (1,'Estudiante','false'),(2,'Admistrador','true'),(3,'Profesor','true');
 /*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +253,7 @@ CREATE TABLE `users` (
   KEY `id` (`id`) USING BTREE,
   KEY `occupation_id` (`occupation_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`occupation_id`) REFERENCES `occupations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,7 +262,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (30,'Carlos','carlos@gmail.com','$2y$10$QTtP6Q8JFBZPK7TNdVWP0uHCWuGc/komLNHN9r.B1V35XNNF/m26u','OqVDvRI94XngDRCUAzgu6HLyKrCC9s0ZwyOlOLlJ3j155xTfU9XVe6soZbLC','2017-09-29 00:09:09','2017-10-03 07:19:56','Ramirez','true',1,'18713843'),(37,'Carla','carla@gmail.com','$2y$10$dDY8dnfFu9DdK69G1l5Ko.mJCFJVm0kesDR7eEsPo60H0bFuZ8TV.','keY6M6ZrM710SOFXHUr7vLHInnUh7MTkGWJuCf6re7e5F0g1KGpNyqBCmW8Y','2017-10-05 06:44:35','2017-10-05 06:47:38','Ramirez','true',1,'18713843');
+INSERT INTO `users` VALUES (30,'Carlos','carlos@gmail.com','$2y$10$QTtP6Q8JFBZPK7TNdVWP0uHCWuGc/komLNHN9r.B1V35XNNF/m26u','VzpOyEUUovejtO7lAfVVZ4NUgo8CN4ZVx6yfafw16KzUJtBLpXH0h366pqXc','2017-09-29 00:09:09','2017-10-03 07:19:56','Ramirez','true',1,'18713843'),(37,'Carla','carla@gmail.com','$2y$10$dDY8dnfFu9DdK69G1l5Ko.mJCFJVm0kesDR7eEsPo60H0bFuZ8TV.','keY6M6ZrM710SOFXHUr7vLHInnUh7MTkGWJuCf6re7e5F0g1KGpNyqBCmW8Y','2017-10-05 06:44:35','2017-10-05 06:47:38','Ramirez','true',1,'18713843'),(38,'Jorge','jlobo@gmail.com','$2y$10$j9QOT9dI/rlxxgjVcoPR8.A8GlI9ixgqhNQhjEJMz/tvfJU2GaV3.',NULL,'2017-10-10 23:10:11','2017-10-10 23:32:17','Logo','true',1,'555674564');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -279,7 +282,7 @@ CREATE TABLE `users_profiles` (
   KEY `users_profiles_ibfk_1` (`user_id`),
   CONSTRAINT `users_profiles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `users_profiles_ibfk_2` FOREIGN KEY (`profile_id`) REFERENCES `profiles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -288,7 +291,7 @@ CREATE TABLE `users_profiles` (
 
 LOCK TABLES `users_profiles` WRITE;
 /*!40000 ALTER TABLE `users_profiles` DISABLE KEYS */;
-INSERT INTO `users_profiles` VALUES (2,26,30),(3,30,37);
+INSERT INTO `users_profiles` VALUES (2,26,30),(3,30,37),(1,31,38);
 /*!40000 ALTER TABLE `users_profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -309,4 +312,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 23:01:17
+-- Dump completed on 2017-10-10 17:04:53

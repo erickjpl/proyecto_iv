@@ -1,0 +1,7 @@
+Modulo de Usuarios 
+revisar modificacion nivel de perfiles 
+autenticar con gmail (actualmente mailtrap) 
+
+
+Modulo de cursos 
+revisar error consola summer note 

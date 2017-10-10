@@ -11,6 +11,7 @@
      this.fnDatepicker();
      this.selectTeacher();
      this.saveCourse();
+     this.exitCourse();
     },fnChosen:function(){
       $(".chosen-select").chosen();
       $('.chosen-container input[type="text"]').attr("autocomplete",false);
@@ -48,7 +49,6 @@
       }
     },selectTeacher:function(){
       var select=$("#profesor");
-      select.append($('<option>',{'value':''}).text('Seleccione'));
       var select_profile=this.consult('./teacherslist',[],'GET');
       select_profile.done(function(d){
           $.each( d, function( i, val ) {
@@ -168,7 +168,16 @@
                 $("#oper_error").text(error);
               }       
         })
-    },
+        if(typeof error!==undefined || error!='' || error!=null ){
+          $(modal).on('hidden.bs.modal', function () {
+              window.location.href = "./listcourse";
+          });
+        }
+    },exitCourse:function(){
+      $("#salircourse").click(function() {
+        window.location.href = "./listcourse";
+      });
+    }
   }
   $(document).ready(function(){
     //courses.validateModal();

@@ -11,10 +11,10 @@ class Course extends Model
     
     function saveCourse($request){
         $id="";
-        $f_inicio=date("Y-m-d", strtotime($request->f_inicio));
-        $h_inicio=date("H:m:s", strtotime($request->h_inicio));
-        $f_fin=date("Y-m-d", strtotime($request->f_fin));
-        $h_fin=date("H:m:s", strtotime($request->h_fin));
+        $h_inicio=date("H:i:s",strtotime(str_replace('/', '-',$request->h_inicio))); 
+        $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->h_fin))); 
+        $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->f_inicio))); 
+        $f_fin=date("Y-m-d",strtotime(str_replace('/', '-',$request->f_fin))); 
         $material=explode(',',$request->material);
         $profesores=explode(',',$request->profesor);
         $streaming='false';
@@ -33,7 +33,8 @@ class Course extends Model
                 'temary'=>$request->temario,
                 'created_at'=>date("Y-m-d H:i:s"),
                 'streaming'=>$streaming,
-                'exams'=>$exams
+                'exams'=>$exams,
+                'status'=>$request->estatus_curso
                 ]
             );
         } catch(\Illuminate\Database\QueryException $ex){         
@@ -69,6 +70,25 @@ class Course extends Model
              $oper["error"]='COD: '.$cod_error;
         }
         return $oper;  
+    }
+
+
+    /**
+     * [getCourse retorna todos los cursos ]
+     * @param  [int] $id [id del curso]
+     * @return [object]  
+     */
+    function getCourse($id=null){
+
+        $query=DB::table('courses');
+
+        if(!empty($id))
+            $query->where('courses.id',$id); 
+
+        $query->select('courses.id','courses.name','courses.start_date', 'courses.end_date','courses.status');
+        $data=$query->get();      
+        return $data; 
+
     }
 
 }

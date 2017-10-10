@@ -54,7 +54,7 @@
 				          </div>
 				          <div class="form-group">
 				            <label for="perfil">Profesor: <span class="requerido">(*)</span></label>
-				            <select class="form-control chosen-select input-modal" multiple id="profesor" name="profesor"></select>
+				            <select class="form-control chosen-select input-modal" data-placeholder='Seleccione' multiple id="profesor" name="profesor"></select>
 				          </div>
 				          <div class="form-group">
 				          	<label for="estatus_curso">Estatus Curso: <span class="requerido">(*)</span></label>
@@ -80,7 +80,7 @@
 				          </div>
 				      </div>
 				      <div class="modal-footer">
-				        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cancelar</button>
+				        <button type="button" class="btn btn-danger" data-dismiss="modal" id='salircourse' >Cancelar</button>
 				        <button type="button" class="btn btn-primary" id="savecourse">Guardar</button>
 				      </div>
 				      </form>

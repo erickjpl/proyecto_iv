@@ -38,8 +38,11 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::post('setuser', 'UsersController@setEstatusUser');
 
 	/*Modulo de Cursos*/
-	Route::get('create', 'CoursesController@index');
+	Route::get('createcourse', 'CoursesController@index');
+	Route::get('listcourse', 'CoursesController@viewListCourses');
 	Route::get('teacherslist', 'CoursesController@listTeachers');
+	Route::get('getcourses', 'CoursesController@listCourses');
+	Route::get('course/{id}', 'CoursesController@editCourse');
 	Route::post('savecourse', 'CoursesController@store');
 
 	
