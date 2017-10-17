@@ -4,4 +4,4 @@ autenticar con gmail (actualmente mailtrap)
 
 
 Modulo de cursos 
-revisar error consola summer note 
+revisar chosen que cargan profesores 

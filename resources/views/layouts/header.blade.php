@@ -24,13 +24,19 @@
     <script src="{{ asset('js/lib/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('js/lib/datatables.min.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/lib/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('js/lib/additional-methods.min.js') }}"></script>
+
+    
     <script src="{{ asset('js/lib/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap-clockpicker.min.js') }}"></script>
     <script src="{{ asset('js/lib/summernote/summernote.js') }}"></script>
     <script src="{{ asset('js/lib/summernote/summernote-es-ES.js') }}"></script>
     <script src="{{ asset('js/lib/chosen.jquery.min.js') }}"></script>
+
+
+    <script src="{{ asset('js/lib/jquery.validate.js') }}"></script>
+    <script src="{{ asset('js/lib/additional-methods.min.js') }}"></script>
+    <script src="{{ asset('js/lib/fn_validate.js') }}"></script>
+    
 
 </head>
 <body>

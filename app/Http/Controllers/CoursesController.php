@@ -71,17 +71,51 @@ class CoursesController extends Controller
 
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * [editCourse description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
      */
-    public function editCourse($id)
-    {
-        dd($id);
+    public function editCourse(Request $request)
+    {     
+        $objCourse= new Course();
+        $id_course=base64_decode($request->id);
+        $data_course=$objCourse->getCourse($id_course);
+        $data_teacher=$objCourse->relationshipteacher($id_course);
+        $arr=array();
+        foreach ($data_course as $key => $value) {
+            $time_ini=explode(' ',$value->start_date);
+            $time_fin=explode(' ',$value->end_date);
+            $h_inicio=date("h:i:sA",strtotime($time_ini[1])); 
+            $h_fin=date("h:i:sA",strtotime($time_fin[1])); 
+            $f_inicio=date("d-m-Y",strtotime($time_ini[0])); 
+            $f_fin=date("d-m-Y",strtotime($time_fin[0])); 
+            $f_inicio=str_replace('-','/',$f_inicio);
+            $f_fin=str_replace('-','/',$f_fin);
+            $d["name"]=$value->name;
+            $d["status"]=$value->status;
+            $d["streaming"]=$value->streaming;
+            $d["temary"]=$value->temary;
+            $d["exams"]=$value->exams;
+            $d["f_inicio"]=$f_inicio;
+            $d["f_fin"]=$f_fin;
+            $d["h_inicio"]=$h_inicio;
+            $d["h_fin"]=$h_fin;
+            $arr[]=$d;
+        }
+        $data["course"]=$arr;
+        $data["teachers"]=$data_teacher[0];
+        return response()->json($data);   
     }
 
-
+    /**
+     * [showCourse description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function showCourse($id)
+    {   
+        return View::make('courses.create',['id' =>$id]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -96,13 +130,23 @@ class CoursesController extends Controller
         return response()->json($save);
     }
 
+
+    public function update(Request $request, $id)
+    {   
+        $objCourse= new Course();
+        $id_course=base64_decode($id);
+        $update=$objCourse->updateCourse($request, $id_course);
+        return response()->json($update);
+    }
+
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    /*public function show($id)
     {
         //
     }
@@ -115,7 +159,7 @@ class CoursesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    /*public function update(Request $request, $id)
     {
         //
     }
@@ -126,8 +170,8 @@ class CoursesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    /*public function destroy($id)
     {
         //
-    }
+    }*/
 }

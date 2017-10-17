@@ -80,13 +80,15 @@
 				          </div>
 				      </div>
 				      <div class="modal-footer">
+				      	<input type="hidden" name="id_course" id="id_course" value="{{ !isset($id)?'':$id }}">
 				        <button type="button" class="btn btn-danger" data-dismiss="modal" id='salircourse' >Cancelar</button>
-				        <button type="button" class="btn btn-primary" id="savecourse">Guardar</button>
+				        <button type="button" class="btn btn-primary btn-createcourse" id="savecourse">Guardar</button>
 				      </div>
 				      </form>
                 </div>
             </div>
         </div>
     </div>
-	<script src="js/createcourses.js"></script>
+    <script src="{{ asset('js/createcourses.js') }}"></script>
+	<!--<script src="js/createcourses.js"></script>-->
 @endsection

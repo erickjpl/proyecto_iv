@@ -60,7 +60,7 @@
        $("body").on("click",".acc_mod", function(){
           $(".form-perfil").hide();
           var course=$(this).attr('data-course');
-          window.location.href = "./course/"+course;
+          window.location.href = "./"+course;
       });
     }
   }

@@ -11,3 +11,8 @@ input.error,select.error,textarea.error{
 .requerido{
     color: #a94442;
 }
+
+.chosenError{
+  border:1px solid red;
+  background:#ffa0a7;
+ }

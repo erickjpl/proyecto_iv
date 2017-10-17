@@ -30,5 +30,5 @@
         </div>
     </div>
 </div>
-<script src="js/listcourses.js"></script>
+<script src="../js/listcourses.js"></script>
 @endsection

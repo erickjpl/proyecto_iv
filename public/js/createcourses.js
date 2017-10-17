@@ -3,15 +3,18 @@
   var courses = {
     btoaFieldsAjax:false,
     typeAjax:"GET",
+    course_id:'',
     launch: function(){
-      this.validateModal();
      this.fnChosen();
      this.fnSummernote();
      this.fnClockpicker();
-     this.fnDatepicker();
+     this.fnDatepicker(); 
      this.selectTeacher();
+     this.getCourse();
      this.saveCourse();
      this.exitCourse();
+     this.validateModal();
+     this.modCourse();
     },fnChosen:function(){
       $(".chosen-select").chosen();
       $('.chosen-container input[type="text"]').attr("autocomplete",false);
@@ -61,14 +64,17 @@
       });
       
     },validateModal:function(){
-        $("#form-create-course").validate();
+
+        $("#form-create-course").validate({
+          ignore: '*:not([name])', //Fixes your name issue*/
+        });
         $( "#nombre_curso" ).rules( "add", {
             required: true,
             messages: {
                 required: ""
             }
         });
-        $( "#hora_inicio" ).rules( "add", {
+         $( "#hora_inicio" ).rules( "add", {
             required: true,
             messages: {
                 required: ""
@@ -92,19 +98,20 @@
                 required: "",
             }
         });
-        $( "#profesor" ).rules( "add", {
-            required: true,
+         $( "#profesor" ).rules( "add", {
+            chosenmultiple: true,
             messages: {
-                required: "",
+                chosenmultiple: ""
             }
         });
-        $( "#temario" ).rules( "add", {
-            required: true,
+         $( "#temario" ).rules( "add", {
+            editorsummer: true,
             messages: {
-                required: "",
+                editorsummer: ""
             }
         });
-    },saveCourse:function(){
+
+     },saveCourse:function(){
        $("body").on("click","#savecourse", function(){
         if($("#form-create-course").valid()){
             var name_course=$("#nombre_curso").val();
@@ -170,18 +177,91 @@
         })
         if(typeof error!==undefined || error!='' || error!=null ){
           $(modal).on('hidden.bs.modal', function () {
-              window.location.href = "./listcourse";
+              window.history.back();
           });
         }
     },exitCourse:function(){
       $("#salircourse").click(function() {
-        window.location.href = "./listcourse";
+        window.history.back();
       });
-    }
+    },getCourse:function(){
+      var course=$("#id_course").val();
+      if(course!=''){
+          courses.course_id=course;
+          var data_course=courses.consult('datacourse',
+              {'id':course},'POST');         
+          data_course.done(function(d){ 
+            var data_course=d.course[0];
+            var data_teacher=[];
+              $.each(d.teachers, function( i, val ) {
+                data_teacher.push(val);
+              });
+              $("#nombre_curso").val(data_course.name);
+              $("#fecha_inicio").val(data_course.f_inicio);
+              $("#fecha_fin").val(data_course.f_fin);
+              $("#hora_inicio").val(data_course.h_fin);
+              $("#hora_final").val(data_course.h_fin);
+              $("#temario").val(data_course.temary);
+              $("#temario").val(data_course.temary);
+              $(".note-editable").html(data_course.temary);                 
+              $("#profesor").val(data_teacher).trigger("liszt:updated");
+              $("#profesor").trigger('chosen:updated');
+
+              if(data_course.status=='true'){
+                 $("#curso_true").attr('checked',true);
+              }else if(data_course.status=='false'){
+                $("#curso_true").attr('checked',false);
+              }
+              $(".material").each(function(){
+                  $(this).attr('checked',false);
+              });
+              if(data_course.streaming=='true'){
+                  $("#tipo_mat1").attr('checked',true);
+              }
+              if(data_course.exams=='true'){
+                  $("#tipo_mat2").attr('checked',true);
+              }
+              $(".btn-createcourse").attr("id",'modcourse');
+          });        
+      }
+    },modCourse:function(){
+        $("body").on("click","#modcourse", function(){
+          if($("#form-create-course").valid()){
+              var name_course=$("#nombre_curso").val();
+              var f_inicio=$("#fecha_inicio").val();
+              var h_inicio=$("#hora_inicio").val();
+              var f_fin=$("#fecha_fin").val();
+              var h_fin=$("#hora_final").val();
+              var profesor=$("#profesor").val();
+              var estatus_curso=$("input[name='estatus_curso']" ).val();
+              var temario=$("#temario").val();
+              var material=[];
+              $('.material').each(function(){
+                  if($(this).is(':checked')){
+                    material.push($(this).val());
+                  }
+              })
+              var update=courses.consult('./updatecourse/'+courses.course_id,
+                {'name_course':name_course,'f_inicio':f_inicio,'f_fin':f_fin,
+                 'h_inicio':h_inicio,'h_fin':h_fin,'profesor':profesor,
+                 'estatus_curso':estatus_curso,'temario':temario,'material':material,_method:'PUT'
+                },'POST');
+              update.done(function(d){ 
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }
+                courses.Modaloper('#modal_operacion',msj,title,error);
+              });
+          }
+        });
+      }
   }
   $(document).ready(function(){
-    //courses.validateModal();
     courses.launch();
-    //courses.saveCourse();
   });
 })(jQuery);
