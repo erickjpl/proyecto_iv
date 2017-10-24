@@ -136,12 +136,15 @@ class Course extends Model
      * @param  [int] $id [id del curso]
      * @return [object]  
      */
-    function getCourse($id=null){
+    function getCourse($id=null,$active=false){
 
         $query=DB::table('courses');
 
         if(!empty($id))
             $query->where('courses.id',$id); 
+
+        if($active==true)
+                $query->where('courses.status','true'); 
 
         $query->select('courses.id','courses.name','courses.start_date', 'courses.end_date','courses.status','courses.temary','courses.exams','courses.streaming');
         $data=$query->get();      

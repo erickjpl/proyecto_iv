@@ -71,9 +71,35 @@ class CoursesController extends Controller
 
 
     /**
-     * [editCourse description]
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     * [listOfferAcademy description]
+     * @return [type] [description]
+     */
+    public function listOfferAcademy(){
+          $objCourse= new Course();
+          $objUser= new User();
+          $data=$objCourse->getCourse('',true);
+          if(!empty($data)){
+             foreach ($data as $key => $value) {
+                $teachers=array();
+                $id=$value->id;
+                $relteacher=$objCourse->relationshipteacher($id);
+                foreach ($relteacher as $k => $v) {
+                    $data_user=$objUser->getUsers($v->user_id);
+                    $nombre=$data_user[0]->name.' '.$data_user[0]->lastname;
+                    array_push($teachers,$nombre);                   
+                }
+                $value->teacher=$teachers;
+             }
+          }
+          $resp["courses"][]=$data;
+          return response()->json($resp);
+    }
+
+
+    /**
+     * [editCourse funcion que solicita la data del curso para modificarlo]
+     * @param  [int] $id [id del curso]
+     * @return [json]     []
      */
     public function editCourse(Request $request)
     {     
@@ -108,20 +134,19 @@ class CoursesController extends Controller
     }
 
     /**
-     * [showCourse description]
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     * [showCourse vista del curso para modificar]
+     * @param  [int] $id [id del curso]
      */
     public function showCourse($id)
     {   
         return View::make('courses.create',['id' =>$id]);
     }
 
+    
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * [store funcion para guardar el curso]
+     * @param  Request $request [objeto del formulario]
+     * @return [json]           []
      */
     public function store(Request $request)
     {
@@ -130,7 +155,12 @@ class CoursesController extends Controller
         return response()->json($save);
     }
 
-
+    /**
+     * [update fucnion que modifica el curso]
+     * @param  Request $request [objeto del formulario]
+     * @param  [int]  $id      [id del curso]
+     * @return []           []
+     */
     public function update(Request $request, $id)
     {   
         $objCourse= new Course();
@@ -139,39 +169,14 @@ class CoursesController extends Controller
         return response()->json($update);
     }
 
-
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * [showAcademy description]
+     * @return [type] [description]
      */
-    /*public function show($id)
-    {
-        //
+    public function showAcademy(){
+       return View::make('courses.academic_offer');
     }
 
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function destroy($id)
-    {
-        //
-    }*/
+
 }

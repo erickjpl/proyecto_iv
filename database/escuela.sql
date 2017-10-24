@@ -36,7 +36,7 @@ CREATE TABLE `courses` (
   `end_date` datetime NOT NULL,
   `status` enum('true','false') DEFAULT 'false',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (3,'Curso Prueba 1','2017-10-11 00:02:40',NULL,'<ol><li>hola','true','true','2017-10-10 12:02:00','2017-10-13 16:00:00','true'),(4,'Curso Prueba 1','2017-10-11 00:03:03',NULL,'<ol><li>hola','true','true','2017-10-10 12:02:00','2017-10-13 16:00:00','true'),(5,'xxcxc','2017-10-11 00:05:21',NULL,'<p>xcxcxcxc</p>','true','true','2017-10-10 12:05:00','2017-10-07 13:05:00','true');
+INSERT INTO `courses` VALUES (6,'Curso Prueba hola','2017-10-18 00:36:24','2017-10-24 22:11:14','<ol><li>temario</li><li>hola</li><li>adios</li></ol>','true','false','2017-10-07 16:00:00','2017-10-17 16:05:00','true');
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +65,7 @@ CREATE TABLE `courses_teachers` (
   KEY `fk_courses_teachers_courses1_idx` (`course_id`),
   CONSTRAINT `courses_teachers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_courses_teachers_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,7 @@ CREATE TABLE `courses_teachers` (
 
 LOCK TABLES `courses_teachers` WRITE;
 /*!40000 ALTER TABLE `courses_teachers` DISABLE KEYS */;
-INSERT INTO `courses_teachers` VALUES (3,37,3),(4,37,4),(5,37,5);
+INSERT INTO `courses_teachers` VALUES (1,37,6);
 /*!40000 ALTER TABLE `courses_teachers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,4 +312,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-10 17:04:53
+-- Dump completed on 2017-10-24 15:56:16

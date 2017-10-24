@@ -47,6 +47,12 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::post('course/datacourse', 'CoursesController@editCourse');
 	Route::put('course/updatecourse/{id}', 'CoursesController@update');
 
+
+	/*inscripcion de alumnos*/
+	Route::get('academicoffer', 'CoursesController@showAcademy');
+	Route::get('listacademic', 'CoursesController@listOfferAcademy');
+
+
 	
 
 	

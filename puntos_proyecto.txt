@@ -5,3 +5,7 @@ autenticar con gmail (actualmente mailtrap)
 
 Modulo de cursos 
 revisar chosen que cargan profesores 
+
+
+snippet lista de cursos 
+https://bootsnipp.com/snippets/featured/call-to-action-with-dark-background
