@@ -58,7 +58,7 @@ trait AuthenticatesUsers
 
                 return $this->sendFailedLoginResponse($request);
         }else{
-           return Redirect::back()->withErrors(['email'=>'Su cuenta sera habilitada en un lapso de 2h']);
+           return Redirect::back()->withErrors(['email'=>'Su cuenta esta Inactiva. Comuniquese con Administración']);
         }       
     }
 

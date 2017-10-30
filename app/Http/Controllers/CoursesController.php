@@ -59,7 +59,7 @@ class CoursesController extends Controller
                  $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date)); 
                  $value->end_date=date("d/m/Y h:i:s A",strtotime($value->end_date)); 
                 $actions='<button type="button" class="acc_mod btn btn-primary btn-xs" data-course="'.$id.'">Modificar</button>
-                          <button type="button" class="acc_del btn btn-warning btn-xs" data-course="'.$id.'">Lista de Alumnos</button>
+                          <button type="button" class="acc_act btn btn-warning btn-xs" data-course="'.$id.'">Lista de Alumnos</button>
                           <button type="button" class="acc_del btn btn-danger btn-xs" data-course="'.$id.'">Eliminar</button>';
 
                 $value->actions=$actions;
@@ -82,13 +82,17 @@ class CoursesController extends Controller
              foreach ($data as $key => $value) {
                 $teachers=array();
                 $id=$value->id;
-                $relteacher=$objCourse->relationshipteacher($id);
+                $start_date=explode(' ',$value->start_date);
+                $end_date=explode(' ',$value->end_date);
+                $value->start_date=date("d/m/Y",strtotime($start_date[0])).' '.date("h:i:s A",strtotime($start_date[1])); 
+                $value->end_date=date("d/m/Y",strtotime($end_date[0])).' '.date("h:i:s A",strtotime($end_date[1])); 
+                $relteacher=$objCourse->relationshipusers($id,'T');
                 foreach ($relteacher as $k => $v) {
                     $data_user=$objUser->getUsers($v->user_id);
                     $nombre=$data_user[0]->name.' '.$data_user[0]->lastname;
                     array_push($teachers,$nombre);                   
                 }
-                $value->teacher=$teachers;
+                $value->teacher=implode(',',$teachers);
              }
           }
           $resp["courses"][]=$data;
@@ -106,7 +110,7 @@ class CoursesController extends Controller
         $objCourse= new Course();
         $id_course=base64_decode($request->id);
         $data_course=$objCourse->getCourse($id_course);
-        $data_teacher=$objCourse->relationshipteacher($id_course);
+        $data_teacher=$objCourse->relationshipusers($id_course,'T');
         $arr=array();
         foreach ($data_course as $key => $value) {
             $time_ini=explode(' ',$value->start_date);
@@ -177,6 +181,83 @@ class CoursesController extends Controller
        return View::make('courses.academic_offer');
     }
 
+    public function inscription(Request $request){
+        $objCourse= new Course();
+        $arr=array();
+        $course=$request->course;
+        $id_user=$request->session()->get('id');
+        
+        $data_user=$objCourse->relationshipusers($course,'S',$id_user);
+        if(empty($data_user)){
+            array_push($arr,$id_user);
+            $insert=$objCourse->insertRelationshipUsers($arr,$course,'S','false');
+            if($insert==true){
+                $insert=$objCourse->returnOper(true);
+            }
+            return response()->json($insert);
+        }else{
+            return $objCourse->returnOper(false,400);
+        }
 
+    }
+
+    public function getStudents(Request $request){
+        $objCourse= new Course();
+        $id_course=base64_decode($request->course);
+        $data=$objCourse->relationshipusers($id_course,'S');
+        return response()->json($data);
+        
+    }
+
+    function setStudent(Request $request){
+           $objUser= new User();
+           $objCourse= new Course();
+           $id_course=base64_decode($request->course_id);
+           $id_user=base64_decode($request->user_id);
+           $notif_mail=$request->notif;
+           $active=$request->user_status;
+           $data=$objCourse->getIdRelationshipUsers($id_course,$id_user);
+           $id_rel=$data[0]->id;
+           $arr=array();
+           $arr['status']=$active;
+           $obj = (object) $arr;
+           $update_estatus=$objCourse->updateRelationshipUsers($id_rel,$obj);
+           if($update_estatus["oper"]==true){
+             if($notif_mail==true){
+                dd('aqui');
+             }
+           }
+           return response()->json($update_estatus);
+
+           /*$data_user=$objUser::find($id);
+           $email=$data_user->email;
+           $name=$data_user->name.' '.$data_user->lastname;
+           $active=$request->user_status;
+           $notif_mail=$request->notif;
+
+
+           /*$data["active"]=$active;
+           $obj = (object) $data;
+           $data_mail=array();
+           $data_mail["name"]=$name;
+           $data_mail["email"]=$email;
+           $data_mail["active"]=$active;
+           
+           $update=$objUser->updateUser($obj,$id);
+           if($update["oper"]==true){
+                if($notif_mail=="true"){      
+                    try {
+                         Mail::to($email,$name)->send(new SendMail($data_mail,$this->mail_active));
+                         Log::info('Cambio de Estatus val:'.$active.' al usuario '.$email.' realizado por: '.Session::get('email'));
+                    }catch (Exception $e) {
+                        Log::error('COD: Falla Mail LINE: '.$ex->getLine().' FILE: '.$ex->getFile());   
+                        $error['cod']='Falla Mail';
+                        $error['oper']=false;
+                        return response()->json($error);
+                    }
+                }
+           }
+           return response()->json($update);*/
+        }
 
 }

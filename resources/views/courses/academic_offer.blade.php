@@ -1,4 +1,5 @@
 @extends('layouts.header')
+@include('modals.modals')
 @section('content')
 <div class="container">
     <div class="row">

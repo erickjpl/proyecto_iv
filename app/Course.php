@@ -43,20 +43,10 @@ class Course extends Model
             return $this->returnOper(false,$ex->errorInfo[0]); 
         }
         if(is_int($id)){
-            $insert=$this->insertRelationshipTeacher($profesores,$id);
+            $insert=$this->insertRelationshipUsers($profesores,$id);
             if($insert){
                  return $this->returnOper(true);
             }
-            /*try {
-                foreach ($profesores as $key=>$value) {
-                   $insert=DB::table('courses_teachers')->insert([
-                             'user_id'=>$value,'course_id'=>$id]);
-                }
-                return $this->returnOper(true);
-            } catch (Exception $e) {
-                Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
-                return $this->returnOper(false,$ex->errorInfo[0]);
-            }*/
         }
     }
 
@@ -104,7 +94,7 @@ class Course extends Model
         if(!empty($dif)){
             $delrel=$this->deleteRelationshipTeacher($id);
             if($delrel){
-                $insert=$this->insertRelationshipTeacher($profesores,$id);
+                $insert=$this->insertRelationshipUsers($profesores,$id);
                 if($insert){
                      return $this->returnOper(true);
                 }
@@ -153,14 +143,21 @@ class Course extends Model
     }
 
     /**
-     * [relationshipteacher description]
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     * [relationshipusers description]
+     * @param  [type] $id    [description]
+     * @param  [type] $sigla [description]
+     * @param  [type] $user  [description]
+     * @return [type]        [description]
      */
-    function relationshipteacher($id){
-        $query=DB::table('courses_teachers');
-        $query->where('courses_teachers.course_id',$id); 
-        $query->select('courses_teachers.user_id');
+    function relationshipusers($id,$sigla,$user=null){
+        $query=DB::table('courses_users');
+        if(!empty($user))
+             $query->where('courses_users.user_id',$user); 
+
+        $query->where('courses_users.type',$sigla); 
+        $query->where('courses_users.course_id',$id); 
+        $query->join('users', 'users.id', '=', 'courses_users.user_id');
+        $query->select('courses_users.user_id','courses_users.status','users.name','users.lastname');
         $data=$query->get();      
         return $data; 
     }
@@ -172,20 +169,34 @@ class Course extends Model
      * @return [type]     [description]
      */
     function deleteRelationshipTeacher($id){
-        $delete=DB::table('courses_teachers')->where('course_id',$id)->delete();
+
+        $query->where('courses_users.course_id',$id); 
+        $query->where('courses_users.type','T'); 
+        $query=DB::table('courses_users');
+        $delete=$query->delete();
         return $delete;
     }
 
 
     /**
-     * [insertRelationshipTeacher description]
-     * @return [type] [description]
+     * [insertRelationshipUsers description]
+     * @param  [type] $usuarios [description]
+     * @param  [type] $id       [description]
+     * @param  [type] $type     [description]
+     * @param  [type] $status   [description]
+     * @return [type]           [description]
      */
-    function insertRelationshipTeacher($profesores,$id){
+    function insertRelationshipUsers($usuarios,$id,$type=null,$status=null){
+        if(empty($status))
+            $status='true';
+
+        if(empty($type))
+            $type='T';
+
         try {
-            foreach ($profesores as $key=>$value) {
-               $insert=DB::table('courses_teachers')->insert([
-                         'user_id'=>$value,'course_id'=>$id]);
+            foreach ($usuarios as $key=>$value) {
+               $insert=DB::table('courses_users')->insert([
+                         'user_id'=>$value,'course_id'=>$id,'type'=>$type,'status'=>$status]);
             }
             return true;
         } catch (Exception $e) {
@@ -194,4 +205,38 @@ class Course extends Model
         }
     }
 
+    /**
+     * [getIdRelationshipUsers description]
+     * @param  [type] $course [description]
+     * @param  [type] $user   [description]
+     * @return [type]         [description]
+     */
+    function getIdRelationshipUsers($course,$user){
+        $query=DB::table('courses_users');
+        $query->where('courses_users.course_id',$course); 
+        $query->where('courses_users.user_id',$user); 
+        $query->select('courses_users.id');
+        $data=$query->get(); 
+        return $data;
+    }
+
+    /**
+     * [updateRelationshipUsers description]
+     * @param  [type] $id   [description]
+     * @param  [type] $data [description]
+     * @return [type]       [description]
+     */
+    function updateRelationshipUsers($id,$data){
+         try {          
+            $update=DB::table('courses_users');
+            $update->where('id',$id);
+            foreach ($data as $key => $value) {
+                $update->update([$key=>$value]);
+            }
+            return $this->returnOper(true);
+        } catch(\Illuminate\Database\QueryException $ex){         
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $this->returnOper(false,$ex->errorInfo[0]); 
+        }
+    }
 }

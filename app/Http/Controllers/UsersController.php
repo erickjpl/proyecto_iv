@@ -103,11 +103,11 @@ class UsersController extends Controller
     {   
         $objUser= new User();
         $save=$objUser->saveUser($request);
-        $resp=response()->json($save);
+        //$resp=response()->json($save);
         if($save["oper"]==true){
             $this->sendResetLinkEmail($request);
         }
-        return $resp;
+        return response()->json($save);
     }
 
 

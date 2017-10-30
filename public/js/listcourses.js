@@ -5,12 +5,17 @@
     typeAjax:"GET",
     table_id:'#tblcourses',
     table:'',
-    //data:[],
+    list_students:[],
+    course:'',
+    user:{},
     //user:[],
     launch: function(){
       this.addCourse();
       this.dataTable(this.table_id);
       this.modCourse();
+      this.activeStudents();
+      this.checkInactive();
+      this.activarUser();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -61,6 +66,51 @@
           $(".form-perfil").hide();
           var course=$(this).attr('data-course');
           window.location.href = "./"+course;
+      });
+    },activeStudents:function(){
+        $("body").on("click",".acc_act", function(){  
+          courses.course=$(this).attr('data-course'); 
+          var liststudents=courses.consult('liststudents',{'course':courses.course},'POST');
+            liststudents.done(function(d){   
+                courses.modalStudents('#modal_list_students',d);
+            });
+        });
+    },modalStudents:function(modal,data){
+       $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {             
+              $("#list_students").empty();
+              $.each(data, function( k, v ) {
+                var status=v.status;
+                var active=(status=='true')?true:false;
+                var inactive=(status=='false')?true:false;
+                $('#list_students').append($('<table>',{class:'table'}).append(
+                    $('<tr>').append(
+                    $('<td>').text(v.name+' '+v.lastname).css('font-weight','bold'),
+                    $('<td>').html($('<input>',{'data-user':btoa(v.user_id),'data-user':btoa(v.user_id),'data-status':status,type:'radio',value:'true',checked:active,class:'check_val'}).add($('<label>').text('Activo'))),
+                    $('<td>').html($('<input>',{'data-user':btoa(v.user_id),'data-status':status,type:'radio',value:'false',checked:inactive,class:'check_val'}).add($('<label>').text('Inactivo'))),
+                )));
+              }); 
+        });
+    },checkInactive:function(){
+         $("body").on("change",".check_val", function(){  
+           var status_act=$(this).attr('data-status');
+           courses.user.id=$(this).attr('data-user');
+           if($(this).val()!=status_act){
+              courses.user.status=$(this).val();
+              $("#email_notif").val(0);
+              courses.Modal('#modal_estatus_usuario');
+           }
+        });
+    },Modal:function(modal){
+        $('.modal').modal('hide');
+        $(modal).modal('show');
+    },activarUser:function(){
+      $('#setestatus_user').click(function() {
+          var val_mail=($("#email_notif").val()==0)?false:true;
+          var update=courses.consult('setstudent',{'course_id':courses.course,'user_id':courses.user.id,'user_status':courses.user.status,'notif':val_mail},'POST');
+          update.done(function(d){   
+             
+          });
       });
     }
   }

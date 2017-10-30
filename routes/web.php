@@ -43,19 +43,20 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::get('course/teacherslist', 'CoursesController@listTeachers');
 	Route::get('course/getcourses', 'CoursesController@listCourses');
 	Route::get('course/{id}', 'CoursesController@showCourse');
+	Route::post('course/liststudents', 'CoursesController@getStudents');
 	Route::post('course/savecourse', 'CoursesController@store');
 	Route::post('course/datacourse', 'CoursesController@editCourse');
 	Route::put('course/updatecourse/{id}', 'CoursesController@update');
+	Route::post('course/setstudent', 'CoursesController@setStudent');
 
+});
+
+Route::group(['middleware' => ['auth','validstudent']], function () {
 
 	/*inscripcion de alumnos*/
 	Route::get('academicoffer', 'CoursesController@showAcademy');
 	Route::get('listacademic', 'CoursesController@listOfferAcademy');
-
-
-	
-
-	
+	Route::post('saveinscription', 'CoursesController@inscription');	
 
 });
 

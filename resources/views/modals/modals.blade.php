@@ -113,3 +113,21 @@
     </div>
   </div>
 </div>
+
+
+<!--modal_confirmacion-->
+<div class="modal fade" id="modal_list_students" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Lista de Estudiantes</h4>
+      </div>
+      <div class="modal-body">
+        <div id="list_students"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
