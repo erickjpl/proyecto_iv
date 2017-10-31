@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::post('course/datacourse', 'CoursesController@editCourse');
 	Route::put('course/updatecourse/{id}', 'CoursesController@update');
 	Route::post('course/setstudent', 'CoursesController@setStudent');
+	Route::delete('course/delcourse/{id}', 'CoursesController@deleteCourse');
 
 });
 

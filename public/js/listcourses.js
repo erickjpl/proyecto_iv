@@ -16,6 +16,8 @@
       this.activeStudents();
       this.checkInactive();
       this.activarUser();
+      this.delCourse();
+      this.confirmDelCourse();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -109,9 +111,51 @@
           var val_mail=($("#email_notif").val()==0)?false:true;
           var update=courses.consult('setstudent',{'course_id':courses.course,'user_id':courses.user.id,'user_status':courses.user.status,'notif':val_mail},'POST');
           update.done(function(d){   
-             
+            var msj='Operacion realizada con éxito';
+            var title='Mensaje!';
+            var error='';
+            if(d.oper==false){
+               msj='Error comuniquese con el Administrador';
+               title='Error!';
+               error=(d.error!='')?d.error:'';
+            }
+            courses.Modaloper('#modal_operacion',msj,title,error);
           });
       });
+    },Modaloper:function(modal,msj,title,error){
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").text(msj);
+              }
+              if(typeof title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(typeof error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
+        })
+    },delCourse:function(){
+      $("body").on("click",".acc_del", function(){  
+        courses.course=$(this).attr('data-course'); 
+        courses.Modaloper('#modal_confirmacion','¿Desea realizar esta operación?','','');
+      });
+    },confirmDelCourse:function(){
+      $("body").on("click","#go_oper", function(){
+         var delet=courses.consult('./delcourse/'+courses.course,{_method:'DELETE'},'POST');
+         delet.done(function(d){
+                /*var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }
+                courses.Modaloper('#modal_operacion',msj,title,error);*/
+           });
+      });     
+      
     }
   }
   $(document).ready(function(){

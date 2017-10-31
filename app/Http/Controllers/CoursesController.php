@@ -7,6 +7,8 @@ use View;
 use \App\User;
 use \App\Profile;
 use \App\Course;
+use Illuminate\Support\Facades\Mail;
+use \App\Mail\SendMail;
 
 class CoursesController extends Controller
 {
@@ -183,16 +185,35 @@ class CoursesController extends Controller
 
     public function inscription(Request $request){
         $objCourse= new Course();
+        $objUser= new User();
         $arr=array();
-        $course=$request->course;
+        $course=base64_decode($request->course);
         $id_user=$request->session()->get('id');
-        
-        $data_user=$objCourse->relationshipusers($course,'S',$id_user);
-        if(empty($data_user)){
+        $user=$objUser::find($id_user);
+        $mail=$user->email;
+        $name=$user->name.' '.$user->lastname;       
+        $data_mail=array();
+        $data_course=$objCourse->getCourse($course);
+        $start_date=date("d/m/Y h:i:s A",strtotime($data_course[0]->start_date)); 
+        $end_date=date("d/m/Y h:i:s A",strtotime($data_course[0]->end_date)); 
+        $data_mail["start_date"]=$start_date;
+        $data_mail["end_date"]=$end_date;
+        $data_mail["name_course"]=strtoupper($data_course[0]->name);
+        $data_mail["name_user"]=$user->name;
+        $user_course=$objCourse->relationshipusers($course,'S',$id_user);
+        if(count($user_course)==0){
             array_push($arr,$id_user);
             $insert=$objCourse->insertRelationshipUsers($arr,$course,'S','false');
             if($insert==true){
-                $insert=$objCourse->returnOper(true);
+                try {
+                     Mail::to($mail,$name)->send(new SendMail($data_mail,'msg_inscription'));
+                     $insert=$objCourse->returnOper(true);
+                }catch (Exception $e) {
+                    Log::error('COD: Falla Mail LINE: '.$ex->getLine().' FILE: '.$ex->getFile()); 
+                    $error['cod']='Falla Mail';
+                    $error['oper']=false;
+                    return response()->json($error);
+                }                
             }
             return response()->json($insert);
         }else{
@@ -214,6 +235,17 @@ class CoursesController extends Controller
            $objCourse= new Course();
            $id_course=base64_decode($request->course_id);
            $id_user=base64_decode($request->user_id);
+           $user=$objUser::find($id_user);
+           $mail=$user->email;
+           $name=$user->name.' '.$user->lastname;       
+           $data_mail=array();
+           $data_course=$objCourse->getCourse($id_course);
+           $start_date=date("d/m/Y h:i:s A",strtotime($data_course[0]->start_date)); 
+           $end_date=date("d/m/Y h:i:s A",strtotime($data_course[0]->end_date)); 
+           $data_mail["start_date"]=$start_date;
+           $data_mail["end_date"]=$end_date;
+           $data_mail["name_course"]=strtoupper($data_course[0]->name);
+           $data_mail["name_user"]=$user->name;
            $notif_mail=$request->notif;
            $active=$request->user_status;
            $data=$objCourse->getIdRelationshipUsers($id_course,$id_user);
@@ -223,41 +255,28 @@ class CoursesController extends Controller
            $obj = (object) $arr;
            $update_estatus=$objCourse->updateRelationshipUsers($id_rel,$obj);
            if($update_estatus["oper"]==true){
-             if($notif_mail==true){
-                dd('aqui');
+             if($notif_mail=='true'){
+                $plantilla='msg_confinscription';
+                if($active==='false'){
+                  $plantilla='msg_bajainscription';  
+                }
+                try {
+                     Mail::to($mail,$name)->send(new SendMail($data_mail,$plantilla));
+                }catch (Exception $e) {
+                    Log::error('COD: Falla Mail LINE: '.$ex->getLine().' FILE: '.$ex->getFile()); 
+                    $error['cod']='Falla Mail';
+                    $error['oper']=false;
+                    return response()->json($error);
+                } 
              }
            }
            return response()->json($update_estatus);
-
-           /*$data_user=$objUser::find($id);
-           $email=$data_user->email;
-           $name=$data_user->name.' '.$data_user->lastname;
-           $active=$request->user_status;
-           $notif_mail=$request->notif;
+        }
 
 
-           /*$data["active"]=$active;
-           $obj = (object) $data;
-           $data_mail=array();
-           $data_mail["name"]=$name;
-           $data_mail["email"]=$email;
-           $data_mail["active"]=$active;
-           
-           $update=$objUser->updateUser($obj,$id);
-           if($update["oper"]==true){
-                if($notif_mail=="true"){      
-                    try {
-                         Mail::to($email,$name)->send(new SendMail($data_mail,$this->mail_active));
-                         Log::info('Cambio de Estatus val:'.$active.' al usuario '.$email.' realizado por: '.Session::get('email'));
-                    }catch (Exception $e) {
-                        Log::error('COD: Falla Mail LINE: '.$ex->getLine().' FILE: '.$ex->getFile());   
-                        $error['cod']='Falla Mail';
-                        $error['oper']=false;
-                        return response()->json($error);
-                    }
-                }
-           }
-           return response()->json($update);*/
+        function deleteCourse(Request $request, $id){
+            print_r($id);
+            die();
         }
 
 }

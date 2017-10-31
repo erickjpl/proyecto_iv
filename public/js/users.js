@@ -121,8 +121,10 @@
         });
           $( "#identification_document" ).rules( "add", {
             required: true,
+            integer:true,
             messages: {
                 required: "",
+                integer: "",
             }
         });
     },saveUser:function(){
@@ -149,6 +151,7 @@
                 var id=modUsers.table;
                 id.ajax.reload();
               }
+              console.log('aqui');
               $('#modalRegistry').modal('hide');
               modUsers.Modaloper('#modal_operacion',msj,title,error);
            });

@@ -51,7 +51,32 @@ class SendMail extends Mailable
                         'complemento'=>$txt_comple
                 ])->from($this->remitente,$this->name_rem)->subject('Notificación de Estatus de Cuenta');
         break;
-            
+
+        case 'msg_inscription':
+            return $this->view($file)
+                ->with(['start_date'=>$data_user["start_date"],
+                        'end_date'=>$data_user["end_date"],
+                        'name_course'=>$data_user["name_course"],
+                        'name_user'=>$data_user["name_user"],
+                ])->from($this->remitente,$this->name_rem)->subject('Inscripción del Curso '.$data_user["name_course"]);
+        break;
+        
+        case 'msg_confinscription':
+            return $this->view($file)
+                ->with(['start_date'=>$data_user["start_date"],
+                        'end_date'=>$data_user["end_date"],
+                        'name_course'=>$data_user["name_course"],
+                        'name_user'=>$data_user["name_user"],
+                ])->from($this->remitente,$this->name_rem)->subject('Confirmación Inscripción del Curso '.$data_user["name_course"]);
+        break;
+
+        case 'msg_bajainscription':
+            return $this->view($file)
+                ->with(['name_course'=>$data_user["name_course"],
+                        'name_user'=>$data_user["name_user"],
+                ])->from($this->remitente,$this->name_rem)->subject('Inscripción del Curso '.$data_user["name_course"]);
+        break;
+
         default:
             return false;
         break;

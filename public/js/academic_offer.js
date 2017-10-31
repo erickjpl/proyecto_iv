@@ -41,7 +41,7 @@
                               $('<p>').text('Fecha Final: '+v.end_date),
                               $('<p>').text('Profesores: '+v.teacher)
                           )]),
-                            $('<div>',{class:'col-md-3 cta-button'}).append($('<a>',{class:'btn btn-lg btn-block btn-info add-course','data-course':v.id,'data-course-name':v.name}).text('Inscribirse'))
+                            $('<div>',{class:'col-md-3 cta-button'}).append($('<a>',{class:'btn btn-lg btn-block btn-info add-course','data-course':btoa(v.id),'data-course-name':v.name}).text('Inscribirse'))
                         )));
               });
           });
