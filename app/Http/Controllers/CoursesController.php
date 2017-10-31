@@ -275,8 +275,32 @@ class CoursesController extends Controller
 
 
         function deleteCourse(Request $request, $id){
-            print_r($id);
-            die();
+            $objCourse=new Course();
+            $id_course=base64_decode($id);
+            $data_course=$objCourse::find($id_course);
+            $status=$data_course->status;
+            if($status=='false'){
+                $data_rel_course=$objCourse->relationshipusers($id_course,'S');
+                if(count($data_rel_course)>0){
+                    $val=true;
+                    foreach ($data_rel_course as $key => $value) {
+                       if($value->status=='true'){
+                            $val=false;
+                       }
+                    }
+                    if($val==false){ //hay un estudiante activo
+                        return $objCourse->returnOper(false,'Hay Estudiantes Activos en el curso');
+                    }else{
+                        $delete=$objCourse->deleteCourse($id_course);
+                        return response()->json($delete);
+                    }
+                }else{
+                    $delete=$objCourse->deleteCourse($id_course);
+                    return response()->json($delete);
+                }
+            }else{
+                return $objCourse->returnOper(false,'Inactivar Curso'); 
+            }
         }
 
 }

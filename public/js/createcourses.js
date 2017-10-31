@@ -233,7 +233,7 @@
               var f_fin=$("#fecha_fin").val();
               var h_fin=$("#hora_final").val();
               var profesor=$("#profesor").val();
-              var estatus_curso=$("input[name='estatus_curso']" ).val();
+              var estatus_curso=$("input[name='estatus_curso']:checked" ).val();
               var temario=$("#temario").val();
               var material=[];
               $('.material').each(function(){

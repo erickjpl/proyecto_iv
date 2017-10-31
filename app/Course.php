@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Log;
+use Session;
 
 class Course extends Model
 {
@@ -86,13 +87,13 @@ class Course extends Model
         }
 
         $data_teachers=array();
-        $teachers=$this->relationshipteacher($id);
+        $teachers=$this->relationshipusers($id,'T');
         foreach ($teachers as $key => $value) {
            $data_teachers[]=$value->user_id;
         }
         $dif=array_diff($data_teachers,$profesores);
         if(!empty($dif)){
-            $delrel=$this->deleteRelationshipTeacher($id);
+            $delrel=$this->deleteRelationshipUsers($id);
             if($delrel){
                 $insert=$this->insertRelationshipUsers($profesores,$id);
                 if($insert){
@@ -164,11 +165,11 @@ class Course extends Model
 
 
     /**
-     * [deleteRelationshipTeacher description]
+     * [deleteRelationshipUsers description]
      * @param  [type] $id [description]
      * @return [type]     [description]
      */
-    function deleteRelationshipTeacher($id){
+    function deleteRelationshipUsers($id){
 
         $query->where('courses_users.course_id',$id); 
         $query->where('courses_users.type','T'); 
@@ -233,6 +234,22 @@ class Course extends Model
             foreach ($data as $key => $value) {
                 $update->update([$key=>$value]);
             }
+            return $this->returnOper(true);
+        } catch(\Illuminate\Database\QueryException $ex){         
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $this->returnOper(false,$ex->errorInfo[0]); 
+        }
+    }
+
+    /**
+     * [deleteCourse description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    function deleteCourse($id){
+        try {          
+            $update=DB::table('courses')->where('id', '=',$id)->delete();
+            Log::info('Course ID: '.$id.' eliminado por: '.Session::get('email'));
             return $this->returnOper(true);
         } catch(\Illuminate\Database\QueryException $ex){         
             Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());

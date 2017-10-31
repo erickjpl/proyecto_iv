@@ -144,15 +144,18 @@
       $("body").on("click","#go_oper", function(){
          var delet=courses.consult('./delcourse/'+courses.course,{_method:'DELETE'},'POST');
          delet.done(function(d){
-                /*var msj='Operacion realizada con éxito';
+                var msj='Operacion realizada con éxito';
                 var title='Mensaje!';
                 var error='';
                 if(d.oper==false){
                    msj='Error comuniquese con el Administrador';
                    title='Error!';
                    error=(d.error!='')?d.error:'';
+                }else{
+                  var id=courses.table;
+                  id.ajax.reload();
                 }
-                courses.Modaloper('#modal_operacion',msj,title,error);*/
+                courses.Modaloper('#modal_operacion',msj,title,error);
            });
       });     
       
