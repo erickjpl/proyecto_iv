@@ -61,3 +61,10 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 
 });
 
+
+Route::group(['middleware' => ['auth']], function () {
+	/*examenes*/
+	Route::get('exams/create', 'ExamsController@index');
+});
+
+
