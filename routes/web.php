@@ -49,7 +49,6 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::put('course/updatecourse/{id}', 'CoursesController@update');
 	Route::post('course/setstudent', 'CoursesController@setStudent');
 	Route::delete('course/delcourse/{id}', 'CoursesController@deleteCourse');
-
 });
 
 Route::group(['middleware' => ['auth','validstudent']], function () {
@@ -58,6 +57,16 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 	Route::get('academicoffer', 'CoursesController@showAcademy');
 	Route::get('listacademic', 'CoursesController@listOfferAcademy');
 	Route::post('saveinscription', 'CoursesController@inscription');	
+
+});
+
+
+Route::group(['middleware' => ['auth']], function () {
+	/*clases en vivo*/
+	Route::get('aulavirtual/list', 'StreamingsController@index');
+	Route::get('aulavirtual/listcourses', 'CoursesController@listCourseStreaming');
+	/*Route::get('listacademic', 'CoursesController@listOfferAcademy');
+	Route::post('saveinscription', 'CoursesController@inscription');*/	
 
 });
 

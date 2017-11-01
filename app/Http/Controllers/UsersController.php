@@ -160,8 +160,8 @@ class UsersController extends Controller
     }
 
     /**
-     * [setEstatusUser description]
-     * @param Request $request [description]
+     * [setEstatusUser setea el estatus de cuenta del estudiante]
+     * @param Request $request [objeto del formulario]
      */
     public function setEstatusUser(Request $request){
        
