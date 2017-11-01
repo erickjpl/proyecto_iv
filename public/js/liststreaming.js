@@ -7,8 +7,8 @@
     table:'',
     user:'',
     course:'',
-    cursos:[],
-    //students:[],
+    courses:[],
+    students:[],
     launch: function(){
       aulaVirtual.user=$('#title_aula').attr('data-user');
       this.listCourses();
@@ -40,9 +40,10 @@
     },Modal:function(modal){
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() { 
+              aulaVirtual.clearInputs();     
               var select=$("#curso");  
               select.empty().append($("<option>",{value:''}).text('Seleccione'));
-              $.each(aulaVirtual.cursos, function( i, val ) {
+              $.each(aulaVirtual.courses, function( i, val ) {
                   $.each(val, function( a, v ) {
                     select.append($('<option>',{'value':btoa(v.id)}).text(v.name));
                   });
@@ -50,7 +51,7 @@
               $(".chosen-select").chosen();
               //$('.chosen-container input[type="text"]').attr("autocomplete",false);       
               select.trigger('chosen:updated');
-              aulaVirtual.clearInputs();     
+              
         })
     },clearInputs:function(){
         //limpiar campos
@@ -70,14 +71,23 @@
     },listCourses:function(){
          var consult=aulaVirtual.consult('./listcourses',{'user':aulaVirtual.user},'GET');
           consult.done(function(d){ 
-              aulaVirtual.cursos=d;
+              aulaVirtual.courses=d;
           });
     },listStudents:function(){
        $("body").on("change","#curso", function(){
           aulaVirtual.course=$(this).val();
           var consult=aulaVirtual.consult('../course/liststudents',{'course':aulaVirtual.course},'POST');
           consult.done(function(d){ 
-              //aulaVirtual.cursos=d;
+              $('#tb_users_reg').show();
+              aulaVirtual.students=d;
+              $.each(aulaVirtual.students, function( i, val ) {
+                  if(val.status=='true'){
+                      $('#tb_users_reg').hide();
+                      $('#tb_users').append($('<tr>').append(
+                        $('<td>').text(val.name+' '+val.lastname)
+                      ));
+                  }                
+              });
           });
        });
     }

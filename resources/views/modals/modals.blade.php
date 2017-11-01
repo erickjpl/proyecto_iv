@@ -143,7 +143,7 @@
         <form id="form-create-user">
             <div class="form-group">
               <label for="nombre">Curso: <span class="requerido">(*)</span></label>
-              <select name="curso" id="l" data-placeholder='Seleccione'  class="form-control chosen-select input-modal" >
+              <select name="curso" id="curso" data-placeholder='Seleccione'  class="form-control chosen-select input-modal" >
               </select>
             </div>
             <div class="form-group">
@@ -176,6 +176,9 @@
                   <th>Email</th>
                 </tr>
               </thead>
+              <tbody id="tb_users">
+                <tr id="tb_users_reg"><th colspan="2">No se encontraron registros</th></tr>
+              </tbody>
             </table>
       </div>
       <div class=""></div>

@@ -43,7 +43,6 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::get('course/teacherslist', 'CoursesController@listTeachers');
 	Route::get('course/getcourses', 'CoursesController@listCourses');
 	Route::get('course/{id}', 'CoursesController@showCourse');
-	Route::post('course/liststudents', 'CoursesController@getStudents');
 	Route::post('course/savecourse', 'CoursesController@store');
 	Route::post('course/datacourse', 'CoursesController@editCourse');
 	Route::put('course/updatecourse/{id}', 'CoursesController@update');
@@ -60,13 +59,14 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 
 });
 
-
+//validar solo profesores en middleware
 Route::group(['middleware' => ['auth']], function () {
 	/*clases en vivo*/
 	Route::get('aulavirtual/list', 'StreamingsController@index');
 	Route::get('aulavirtual/listcourses', 'CoursesController@listCourseStreaming');
-	/*Route::get('listacademic', 'CoursesController@listOfferAcademy');
-	Route::post('saveinscription', 'CoursesController@inscription');*/	
+});
 
+Route::group(['middleware' => ['auth']], function () {
+	Route::post('course/liststudents', 'CoursesController@getStudents');
 });
 
