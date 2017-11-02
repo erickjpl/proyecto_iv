@@ -131,3 +131,62 @@
     </div>
   </div>
 </div>
+
+<!--Registro de Eventos-->
+<div class="modal fade" id="modalRegistryEvents" tabindex="-1" role="dialog" aria-labelledby="registryLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="registryLabel">Registrar Evento</h4>
+      </div>
+      <div class="modal-body">
+        <form id="form-create-user">
+            <div class="form-group">
+              <label for="nombre">Curso: <span class="requerido">(*)</span></label>
+              <select name="curso" id="curso" data-placeholder='Seleccione'  class="form-control chosen-select input-modal" >
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="apellido">Descripción: <span class="requerido">(*)</span></label>
+              <input type="text" class="form-control input-modal" id="descripcion" name="descripcion" placeholder="Descripcion">
+            </div>
+            <div class="form-group">
+              <label for="email">Url: <span class="requerido">(*)</span></label>
+              <div class="input-group url">
+                <input type="text" class="form-control input-modal" id="email" name="email" placeholder="Email">
+                 <div class="input-group-addon">
+                      <span class="glyphicon glyphicon-link"></span>
+                  </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Fecha de Inicio: <span class="requerido">(*)</span></label>
+                <div class="input-group date" data-provide="datepicker">
+                  <input type="text" class="form-control datepicker col-xs-12 input-modal"
+                  id="fecha_inicio" name="fecha_inicio" placeholder="dd/mm/yyyy">
+                  <div class="input-group-addon">
+                      <span class="glyphicon glyphicon-th"></span>
+                  </div>
+                </div>
+            </div>
+            <table class="table table-hover" id="list_students">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody id="tb_users">
+                <tr id="tb_users_reg"><th colspan="2">No se encontraron registros</th></tr>
+              </tbody>
+            </table>
+      </div>
+      <div class=""></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+        <button type="button" class="btn btn-primary modalsave" id="saveuser">Guardar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

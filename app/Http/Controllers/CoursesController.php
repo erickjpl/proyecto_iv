@@ -222,6 +222,11 @@ class CoursesController extends Controller
 
     }
 
+    /**
+     * [getStudents description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
     public function getStudents(Request $request){
         $objCourse= new Course();
         $id_course=base64_decode($request->course);
@@ -230,6 +235,10 @@ class CoursesController extends Controller
         
     }
 
+    /**
+     * [setStudent description]
+     * @param Request $request [description]
+     */
     function setStudent(Request $request){
            $objUser= new User();
            $objCourse= new Course();
@@ -301,6 +310,18 @@ class CoursesController extends Controller
             }else{
                 return $objCourse->returnOper(false,'Inactivar Curso'); 
             }
+        }
+
+        /**
+         * [listCourseStreaming description]
+         * @param  Request $request [description]
+         * @return [type]           [description]
+         */
+        function listCourseStreaming(Request $request){
+            $objCourse=new Course();
+            $id_user=base64_decode($request->user);
+            $data_courses=$objCourse->listCoursesStreaming($id_user);
+            return response()->json($data_courses);
         }
 
 }

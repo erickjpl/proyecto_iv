@@ -11,6 +11,11 @@ class Course extends Model
 {
 
 
+    /**
+     * [saveCourse description]
+     * @param  [type] $request [description]
+     * @return [type]          [description]
+     */
     function saveCourse($request){
         $id="";
         $h_inicio=date("H:i:s",strtotime(str_replace('/', '-',$request->h_inicio))); 
@@ -51,7 +56,12 @@ class Course extends Model
         }
     }
 
-
+    /**
+     * [updateCourse description]
+     * @param  [type] $request [description]
+     * @param  [type] $id      [description]
+     * @return [type]          [description]
+     */
     function updateCourse($request,$id){
         $h_inicio=date("H:i:s",strtotime(str_replace('/', '-',$request->h_inicio))); 
         $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->h_fin))); 
@@ -255,5 +265,21 @@ class Course extends Model
             Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
             return $this->returnOper(false,$ex->errorInfo[0]); 
         }
+    }
+
+    /**
+     * [listCoursesStreaming description]
+     * @return [type] [description]
+     */
+    function listCoursesStreaming($user_id=null){
+        $query=DB::table('courses');
+        if(!empty($user_id))
+            $query->where('courses_users.user_id',$user_id); 
+        $query->where('courses.streaming','true');
+        $query->where('courses.status','true'); 
+        $query->join('courses_users', 'courses.id', '=', 'courses_users.course_id');
+        $query->select('courses.id','courses.name');        
+        $data=$query->get()->groupBy('courses.id');      
+        return $data;
     }
 }
