@@ -3,19 +3,22 @@
   var aulaVirtual = {
     btoaFieldsAjax:false,
     typeAjax:"GET",
-    table_id:'#tblstudents',
+    table_id:'#tblstreamings',
     table:'',
     user:'',
-    course:'',
+    courseid:'',
     courses:[],
     students:[],
+    streamingid:'',
     launch: function(){
       aulaVirtual.user=$('#title_aula').attr('data-user');
+      this.dataTable(this.table_id);
       this.listCourses();
       this.fnDatepicker();
       this.btnRegistry();
       this.listStudents();
-      
+      this.saveUser();
+      this.modEvent();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -38,9 +41,11 @@
           aulaVirtual.Modal('#modalRegistryEvents');
       });
     },Modal:function(modal){
+        $(modal).modal({backdrop: 'static', keyboard: false});  
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() { 
-              aulaVirtual.clearInputs();     
+              aulaVirtual.clearInputs();   
+              aulaVirtual.validateModal();
               var select=$("#curso");  
               select.empty().append($("<option>",{value:''}).text('Seleccione'));
               $.each(aulaVirtual.courses, function( i, val ) {
@@ -49,6 +54,7 @@
                   });
               });
               $(".chosen-select").chosen();
+              $('#hora_inicio_streaming').clockpicker({align: 'left',placement:'top',donetext:"Seleccionar",twelvehour:true,default:'now'});
               //$('.chosen-container input[type="text"]').attr("autocomplete",false);       
               select.trigger('chosen:updated');
               
@@ -75,21 +81,160 @@
           });
     },listStudents:function(){
        $("body").on("change","#curso", function(){
-          aulaVirtual.course=$(this).val();
-          var consult=aulaVirtual.consult('../course/liststudents',{'course':aulaVirtual.course},'POST');
+          $("#curso_chosen").find('.chosen-single').removeClass('chosen-error')
+          aulaVirtual.courseid=$(this).val();
+          var consult=aulaVirtual.consult('../course/liststudents',{'course':aulaVirtual.courseid},'POST');
           consult.done(function(d){ 
+              $(".registros").remove();
               $('#tb_users_reg').show();
               aulaVirtual.students=d;
               $.each(aulaVirtual.students, function( i, val ) {
+                  console.log(val);
                   if(val.status=='true'){
                       $('#tb_users_reg').hide();
-                      $('#tb_users').append($('<tr>').append(
-                        $('<td>').text(val.name+' '+val.lastname)
+                      $('#tb_users').append($('<tr>',{class:'registros'}).append(
+                        $('<td>').text(val.name+' '+val.lastname),
+                        $('<td>').text(val.email)
                       ));
                   }                
               });
           });
        });
+    },saveUser:function(){
+       $("body").on("click","#saveuser", function(){
+          if($("#form-create-streaming").valid()){
+            var course=$("#curso").val();
+            var descripcion=$("#descripcion").val();
+            var url=$("#url").val();
+            var fecha_inicio=$("#fecha_inicio").val();
+            var insert=aulaVirtual.consult('./eventsave',{'fecha_inicio':fecha_inicio,'course':course,'descripcion':descripcion,'url':url},'POST');
+            insert.done(function(d){ 
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }else{
+                  var id=aulaVirtual.table;
+                  id.ajax.reload();
+                }
+                aulaVirtual.Modaloper('#modal_operacion',msj,title,error);
+            });
+          }else{
+            if($("#curso").val()==''){
+               $("#curso_chosen").find('.chosen-single').addClass('chosen-error')
+            }
+          }
+       });
+    },validateModal:function(){
+        $("#form-create-streaming").validate({
+            validClass: "success",
+        });
+        $( "#curso" ).rules( "add", {
+            required: true,
+            messages: {
+                required: ""
+            }
+        });
+        $( "#descripcion" ).rules( "add", {
+            required: true,
+            messages: {
+                required: ""
+            }
+        });
+        $( "#url" ).rules( "add", {
+            required: true,
+            url: true,
+            messages: {
+                required: "",
+                url:"",
+            }
+        });
+        $( "#fecha_inicio_streaming" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+        $( "#hora_inicio_streaming" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+        
+    },Modaloper:function(modal,msj,title,error){
+        $('.modal').modal('hide');
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {             
+              aulaVirtual.clearInputs();
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").text(msj);
+              }
+              if(typeof title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(typeof error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
+        })
+    },dataTable:function(idtable){
+        this.table=$(idtable).DataTable( {
+            "ajax": './liststreamings',
+            "language": {
+              "lengthMenu": "Total de registros:_MENU_ ",
+              "zeroRecords": "No se encontraron registros que mostrar",
+              "info": "Total de p&aacute;ginas _PAGE_ de _PAGES_",
+              "infoEmpty": "",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "sSearch" :"Buscar: ",
+              "sProcessing": "",
+              "paginate": {
+                  "previous": "Anterior",
+                  "next": "Siguiente"
+               }
+             },
+            "columns": [
+                { "data": "name","sClass": 'text-center'  },
+                { "data": "description","sClass": 'text-center'  },
+                { "data": "url","sClass": ''  },
+                { "data": "start_date","sClass": 'text-center'  },           
+                { "data": "actions","sClass": 'text-center' }
+            ]
+        },);
+    },modEvent:function(){
+         $("body").on("click",".acc_mod", function(){
+            aulaVirtual.streamingid=$(this).attr('data-streaming');
+            var consult=aulaVirtual.consult('./getstreaming',{'streaming':aulaVirtual.streamingid},'GET');
+            consult.done(function(d){ 
+              aulaVirtual.ModalMod('#modalRegistryEvents',d);
+            });
+         });
+    },ModalMod:function(modal,data){
+      $('.modal').modal('hide');
+      $(modal).modal('show');
+      $(modal).on('shown.bs.modal', function() {             
+           var arrcourse=[];
+           arrcourse.push(btoa(data[0].course_id)); 
+           var select=$("#curso");  
+            select.empty().append($("<option>",{value:''}).text('Seleccione'));
+            $.each(aulaVirtual.courses, function( i, val ) {
+                $.each(val, function( a, v ) {
+                  select.append($('<option>',{'value':btoa(v.id)}).text(v.name));
+                });
+            });        
+           $('#hora_inicio_streaming').clockpicker({align: 'left',placement:'top',donetext:"Seleccionar",twelvehour:true,default:'now'});
+           select.chosen();
+           select.val(arrcourse).trigger("liszt:updated");
+           select.trigger('chosen:updated');
+           console.log(data);
+           $('#descripcion').val(data[0].description);
+           $('#url').val(data[0].url);
+           $('#fecha_inicio_streaming').val(data[0].start_date);
+           $('#hora_inicio_streaming').val(data[0].h_inicio);
+      })
     }
   }
   $(document).ready(function(){

@@ -212,6 +212,9 @@
     },Modal:function(modal){
         $(modal).modal('show');
     },Modaloper:function(modal,msj,title,error){
+        if(modal=='#modalRegistry'){
+          $(modal).modal({backdrop: 'static', keyboard: false})  
+        }
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() {             
               modUsers.clearInputs();
@@ -226,7 +229,7 @@
               }       
         })
     },ModalMod:function(modal,data_user){
-
+        $(modal).modal({backdrop: 'static', keyboard: false})  
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() {
             

@@ -138,19 +138,14 @@ class Course extends Model
      * @return [object]  
      */
     function getCourse($id=null,$active=false){
-
         $query=DB::table('courses');
-
         if(!empty($id))
             $query->where('courses.id',$id); 
-
         if($active==true)
                 $query->where('courses.status','true'); 
-
         $query->select('courses.id','courses.name','courses.start_date', 'courses.end_date','courses.status','courses.temary','courses.exams','courses.streaming');
         $data=$query->get();      
         return $data; 
-
     }
 
     /**
@@ -168,7 +163,7 @@ class Course extends Model
         $query->where('courses_users.type',$sigla); 
         $query->where('courses_users.course_id',$id); 
         $query->join('users', 'users.id', '=', 'courses_users.user_id');
-        $query->select('courses_users.user_id','courses_users.status','users.name','users.lastname');
+        $query->select('courses_users.user_id','courses_users.status','users.name','users.lastname','users.email');
         $data=$query->get();      
         return $data; 
     }

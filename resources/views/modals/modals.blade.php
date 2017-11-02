@@ -133,14 +133,14 @@
 </div>
 
 <!--Registro de Eventos-->
-<div class="modal fade" id="modalRegistryEvents" tabindex="-1" role="dialog" aria-labelledby="registryLabel">
+<div class="modal fade" id="modalRegistryEvents"  role="dialog" aria-labelledby="registryLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="registryLabel">Registrar Evento</h4>
       </div>
       <div class="modal-body">
-        <form id="form-create-user">
+        <form id="form-create-streaming">
             <div class="form-group">
               <label for="nombre">Curso: <span class="requerido">(*)</span></label>
               <select name="curso" id="curso" data-placeholder='Seleccione'  class="form-control chosen-select input-modal" >
@@ -153,7 +153,7 @@
             <div class="form-group">
               <label for="email">Url: <span class="requerido">(*)</span></label>
               <div class="input-group url">
-                <input type="text" class="form-control input-modal" id="email" name="email" placeholder="Email">
+                <input type="text" class="form-control input-modal" id="url" name="url" placeholder="Url">
                  <div class="input-group-addon">
                       <span class="glyphicon glyphicon-link"></span>
                   </div>
@@ -163,11 +163,21 @@
                 <label for="nombre">Fecha de Inicio: <span class="requerido">(*)</span></label>
                 <div class="input-group date" data-provide="datepicker">
                   <input type="text" class="form-control datepicker col-xs-12 input-modal"
-                  id="fecha_inicio" name="fecha_inicio" placeholder="dd/mm/yyyy">
+                  id="fecha_inicio_streaming" name="fecha_inicio" placeholder="dd/mm/yyyy">
                   <div class="input-group-addon">
                       <span class="glyphicon glyphicon-th"></span>
                   </div>
                 </div>
+            </div>
+            <div class="form-group">
+                    <label for="nombre">Hora de Inicio: <span class="requerido">(*)</span></label>
+                    <div class="input-group  clockpicker">
+                    <input type="text" class="form-control clockpicker col-xs-12"
+                    id="hora_inicio_streaming" name="hora_inicio" placeholder="00:00:00">
+                  <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+              </div>
             </div>
             <table class="table table-hover" id="list_students">
               <thead>
@@ -177,7 +187,7 @@
                 </tr>
               </thead>
               <tbody id="tb_users">
-                <tr id="tb_users_reg"><th colspan="2">No se encontraron registros</th></tr>
+                <tr id="tb_users_reg"><th colspan="2" class="tbl-registros" >No se encontraron registros</th></tr>
               </tbody>
             </table>
       </div>

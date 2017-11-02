@@ -165,7 +165,7 @@
          });
        });
     },ModalMod:function(modal,data_user){
-
+        $(modal).modal({backdrop: 'static', keyboard: false});  
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() {
             

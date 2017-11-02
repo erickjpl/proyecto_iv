@@ -74,7 +74,7 @@
                 required: ""
             }
         });
-         $( "#hora_inicio" ).rules( "add", {
+        $( "#hora_inicio" ).rules( "add", {
             required: true,
             messages: {
                 required: ""
