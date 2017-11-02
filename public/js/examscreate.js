@@ -6,17 +6,18 @@
     course_id:'',
     textQuestionSimple:"Pregunta Simple",
     textQuestionSelection:"Seleccion Multiple",
+    row:"",
     launch: function(){
       this.createForm();
       this.typeQuestion();
+      this.addQuestion();
       this.fnChosen();
     },
     createForm:function(){
       var select = $("<select>",{"id":"courses","class":"form-control chosen-select"}),
-      
-      row=$("<div>",{"class":"row-question"}).append($("<div>",{"class":"row"}).append(
+      row=$("<div>",{"class":"rowquestion"}).append($("<div>",{"class":"row"}).append(
           $("<div>",{"class":"col-xs-8"}).append(
-            $("<input>",{"type":"text","class":"description form-control"}).val("")
+            $("<input>",{"type":"text","class":"description form-control","placeholder":"Question"}).val("")
           ),
           [
             $("<div>",{"class":"col-xs-2"}).append(
@@ -33,16 +34,18 @@
             )
           ])
       )
-      $(".panel-body").append(select.add(row));
+      this.row=row.clone();
+      $(".panel-body").append(select.add(this.row));
     },
     typeQuestion:function(){
+      $(".select-question").off("change");
       $(".select-question").on("change",function(e){
         e.preventDefault(),e.stopPropagation();
         if($(this).val()==="on"){
           $(this).parents().eq(2).append(
             $("<div>",{"class":"row option-row"}).append(
               $("<div>",{"class":"col-xs-8"}).append(
-                $("<input>",{"class":"form-control","type":"text"})
+                $("<input>",{"class":"form-control","type":"text","placeholder":"Option"})
               ),[
                 $("<div>",{"class":"col-xs-4"}).append(
                   $("<button>",{"class":"btn btn-success addOption"}).text("+"),[
@@ -66,7 +69,7 @@
         $(this).parents().eq(2).append(
           $("<div>",{"class":"row option-row"}).append(
           $("<div>",{"class":"col-xs-8"}).append(
-            $("<input>",{"class":"form-control","type":"text"})
+            $("<input>",{"class":"form-control","type":"text","placeholder":"Option"})
           ),[
             $("<div>",{"class":"col-xs-4"}).append(
               $("<button>",{"class":"btn btn-success addOption"}).text("+"),[
@@ -84,8 +87,20 @@
       $(".removeOption").off("click");
       $(".removeOption").on("click",function(e){
         e.preventDefault(),e.stopPropagation();
-        $(this).parents().eq(1).remove();
+        if($(this).parents('.rowquestion').find('.option-row').length>1){
+          $(this).parents().eq(1).remove();
+        }
       }); 
+    },
+    addQuestion:function(){
+      $(".addQuestion").off();
+      $(".addQuestion").on("click",function(e){
+        e.preventDefault(),e.stopPropagation();
+        console.log(courses.row.get(0));
+        $(this).parents().eq(3).append(courses.row.clone());
+        courses.typeQuestion();
+        courses.addOption();
+      });
     },
     fnChosen:function(){
       $(".chosen-select").chosen();

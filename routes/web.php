@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 });
 //validar solo profesores en middleware
 Route::group(['middleware' => ['auth']], function () {
+	Route::get('exams/create', 'ExamsController@index');
 	/*clases en vivo*/
 	Route::get('aulavirtual/list', 'StreamingsController@index');
 	Route::get('aulavirtual/listcourses', 'CoursesController@listCourseStreaming');
