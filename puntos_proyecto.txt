@@ -2,10 +2,7 @@ Modulo de Usuarios
 revisar modificacion nivel de perfiles 
 autenticar con gmail (actualmente mailtrap) 
 
-
-Modulo de cursos 
-revisar chosen que cargan profesores 
-
-
 snippet lista de cursos 
 https://bootsnipp.com/snippets/featured/call-to-action-with-dark-background
+
+crear middleware profesores y administradores

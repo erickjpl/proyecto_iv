@@ -8,10 +8,10 @@ use Session;
 use App\Streaming;
 class StreamingsController extends Controller
 {
+    
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * [index funcion que renderiza la vista del modulo de streaming]
+     * @return [] []
      */
     public function index()
     {
@@ -22,15 +22,15 @@ class StreamingsController extends Controller
 
     
     /**
-     * [saveEvent description]
-     * @param  Request $request [description]
-     * @return [type]           [description]
+     * [saveEvent funcion que guarda el streaming]
+     * @param  Request $request [objeto del formulario]
+     * @return [array]           
      */
     public function saveEvent(Request $request)
     {   
         $objStreaming= new Streaming();
         $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_inicio))); 
-        $h_inicio=date("H:i:s",strtotime(str_replace('/', '-',$request->h_inicio))); 
+        $h_inicio=date("H:i:s",strtotime($request->h_inicio)); 
         $request["fecha_inicio"]=$f_inicio.' '.$h_inicio;
         $request["course"]=base64_decode($request->course);
         $request["user_id"]=$request->session()->get('id');
@@ -40,8 +40,8 @@ class StreamingsController extends Controller
 
    
      /**
-      * [listStreamings description]
-      * @return [type] [description]
+      * [listStreamings function que renderiza la consulta dataTables Streaming]
+      * @return [] []
       */
      public function listStreamings(){
         $objStreaming= new Streaming();
@@ -55,7 +55,7 @@ class StreamingsController extends Controller
                  $value->url='<a href="'.$value->url.'" target="blank">'.$value->url.'</a>';
                  $value->start_date=date("d/m/Y",strtotime($start_date[0])).' '.date("h:i:s A",strtotime($start_date[1])); 
                  $actions='<button type="button" class="acc_mod btn btn-primary btn-xs" data-streaming="'.$id.'">Modificar</button>
-                          <button type="button" class="acc_del btn btn-danger btn-xs" data-streaming="'.$id.'">Eliminar</button>';
+                          <button type="button" class="acc_del btn btn-danger btn-xs" data-streaming="'.$id.'">Eliminar</button>&nbsp<button type="button" title="finalizar streaming" class="acc-inactivar btn btn-warning btn-xs" data-streaming="'.$id.'">Finalizar Evento</button>';
 
                 $value->actions=$actions;
                 $resp["data"][]=$value;
@@ -65,7 +65,11 @@ class StreamingsController extends Controller
     }
 
 
-
+    /**
+     * [getStreaming function que consulta la data de un streaming]
+     * @param  Request $request [objeto]
+     * @return [json]           []
+     */
     public function getStreaming(Request $request)
     {
        $objStreaming= new Streaming();
@@ -81,36 +85,54 @@ class StreamingsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * [updateStreaming funcion que modifica un streaming]
+     * @param  Request $request [objeto del formulario]
+     * @param  [int]  $id      [id del streaming]
+     * @return [json]           []
      */
-    public function edit($id)
-    {
-        //
+    public function updateStreaming(Request $request, $id)
+    { 
+        $objStreaming= new Streaming();
+        $id=base64_decode($id);
+        $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_inicio))); 
+        $h_inicio=date("H:i:s",strtotime($request->h_inicio)); 
+        $request["fecha_inicio"]=$f_inicio.' '.$h_inicio;
+        $request["course"]=base64_decode($request->course);
+        $udpate=$objStreaming->updateStreaming($request,$id);
+        return response()->json($udpate);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * [deleteStreaming funcion que elimina un streaming]
+     * @param  [int] $id [id del streaming]
+     * @return [json]     []
      */
-    public function update(Request $request, $id)
+    public function deleteStreaming($id)
     {
-        //
+        $objStreaming= new Streaming();
+        $id=base64_decode($id);
+        $delete=$objStreaming->deleteStreaming($id);
+        return response()->json($delete);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * [finalizarEvento funcion que finaliza el evento streaming]
+     * @param  [int] $id [id del streaming]
+     * @return [json]     []
      */
-    public function destroy($id)
-    {
-        //
+    function finalizarEvento($id){
+        
+        try {
+            $objStreaming= new Streaming();
+            $id=base64_decode($id);
+            $objStreaming=$objStreaming::find($id);
+            $objStreaming->status='false';
+            $objStreaming->update();
+            return response()->json($objStreaming->returnOper(true));
+        }catch (Exception $e) {
+            Log::error('Falla en Finalizar Evento LINE: '.$ex->getLine().' FILE: '.$ex->getFile()); 
+            return response()->json($objStreaming->returnOper(false,500));
+        }   
+
     }
 }

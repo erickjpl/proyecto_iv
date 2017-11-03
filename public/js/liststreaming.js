@@ -19,6 +19,11 @@
       this.listStudents();
       this.saveUser();
       this.modEvent();
+      this.updateEvent();
+      this.btnDelete();
+      this.DelEvent();
+      this.finalizarEvento();
+      this.btnFinalizarEvento();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -79,35 +84,38 @@
           consult.done(function(d){ 
               aulaVirtual.courses=d;
           });
+    },consultStudents(idcourse){
+        var consult=aulaVirtual.consult('../course/liststudents',{'course':idcourse},'POST');
+        consult.done(function(d){ 
+            $(".registros").remove();
+            $('#tb_users_reg').show();
+            aulaVirtual.students=d;
+            $.each(aulaVirtual.students, function( i, val ) {
+                console.log(val);
+                if(val.status=='true'){
+                    $('#tb_users_reg').hide();
+                    $('#tb_users').append($('<tr>',{class:'registros'}).append(
+                      $('<td>').text(val.name+' '+val.lastname),
+                      $('<td>').text(val.email)
+                    ));
+                }                
+            });
+        });
     },listStudents:function(){
        $("body").on("change","#curso", function(){
           $("#curso_chosen").find('.chosen-single').removeClass('chosen-error')
           aulaVirtual.courseid=$(this).val();
-          var consult=aulaVirtual.consult('../course/liststudents',{'course':aulaVirtual.courseid},'POST');
-          consult.done(function(d){ 
-              $(".registros").remove();
-              $('#tb_users_reg').show();
-              aulaVirtual.students=d;
-              $.each(aulaVirtual.students, function( i, val ) {
-                  console.log(val);
-                  if(val.status=='true'){
-                      $('#tb_users_reg').hide();
-                      $('#tb_users').append($('<tr>',{class:'registros'}).append(
-                        $('<td>').text(val.name+' '+val.lastname),
-                        $('<td>').text(val.email)
-                      ));
-                  }                
-              });
-          });
+          aulaVirtual.consultStudents(aulaVirtual.courseid);
        });
     },saveUser:function(){
-       $("body").on("click","#saveuser", function(){
+       $("body").on("click","#savestreaming", function(){
           if($("#form-create-streaming").valid()){
             var course=$("#curso").val();
             var descripcion=$("#descripcion").val();
             var url=$("#url").val();
-            var fecha_inicio=$("#fecha_inicio").val();
-            var insert=aulaVirtual.consult('./eventsave',{'fecha_inicio':fecha_inicio,'course':course,'descripcion':descripcion,'url':url},'POST');
+            var fecha_inicio=$("#fecha_inicio_streaming").val();
+            var h_inicio=$("#hora_inicio_streaming").val();
+            var insert=aulaVirtual.consult('./eventsave',{'fecha_inicio':fecha_inicio,'course':course,'descripcion':descripcion,'url':url,'h_inicio':h_inicio},'POST');
             insert.done(function(d){ 
                 var msj='Operacion realizada con éxito';
                 var title='Mensaje!';
@@ -168,6 +176,10 @@
     },Modaloper:function(modal,msj,title,error){
         $('.modal').modal('hide');
         $(modal).modal('show');
+        if(modal=='#modalRegistryEvents'){
+          $(modal).modal({backdrop: 'static', keyboard: false});
+          $('.modalstreaming').attr('id','savestreaming');  
+        }
         $(modal).on('shown.bs.modal', function() {             
               aulaVirtual.clearInputs();
               if(typeof msj!==undefined || msj!='' || msj!=null ){
@@ -215,7 +227,8 @@
     },ModalMod:function(modal,data){
       $('.modal').modal('hide');
       $(modal).modal('show');
-      $(modal).on('shown.bs.modal', function() {             
+      $(modal).on('shown.bs.modal', function() { 
+           $('.modalstreaming').attr('id','modtreaming');            
            var arrcourse=[];
            arrcourse.push(btoa(data[0].course_id)); 
            var select=$("#curso");  
@@ -229,12 +242,94 @@
            select.chosen();
            select.val(arrcourse).trigger("liszt:updated");
            select.trigger('chosen:updated');
-           console.log(data);
            $('#descripcion').val(data[0].description);
            $('#url').val(data[0].url);
            $('#fecha_inicio_streaming').val(data[0].start_date);
            $('#hora_inicio_streaming').val(data[0].h_inicio);
+           aulaVirtual.consultStudents(btoa(data[0].course_id));
       })
+    },updateEvent:function(){
+        $("body").on("click","#modtreaming", function(){
+          if($("#form-create-streaming").valid()){
+            var course=$("#curso").val();
+            var descripcion=$("#descripcion").val();
+            var url=$("#url").val();
+            var fecha_inicio=$("#fecha_inicio_streaming").val();
+            var h_inicio=$("#hora_inicio_streaming").val();
+            var update=aulaVirtual.consult('./eventmod/'+aulaVirtual.streamingid,{'_method':'PUT',
+              'fecha_inicio':fecha_inicio,'h_inicio':h_inicio,'course':course,'descripcion':descripcion,'url':url},'POST');
+            update.done(function(d){ 
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }else{
+                  var id=aulaVirtual.table;
+                  id.ajax.reload();
+                }
+                aulaVirtual.Modaloper('#modal_operacion',msj,title,error);
+            });
+          }else{
+            if($("#curso").val()==''){
+               $("#curso_chosen").find('.chosen-single').addClass('chosen-error')
+            }
+          }
+        });
+    },btnDelete:function(){
+      $("body").on("click",".acc_del", function(){
+          aulaVirtual.streamingid=$(this).attr('data-streaming');
+          $(".aceptar_confirmarcion").attr('id','go_oper');
+          aulaVirtual.Modaloper('#modal_confirmacion','¿Desea realizar esta operación?','','');
+      });
+    },DelEvent:function(){
+      $("body").on("click","#go_oper", function(){
+         var delet=aulaVirtual.consult('./delevent/'+aulaVirtual.streamingid,{_method:'DELETE'},'POST');
+         delet.done(function(d){
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }else{
+                  var id=aulaVirtual.table;
+                  id.ajax.reload();
+                }
+                $('#modalRegistry').modal('hide');
+                aulaVirtual.Modaloper('#modal_operacion',msj,title,error);
+           });
+      });     
+    },finalizarEvento:function(){
+        $("body").on("click",".acc-inactivar", function(){
+          aulaVirtual.streamingid=$(this).attr('data-streaming');
+          $(".aceptar_confirmarcion").attr('id','go_finalizar');
+          aulaVirtual.Modaloper('#modal_confirmacion','¿Desea realizar esta operación?','','');
+      });
+    },btnFinalizarEvento:function(){
+      $("body").on("click","#go_finalizar", function(){
+         console.log('hola');
+         var updateevento=aulaVirtual.consult('./finevent/'+aulaVirtual.streamingid,{_method:'PUT'},'POST');
+         updateevento.done(function(d){
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }else{
+                  var id=aulaVirtual.table;
+                  id.ajax.reload();
+                }
+                $('#modalRegistry').modal('hide');
+                aulaVirtual.Modaloper('#modal_operacion',msj,title,error);
+           });
+      });
+      
     }
   }
   $(document).ready(function(){

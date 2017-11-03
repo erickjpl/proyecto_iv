@@ -73,7 +73,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" >No</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" id="go_oper" >Si</button>
+        <button type="button" class="btn btn-primary aceptar_confirmarcion" data-dismiss="modal" id="go_oper" >Si</button>
       </div>
     </div>
   </div>
@@ -194,7 +194,7 @@
       <div class=""></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
-        <button type="button" class="btn btn-primary modalsave" id="saveuser">Guardar</button>
+        <button type="button" class="btn btn-primary modalstreaming" id="savestreaming">Guardar</button>
       </div>
       </form>
     </div>

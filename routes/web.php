@@ -57,16 +57,20 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 	Route::post('saveinscription', 'CoursesController@inscription');	
 
 });
-//validar solo profesores en middleware
-Route::group(['middleware' => ['auth']], function () {
+
+Route::group(['middleware' => ['auth','validteacher']], function () {
 	/*examenes*/
 	Route::get('exams/create', 'ExamsController@index');
+
 	/*aula virtual*/
 	Route::get('aulavirtual/list', 'StreamingsController@index');
 	Route::get('aulavirtual/listcourses', 'CoursesController@listCourseStreaming');
 	Route::get('aulavirtual/liststreamings', 'StreamingsController@listStreamings');
 	Route::get('aulavirtual/getstreaming', 'StreamingsController@getStreaming');
 	Route::post('aulavirtual/eventsave', 'StreamingsController@saveEvent');
+	Route::put('aulavirtual/eventmod/{id}', 'StreamingsController@updateStreaming');
+	Route::put('aulavirtual/finevent/{id}', 'StreamingsController@finalizarEvento');
+	Route::delete('aulavirtual/delevent/{id}', 'StreamingsController@deleteStreaming');
 });
 
 /*profesores y administradores*/

@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Log;
+use Session;
+
 class Streaming extends Model
 {	
     
@@ -46,7 +48,13 @@ class Streaming extends Model
         return $oper;  
     }
 
-
+    /**
+     * [getStreamings Funcion que consulta los streamings]
+     * @param  [int] $id      [id del streaming]
+     * @param  [int] $user_id [id del usuario q cargo el streaming]
+     * @param  string $status  [true=>streamings activos, false=>streamings inactivos]
+     * @return [object]          []
+     */
     function getStreamings($id=null,$user_id=null,$status=''){
     	 $query=DB::table('streamings');
         if(!empty($id))
@@ -63,5 +71,44 @@ class Streaming extends Model
         $query->select('streamings.id','streamings.url','streamings.start_date', 'streamings.description','courses.name','users.name as name_user','users.lastname','streamings.course_id');
         $data=$query->get();      
         return $data; 
+    }
+
+    /**
+     * [updateStreaming funcion que modifica el streaming]
+     * @param  [objeto] $data [datos para modificar]
+     * @param  [int] $id   [id del streaming]
+     * @return [array]       [fn returnOper]
+     */
+    function updateStreaming($data,$id){
+        try {   
+            DB::table('streamings')
+                ->where('id',$id)
+                ->update(
+                    ['url' => $data->url,
+                    'start_date'=>$data->fecha_inicio,
+                    'course_id'=>$data->course,
+                    'updated_at'=>date("Y-m-d H:i:s"),
+                    ]
+                );       
+        } catch(\Illuminate\Database\QueryException $ex){         
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $this->returnOper(false,$ex->errorInfo[0]); 
+        }
+    }
+
+    /**
+     * [deleteStreaming funcion que elimina el stareaming]
+     * @param  [int] $id [id del streaming]
+     * @return [array]     [returnOper]
+     */
+    function deleteStreaming($id){
+        try {          
+            $delete=DB::table('streamings')->where('id', '=',$id)->delete();
+            Log::info('Usuario ID: '.$id.' eliminado por: '.Session::get('email'));
+            return $this->returnOper(true);
+        } catch(\Illuminate\Database\QueryException $ex){         
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $this->returnOper(false,$ex->errorInfo[0]); 
+        }
     }
 }
