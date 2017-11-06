@@ -25,7 +25,8 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12">
-                            <div class="alert alert-info">A continuacion se listan los proximos eventos <b><i>"Streaming"</i></b> del Curso</div>
+                            <div class="alert alert-info">A continuacion se listan los proximos eventos <b><i>"Streaming"</i></b>del Curso&nbsp;&nbsp;
+                            <button id="refresh" class="btn btn-primary"><i class="glyphicon glyphicon-refresh" title="Refrescar"></i></button></div>
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>

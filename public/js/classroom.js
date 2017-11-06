@@ -8,6 +8,7 @@
     launch: function(){
       this.course_id=$('#panel-clasroom').attr('data-course')
       this.listStreaming();
+      this.refresh();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -25,6 +26,22 @@
           headers: (method=="POST"?{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}:"")
         });
       }
+    },
+    getLocalDate: function(){
+      var ret="",from="",objdate="",month="", date="", objhour="", hour="",seg="",hourNumber="", meridiem="",min="";
+      objdate = new Date();
+      month = (objdate.getMonth() < 10? "0"+objdate.getMonth() : objdate.getMonth()+1);
+      ret = objdate.getDate()+"/"+month+"/"+objdate.getFullYear();
+      min = (objdate.getMinutes() < 10? "0"+objdate.getMinutes() : objdate.getMinutes());
+      seg = (objdate.getSeconds() < 10? "0"+objdate.getSeconds() : objdate.getSeconds());
+      hourNumber = (objdate.getHours() <= 12? objdate.getHours() : objdate.getHours()-12);
+      meridiem = (objdate.getHours() <= 12? "AM" : "PM");
+      ret +=" "+hourNumber+":"+min+":"+seg+" "+meridiem;
+      return ret;
+    },refresh:function(){
+      $("#refresh").on("click",function(){
+        myClassRoom.listStreaming();  
+      });
     },listStreaming:function(){
         var data=this.consult('./listStreaming/'+myClassRoom.course_id,[],'GET');
           data.done(function(d){
@@ -34,12 +51,16 @@
                     var est='';
                     var url=v.url;
                     if(v.status=='true'){
-                     est='<span class="label label-success label-status">Por Iniciar</span>';
+                      if(new Date(v.start_date) <= new Date(myClassRoom.getLocalDate())){
+                        est='<span class="label label-warning label-status">En Curso</span>';
+                      }else{
+                        est='<span class="label label-success label-status">Por Iniciar</span>';
+                      }
                      url='<a target="blank" href="'+url+'">'+url+'</a>';
                     }else if(v.status=='false'){
                      est='<span class="label label-danger label-status">Finalizado</span>'; 
                     }
-                    $('#tbstreamings').append(
+                    $('#tbstreamings').empty().append(
                       $('<tr>').append(
                           $('<td>').text(v.start_date),
                           $('<td>').html(url),
