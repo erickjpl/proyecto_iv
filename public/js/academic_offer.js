@@ -9,6 +9,7 @@
       this.optionsViews();
       this.inscripcion();
       this.confirmacionInscripcion();
+      this.modalMasinfo();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -41,7 +42,9 @@
                               $('<p>').text('Fecha Final: '+v.end_date),
                               $('<p>').text('Profesores: '+v.teacher)
                           )]),
-                            $('<div>',{class:'col-md-3 cta-button'}).append($('<a>',{class:'btn btn-lg btn-block btn-info add-course','data-course':btoa(v.id),'data-course-name':v.name}).text('Inscribirse'))
+                            $('<div>',{class:'col-md-3 cta-button'}).append(
+                                $('<a>',{class:'btn btn-lg btn-block btn-info add-course','data-course':btoa(v.id),'data-course-name':v.name}).text('Inscribirse'),
+                                $('<a>',{class:'btn btn-lg btn-block btn-info add-masinfo','data-course':btoa(v.id)}).text('Mas Información'))
                         )));
               });
           });
@@ -82,6 +85,22 @@
                 }
                 ofertaCursos.Modaloper('#modal_operacion',msj,title,error);
            });
+      });
+    },modalMasinfo:function(){
+      $("body").on("click",".add-masinfo", function(){
+          ofertaCursos.course.id=$(this).attr('data-course');
+          $("#modal_informacion").modal('show');
+          $("#modal_informacion").on('shown.bs.modal', function() { 
+           var data_course=ofertaCursos.consult('course/datacourse',{'id':ofertaCursos.course.id},'POST');         
+            data_course.done(function(d){ 
+              var data_course=d.course[0];
+              console.log(data_course);
+              $("#titulo_informacion").text('Descripción del Temario').css('font-weight','bold'); 
+              $("#mensaje_informacion").html(data_course.temary);  
+            });            
+               
+          })
+
       });
     }
   }

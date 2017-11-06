@@ -200,3 +200,20 @@
     </div>
   </div>
 </div>
+
+<!--modal_informacion-->
+<div class="modal fade" id="modal_informacion" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="titulo_informacion"></h4>
+      </div>
+      <div class="modal-body">
+        <p id="mensaje_informacion"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

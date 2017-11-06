@@ -111,4 +111,22 @@ class Streaming extends Model
             return $this->returnOper(false,$ex->errorInfo[0]); 
         }
     }
+
+    /**
+     * [listStreamingStudent description]
+     * @param  [type] $courseid  [description]
+     * @param  [type] $studentid [description]
+     * @return [type]            [description]
+     */
+    function listStreamingStudent($courseid,$studentid){
+        $query=DB::table('streamings');
+        $query->where('courses_users.user_id',$studentid); 
+        $query->join('courses_users', 'courses_users.course_id', '=', 'streamings.course_id');
+        $query->join('courses', 'courses.id', '=', 'streamings.course_id');
+        $query->select('streamings.id','streamings.url','streamings.start_date','courses.name',
+        'streamings.status');
+        $data=$query->get();      
+        return $data; 
+    }
+
 }

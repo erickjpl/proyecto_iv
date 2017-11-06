@@ -133,6 +133,23 @@ class StreamingsController extends Controller
             Log::error('Falla en Finalizar Evento LINE: '.$ex->getLine().' FILE: '.$ex->getFile()); 
             return response()->json($objStreaming->returnOper(false,500));
         }   
+    }
 
+    /**
+     * [listStreamingStudent description]
+     * @return [type] [description]
+     */
+    function listStreamingStudent($course){
+        $objStreaming= new Streaming();
+        $user=Session::get('id');
+        $course_id=base64_decode($course);
+        $data=$objStreaming->listStreamingStudent($course_id,$user);
+        if(count($data)>0){
+            foreach ($data as $value) {
+                $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date));
+            }
+        }
+        return response()->json($data);
+        
     }
 }

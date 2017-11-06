@@ -277,4 +277,21 @@ class Course extends Model
         $data=$query->get()->groupBy('courses.id');      
         return $data;
     }
+
+    /**
+     * [listCoursesStudent consulta de cursos inscritos por el estudiante]
+     * @param  [type] $user_id [description]
+     * @return [type]          [description]
+     */
+    function listCoursesStudent($user_id){
+        $query=DB::table('courses');
+        $query->where('courses_users.user_id',$user_id); 
+        $query->where('courses_users.status','true'); 
+        $query->join('courses_users', 'courses.id', '=', 'courses_users.course_id');
+        $query->select('courses.id','courses.name','courses.start_date','courses.end_date');        
+        $data=$query->get()->groupBy('courses.id');      
+        return $data;
+    }
+
+
 }

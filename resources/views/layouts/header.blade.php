@@ -17,27 +17,29 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap-clockpicker.min.css') }}"> 
     <link href="{{ asset('css/summernote/summernote.css') }}" rel="stylesheet">
     <link href="{{ asset('css/chosen/chosen.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/fileinput/fileinput.css') }}" rel="stylesheet">
+
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
-          
+    
     <!-- Scripts -->
     <!--<script src="{{ asset('js/app.js') }}"></script>-->
-    <script src="{{ asset('js/lib/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('js/lib/jquery-3.2.1.min.js') }}"></script>    
     <script src="{{ asset('js/lib/datatables.min.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>
 
-    
     <script src="{{ asset('js/lib/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap-clockpicker.min.js') }}"></script>
     <script src="{{ asset('js/lib/summernote/summernote.js') }}"></script>
     <script src="{{ asset('js/lib/summernote/summernote-es-ES.js') }}"></script>
     <script src="{{ asset('js/lib/chosen.jquery.min.js') }}"></script>
 
-
     <script src="{{ asset('js/lib/jquery.validate.js') }}"></script>
     <script src="{{ asset('js/lib/additional-methods.min.js') }}"></script>
     <script src="{{ asset('js/lib/fn_validate.js') }}"></script>
-    
 
+   {{--  <script src="{{ asset('js/lib/fileinput/fileinput.js') }}"></script>
+    <script src="{{ asset('js/lib/fileinput/es.js') }}"></script> --}}
+    
 </head>
 <body>
     <div id="app">

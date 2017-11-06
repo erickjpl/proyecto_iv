@@ -9,6 +9,7 @@ use \App\Profile;
 use \App\Course;
 use Illuminate\Support\Facades\Mail;
 use \App\Mail\SendMail;
+use Session;
 
 class CoursesController extends Controller
 {
@@ -38,7 +39,7 @@ class CoursesController extends Controller
 
     /**
      * [viewListCourses tabla donde se muestra 
-     * los contratos ]
+     * los cursos para el administrador ]
      * @return [] []
      */
     public function viewListCourses(){
@@ -47,7 +48,8 @@ class CoursesController extends Controller
 
 
     /**
-     * [listCourses consulta los cursos para el reporte de dataTables]
+     * [listCourses consulta los cursos para el reporte de dataTables
+     * cursos administrador]
      * @return [json] []
      */
      public function listCourses(){
@@ -73,7 +75,8 @@ class CoursesController extends Controller
 
 
     /**
-     * [listOfferAcademy description]
+     * [listOfferAcademy consulta que lista los cursos 
+     * para que el estudiante se inscriba]
      * @return [type] [description]
      */
     public function listOfferAcademy(){
@@ -140,7 +143,8 @@ class CoursesController extends Controller
     }
 
     /**
-     * [showCourse vista del curso para modificar]
+     * [showCourse vista del curso para modificar
+     * cursos administrador]
      * @param  [int] $id [id del curso]
      */
     public function showCourse($id)
@@ -150,7 +154,8 @@ class CoursesController extends Controller
 
     
     /**
-     * [store funcion para guardar el curso]
+     * [store funcion para guardar el curso 
+     * modulo curso administrador]
      * @param  Request $request [objeto del formulario]
      * @return [json]           []
      */
@@ -176,13 +181,19 @@ class CoursesController extends Controller
     }
 
     /**
-     * [showAcademy description]
+     * [showAcademy vista para listar las ofertas de cursos 
+     * para que el estudiante se inscriba ]
      * @return [type] [description]
      */
     public function showAcademy(){
        return View::make('courses.academic_offer');
     }
 
+    /**
+     * [inscription funcion que guarda la inscricion del alumno en el curso]
+     * @param  Request $request [objeto del formulario]
+     * @return [type]           [description]
+     */
     public function inscription(Request $request){
         $objCourse= new Course();
         $objUser= new User();
@@ -223,7 +234,7 @@ class CoursesController extends Controller
     }
 
     /**
-     * [getStudents description]
+     * [getStudents lista de estudiantes inscrito en un curso]
      * @param  Request $request [description]
      * @return [type]           [description]
      */
@@ -282,7 +293,13 @@ class CoursesController extends Controller
            return response()->json($update_estatus);
         }
 
-
+        /**
+         * [deleteCourse Funcion que elimina el curso 
+         * mod administrador]
+         * @param  Request $request [description]
+         * @param  [type]  $id      [description]
+         * @return [type]           [description]
+         */
         function deleteCourse(Request $request, $id){
             $objCourse=new Course();
             $id_course=base64_decode($id);
@@ -313,7 +330,7 @@ class CoursesController extends Controller
         }
 
         /**
-         * [listCourseStreaming description]
+         * [listCourseStreaming lista de cursos por profesor ]
          * @param  Request $request [description]
          * @return [type]           [description]
          */
@@ -323,5 +340,60 @@ class CoursesController extends Controller
             $data_courses=$objCourse->listCoursesStreaming($id_user);
             return response()->json($data_courses);
         }
+
+
+        /**
+         * [coursesViewStudent vista de Cursos 
+         * inscritos por el estudiante]
+         * @return [type] [description]
+         */
+        function coursesViewStudent(){
+            $user=Session::get('id');
+            $user=base64_encode($user);
+            return View::make('coursestudent.listcourses')->with(['user'=>$user]);
+        }
+
+        /**
+         * [detailCourseStudent Lista de curos 
+         * inscritos por ell estudiante]
+         * @return [type] [description]
+         */
+        function detailCoursesStudent(){
+            $objCourse=new Course();
+            $objUser= new User();
+            $user=Session::get('id');
+            $data=$objCourse->listCoursesStudent($user);
+
+            if(count($data)>0){
+                $resp=array();
+                foreach ($data as $key=>$value) {
+                    foreach ($value as $val) {
+                        $val->start_date=date("d/m/Y h:i:s A",strtotime($val->start_date)); 
+                        $val->end_date=date("d/m/Y h:i:s A",strtotime($val->end_date));
+                        $teachers=array();
+                        $relteacher=$objCourse->relationshipusers($val->id,'T');
+                        foreach ($relteacher as $k => $v) {
+                            $data_user=$objUser->getUsers($v->user_id);
+                            $nombre=$data_user[0]->name.' '.$data_user[0]->lastname;
+                            array_push($teachers,$nombre);                   
+                        }
+                        $val->teacher=implode(',',$teachers);
+                        $resp[]=$val;
+                    }
+                }
+            }
+            return response()->json($resp);
+        }
+
+        /**
+         * [viewCourseDetail vista del Aula Interactiva]
+         * @param  [string] $id [id del curso]
+         * @return []     []
+         */
+        function viewCourseDetail($id){
+           return View::make('coursestudent.classroom',['id' =>$id]);
+        }
+
+        
 
 }

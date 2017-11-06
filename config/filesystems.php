@@ -48,6 +48,11 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'materialCursos' => [
+            'driver' => 'local',
+            'root' => public_path('materialCursos'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

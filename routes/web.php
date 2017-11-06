@@ -44,17 +44,23 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::get('course/getcourses', 'CoursesController@listCourses');
 	Route::get('course/{id}', 'CoursesController@showCourse');
 	Route::post('course/savecourse', 'CoursesController@store');
-	Route::post('course/datacourse', 'CoursesController@editCourse');
 	Route::put('course/updatecourse/{id}', 'CoursesController@update');
 	Route::post('course/setstudent', 'CoursesController@setStudent');
 	Route::delete('course/delcourse/{id}', 'CoursesController@deleteCourse');
 });
 
 Route::group(['middleware' => ['auth','validstudent']], function () {
+	
 	/*inscripcion de alumnos*/
 	Route::get('academicoffer', 'CoursesController@showAcademy');
 	Route::get('listacademic', 'CoursesController@listOfferAcademy');
-	Route::post('saveinscription', 'CoursesController@inscription');	
+	Route::post('saveinscription', 'CoursesController@inscription');
+	
+	/*aula virtual alumno*/
+	Route::get('mycourses', 'CoursesController@coursesViewStudent');
+	Route::get('listmycourses', 'CoursesController@detailCoursesStudent');	
+	Route::get('coursestudent/{id}', 'CoursesController@viewCourseDetail');	
+	Route::get('coursestudent/listStreaming/{id}', 'StreamingsController@listStreamingStudent');	
 
 });
 
@@ -71,9 +77,21 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 	Route::put('aulavirtual/eventmod/{id}', 'StreamingsController@updateStreaming');
 	Route::put('aulavirtual/finevent/{id}', 'StreamingsController@finalizarEvento');
 	Route::delete('aulavirtual/delevent/{id}', 'StreamingsController@deleteStreaming');
+
+	/*gestor de archivos*/
+	Route::get('aulavirtual/files', 'FilesController@index');
+	Route::get('aulavirtual/listfiles/{id}', 'FilesController@getFiles');
+	Route::post('aulavirtual/savefiles', 'FilesController@saveFiles');
+	Route::post('aulavirtual/deletefile', 'FilesController@deleteFile');
+
 });
 
 /*profesores y administradores*/
 Route::group(['middleware' => ['auth']], function () {
 	Route::post('course/liststudents', 'CoursesController@getStudents');
+});
+
+/*profesores y administradores y alumnos*/	
+Route::group(['middleware' => ['auth']], function () {
+	Route::post('course/datacourse', 'CoursesController@editCourse');
 });
