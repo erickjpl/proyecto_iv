@@ -15,8 +15,11 @@ class ExamsController extends Controller
      */
     public function index()
     {
-        return View::make('exams.create');
+        return View::make('exams.listexams');
     }
+
+    
+
 
     /**
      * Show the form for creating a new resource.

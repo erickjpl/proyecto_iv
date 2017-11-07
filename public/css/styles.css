@@ -137,3 +137,10 @@ input.error,select.error,textarea.error{
     font-size: 12px;
 }
 
+.scroll-files{
+  display: block;
+  max-height: 250px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+

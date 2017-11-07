@@ -85,6 +85,8 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 	Route::post('aulavirtual/savefiles', 'FilesController@saveFiles');
 	Route::post('aulavirtual/deletefile', 'FilesController@deleteFile');
 
+	/*modulo de creacion de examenes*/
+	Route::get('exams/list', 'ExamsController@index');
 });
 
 /*profesores y administradores*/

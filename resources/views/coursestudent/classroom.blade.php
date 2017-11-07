@@ -8,8 +8,8 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-5">
-                             <div class="" id="scroll-files">
-                                <table class="table table-striped table-hover table-bordered">
+                             <div class="scroll-files" >
+                                <table class="table table-striped table-hover table-bordered" style="margin-top: 15px;">
                                     <thead>
                                         <tr>
                                             <th>Archivos</th>
@@ -20,8 +20,10 @@
                             </div>
                         </div>
                         <div class="col-xs-7">
-                            <div class="panel-heading bold">Descripción</div>
-                            <div id="descripcionfile"></div>
+                            <div class="scroll-files" >
+                                <div class="panel-heading bold">Descripción</div>
+                                <div id="descripcionfile" ></div>
+                            </div>
                     </div>
                 </div>
             </div>
