@@ -60,7 +60,8 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 	Route::get('mycourses', 'CoursesController@coursesViewStudent');
 	Route::get('listmycourses', 'CoursesController@detailCoursesStudent');	
 	Route::get('coursestudent/{id}', 'CoursesController@viewCourseDetail');	
-	Route::get('coursestudent/listStreaming/{id}', 'StreamingsController@listStreamingStudent');	
+	Route::get('coursestudent/listStreaming/{id}', 'StreamingsController@listStreamingStudent');
+	Route::get('coursestudent/getFiles/{idcourse}', 'FilesController@getFilesCourse');	
 
 });
 

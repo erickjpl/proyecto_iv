@@ -9,6 +9,7 @@ use Session;
 use Storage;
 use App\FileManager;
 use Log;
+use App\Course;
 
 class FilesController extends Controller
 {
@@ -130,6 +131,27 @@ class FilesController extends Controller
         $curso_id=base64_decode($id);
         $data=$objManager->getFilesDetails($curso_id);
         return response()->json($data);
+    }
+
+    function getFilesCourse($id){
+        $objCourse=new Course();
+        $objManager= new FileManager();
+        $user=Session::get('id');
+        $curso_id=base64_decode($id);
+        $teacher=$objCourse->relationshipusers($curso_id,'T');
+        $teacher=$teacher[0]->user_id;
+        $data_file=$objManager->getFilesDetails($curso_id);
+        if(!empty($data_file)){
+            foreach ($data_file as $value) {
+                $value->route='../materialCursos/curso_'.$curso_id.'_'.$teacher.'/'.$value->name;
+            }
+        }
+        $arr['files']=$data_file;
+        $arr['files_manager']=$objManager->getFilesManager($curso_id);
+        return response()->json($arr);
+        
+
+
     }
 
 }

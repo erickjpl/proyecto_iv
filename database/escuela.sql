@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `escuela` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `escuela`;
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: escuela
 -- ------------------------------------------------------
--- Server version	5.6.28-log
+-- Server version	5.7.5-m15-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -36,18 +36,8 @@ CREATE TABLE `courses` (
   `end_date` datetime NOT NULL,
   `status` enum('true','false') DEFAULT 'false',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `courses`
---
-
-LOCK TABLES `courses` WRITE;
-/*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (9,'curso 1','2017-10-26 23:05:58',NULL,'<p>hola como estas</p>','true','true','2017-10-06 12:00:00','2017-10-24 18:00:00','true');
-/*!40000 ALTER TABLE `courses` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `courses_users`
@@ -67,18 +57,47 @@ CREATE TABLE `courses_users` (
   KEY `fk_courses_teachers_courses1_idx` (`course_id`),
   CONSTRAINT `courses_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_courses_teachers_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `courses_users`
+-- Table structure for table `files`
 --
 
-LOCK TABLES `courses_users` WRITE;
-/*!40000 ALTER TABLE `courses_users` DISABLE KEYS */;
-INSERT INTO `courses_users` VALUES (3,37,9,'T','true'),(7,46,9,'S','true');
-/*!40000 ALTER TABLE `courses_users` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `files` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  `file_manager_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_files_files_manager1_idx` (`file_manager_id`),
+  CONSTRAINT `files_ibfk_1` FOREIGN KEY (`file_manager_id`) REFERENCES `files_manager` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `files_manager`
+--
+
+DROP TABLE IF EXISTS `files_manager`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `files_manager` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `description` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `course_id` int(11) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_files_manager_courses1_idx` (`course_id`),
+  KEY `fk_files_manager_users1_idx` (`user_id`),
+  CONSTRAINT `fk_files_manager_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_files_manager_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `migrations`
@@ -89,20 +108,11 @@ DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `migrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `migrations`
---
-
-LOCK TABLES `migrations` WRITE;
-/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `occupations`
@@ -119,16 +129,6 @@ CREATE TABLE `occupations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `occupations`
---
-
-LOCK TABLES `occupations` WRITE;
-/*!40000 ALTER TABLE `occupations` DISABLE KEYS */;
-INSERT INTO `occupations` VALUES (1,'Ingeniero');
-/*!40000 ALTER TABLE `occupations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `password_resets`
 --
 
@@ -136,22 +136,12 @@ DROP TABLE IF EXISTS `password_resets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `password_resets` (
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   KEY `password_resets_email_index` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `password_resets`
---
-
-LOCK TABLES `password_resets` WRITE;
-/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
-INSERT INTO `password_resets` VALUES ('bebe@gmail.com','$2y$10$1wQs/EmRD/P3dUPKqgd.EudBvwYf1web7.IjqVjE0VvxFDATcGYMy','2017-10-25 00:17:48'),('hola@gmail.com','$2y$10$ritVwp0FC2kaF8jJz4a.p.ShG57ShpvM0v4.cZOcFzw4h9QDBgllW','2017-10-25 00:22:25'),('lala@gmail.com','$2y$10$bS0Idzdtkk0a8PT8jqtDk.B5eL.EG0KmI.vc0XidwXzveS.I8oNve','2017-10-26 00:16:09');
-/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `profiles`
@@ -168,16 +158,6 @@ CREATE TABLE `profiles` (
   KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `profiles`
---
-
-LOCK TABLES `profiles` WRITE;
-/*!40000 ALTER TABLE `profiles` DISABLE KEYS */;
-INSERT INTO `profiles` VALUES (1,'Estudiante','false'),(2,'Admistrador','true'),(3,'Profesor','true');
-/*!40000 ALTER TABLE `profiles` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `streamings`
@@ -201,41 +181,8 @@ CREATE TABLE `streamings` (
   KEY `fk_streamings_users1_idx` (`user_id`),
   CONSTRAINT `fk_streamings_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_streamings_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `streamings`
---
-
-LOCK TABLES `streamings` WRITE;
-/*!40000 ALTER TABLE `streamings` DISABLE KEYS */;
-INSERT INTO `streamings` VALUES (5,'https://stackoverflow.com/questions/22207377/disable-click-outside-of-bootstrap-modal-area-to-close-modal','2017-11-02 14:28:57','2017-11-02 18:28:53',NULL,9,'tes',37,'true'),(6,'https://trello.com/b/upcDZw8G/sistema-de-contrato-digital','1970-01-01 00:00:00','2017-11-03 00:25:10',NULL,9,'tests',37,'true');
-/*!40000 ALTER TABLE `streamings` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `types_files`
---
-
-DROP TABLE IF EXISTS `types_files`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `types_files` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `types_files`
---
-
-LOCK TABLES `types_files` WRITE;
-/*!40000 ALTER TABLE `types_files` DISABLE KEYS */;
-/*!40000 ALTER TABLE `types_files` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -246,33 +193,23 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `lastname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `active` enum('true','false') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'false',
+  `lastname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `active` enum('true','false') COLLATE utf8mb4_unicode_ci DEFAULT 'false',
   `occupation_id` int(11) DEFAULT NULL,
-  `identification_document` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `identification_document` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `id` (`id`) USING BTREE,
   KEY `occupation_id` (`occupation_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`occupation_id`) REFERENCES `occupations` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (37,'Carla','carla@gmail.com','$2y$10$dDY8dnfFu9DdK69G1l5Ko.mJCFJVm0kesDR7eEsPo60H0bFuZ8TV.','T6KLLZV9vZkhko0S00cHFN5JiFIKEcMbwYpbwVWnRQ244WJDGAeVvO1sEFgR','2017-10-05 06:44:35','2017-10-05 06:47:38','Ramirez','true',1,'18713843'),(38,'Jorge','jlobo@gmail.com','$2y$10$j9QOT9dI/rlxxgjVcoPR8.A8GlI9ixgqhNQhjEJMz/tvfJU2GaV3.','NJSN8d0WDw0woQs1K1KR4hz5N2xxso5X8B3YRvyBFl5MDWc1GLufqJcXkaAX','2017-10-10 23:10:11','2017-10-10 23:32:17','Logo','true',1,'555674564'),(46,'Adrian','adrian@gmail.com','$2y$10$NqKyPfctZU/qfzdDcakukOSzkVRpuv7aQBSXHzMSsxAkKqrfE6RBu','YHRTSJy7fnMdKJQ28Ay052BvcUG4WvApAEYZLQlaSmlddNlBCfZB6aRzLLwO','2017-10-26 00:10:34',NULL,'Narvaez','true',1,'187135469');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users_profiles`
@@ -290,18 +227,8 @@ CREATE TABLE `users_profiles` (
   KEY `users_profiles_ibfk_1` (`user_id`),
   CONSTRAINT `users_profiles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `users_profiles_ibfk_2` FOREIGN KEY (`profile_id`) REFERENCES `profiles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users_profiles`
---
-
-LOCK TABLES `users_profiles` WRITE;
-/*!40000 ALTER TABLE `users_profiles` DISABLE KEYS */;
-INSERT INTO `users_profiles` VALUES (3,30,37),(2,31,38),(1,37,46);
-/*!40000 ALTER TABLE `users_profiles` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Dumping events for database 'escuela'
@@ -320,4 +247,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-02 17:00:33
+-- Dump completed on 2017-11-06 23:30:10

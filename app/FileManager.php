@@ -96,40 +96,18 @@ class FileManager extends Model
 
 
     /**
-     * [colsultExistFile description]
+     * [getFilesManager funcion que retorna el detalle general de los archivos relacionados
+     * en files]
      * @param  [type] $curso_id [description]
-     * @param  [type] $user_id  [description]
      * @return [type]           [description]
      */
-    /*function colsultExistFile($curso_id,$user_id){
+    function getFilesManager($curso_id){
+
         $query=DB::table('files_manager');
-        $query->where('files_manager.user_id',$user_id);
         $query->where('files_manager.course_id',$curso_id); 
-        $query->select('files.id');        
-        $data=$query->get();
-        if(!empty($data)){
-            return $data[0];
-        }else{
-            return false;
-        }
-    }*/
-
-    /**
-     * [getFilesDetails description]
-     * @param  [type] $curso_id [description]
-     * @return [type]           [description]
-     */
-    /*function getFilesDetails($curso_id){
-
-        $query=DB::table('files');
-        $query->where('files_manager.course_id',$curso_id); 
-        $query->join('files_manager', 'files_manager.id', '=', 'files.files_manager_id');
-        $data=$query->select('files.id','files.name');
+        $data=$query->select('files_manager.description','files_manager.id')->get();
         return $data;
-    }*/
-
-
-
+    }
 
     /**
      * [returnOper function que retorna la operacion insert,update,delete 

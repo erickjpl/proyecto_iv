@@ -9,6 +9,7 @@
       this.course_id=$('#panel-clasroom').attr('data-course')
       this.listStreaming();
       this.refresh();
+      this.getFiles();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -72,6 +73,26 @@
                     $('<tr>').append('<td>',{colspan:3}).text('No se encontraron Registros'));
               }
           });
+    },getFiles:function(){
+      var data=this.consult('./getFiles/'+myClassRoom.course_id,[],'GET');
+      data.done(function(d){
+          if(d.files.length>0){
+             //$('#descripcionfile').text(d[0].description);
+             $.each(d.files, function( k, v ) {
+                var url='<a target="blank" href="'+v.route+'">'+v.name+'</a>';
+                $('#tbfiles').append(
+                  $('<tr>').append(
+                      $('<td>').html(url)));
+            });
+             $.each(d.files_manager, function( k, v ) {
+                $("#descripcionfile").append($('<div>',{class:'alert alert-warning'}).text(v.description));
+            });
+          }else{
+            $('#descripcionfile').text('No se han cargado material para este curso');
+            $('#tbfiles').append(
+                $('<tr>').append('<td>',{colspan:1}).text('No se encontraron Registros'));
+          }
+      });
     }
   }
   $(document).ready(function(){
