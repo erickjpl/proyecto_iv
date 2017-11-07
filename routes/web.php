@@ -87,6 +87,7 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 	/*modulo de creacion de examenes*/
 	Route::get('exams/list', 'ExamsController@index');
 	Route::get('exams/create', 'ExamsController@create');
+	Route::get('exams/listcourses', 'CoursesController@listCourseExams');
 });
 
 /*profesores y administradores*/

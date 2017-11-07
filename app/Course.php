@@ -279,6 +279,24 @@ class Course extends Model
     }
 
     /**
+     * [listCoursesExams lista de cursos habilitados para crear 
+     * examenes]
+     * @param  [int] $user_id [usuario de session]
+     * @return [type]          [description]
+     */
+    function listCoursesExams($user_id=null){
+        $query=DB::table('courses');
+        if(!empty($user_id))
+            $query->where('courses_users.user_id',$user_id); 
+        $query->where('courses.exams','true');
+        $query->where('courses.status','true'); 
+        $query->join('courses_users', 'courses.id', '=', 'courses_users.course_id');
+        $query->select('courses.id','courses.name');        
+        $data=$query->get()->groupBy('courses.id');      
+        return $data;
+    }
+
+    /**
      * [listCoursesStudent consulta de cursos inscritos por el estudiante]
      * @param  [type] $user_id [description]
      * @return [type]          [description]

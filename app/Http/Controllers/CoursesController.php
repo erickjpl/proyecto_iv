@@ -343,6 +343,19 @@ class CoursesController extends Controller
 
 
         /**
+         * [listCourseExams lista de cursos habilitados 
+         * para crear examenes]
+         * @return [type] [description]
+         */
+        function listCourseExams(){
+            $user=Session::get('id');
+            $objCourse=new Course();
+            $data_courses=$objCourse->listCoursesExams($user);
+            return response()->json($data_courses);
+        }
+
+
+        /**
          * [coursesViewStudent vista de Cursos 
          * inscritos por el estudiante]
          * @return [type] [description]
