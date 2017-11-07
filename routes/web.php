@@ -67,7 +67,6 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 
 Route::group(['middleware' => ['auth','validteacher']], function () {
 
-
 	/*aula virtual*/
 	Route::get('aulavirtual/list', 'StreamingsController@index');
 	Route::get('aulavirtual/listcourses', 'CoursesController@listCourseStreaming');

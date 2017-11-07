@@ -37,64 +37,79 @@
     <script src="{{ asset('js/lib/additional-methods.min.js') }}"></script>
     <script src="{{ asset('js/lib/fn_validate.js') }}"></script>
 
-   {{--  <script src="{{ asset('js/lib/fileinput/fileinput.js') }}"></script>
-    <script src="{{ asset('js/lib/fileinput/es.js') }}"></script> --}}
-    
+    <script src="{{ asset('js/nav.js') }}"></script>
+
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
+    <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
 
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+            <!-- Collapsed Hamburger -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                       Escuela del Software
-                    </a>
-                </div>
-
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a href="#" id="dLabel" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+            <!-- Branding Image -->
+            <a class="navbar-brand" href="{{ url('home') }}">
+               Escuela del Software
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="app-navbar-collapse" data-profile='{{ base64_encode(Session::get('profile_id'))  }}'>
+            <!-- Right Side Of Navbar -->
+            <ul class="nav navbar-nav navbar-right">
+                <!-- Authentication Links -->
+                @guest
+                    <li><a href="{{ route('login') }}">Login</a></li>
+                    <li><a href="{{ route('register') }}">Register</a></li>
+                @else
+                    <!--Menu Administrador-->
+                    <li class="hide nav-app nav-adm"><a href="{{ url('/course/listcourse') }}">Modulo Cursos<span class="sr-only"></span></a></li>
+                    <li class="hide nav-app nav-adm"><a href="{{ url('students') }}">Modulo de Estudiantes<span class="sr-only"></span></a></li>
+                    <li class="hide nav-app nav-adm"><a href="{{ url('users') }}">Modulo de Usuarios<span class="sr-only"></span></a></li>
+                    <!--Menu Estudiante-->
+                    <li class="hide nav-app nav-stu"><a href="{{ url('academicoffer') }}">Oferta de Cursos<span class="sr-only"></span></a></li>
+                    <li class="hide nav-app nav-stu"><a href="{{ url('mycourses') }}">Mis Cursos<span class="sr-only"></span></a></li>
+                    <!--Menu profesor-->
+                    <li class="hide nav-app nav-tea"><a href="">Evaluaciones<span class="sr-only"></span></a></li>
+                    <li class="dropdown hide nav-app nav-tea">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Mis Cursos <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li class="dropdown-header">Aula Virtuales</li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ url('aulavirtual/list') }}">Streamings</a></li>
+                            <li><a href="{{ url('aulavirtual/files') }}">Gestor de Archivos</a></li>
+                            <li><a href="#">Examenes</a></li>                          
+                             <!--<li class="dropdown-header">Nav header</li>-->
+                            <!--<li><a href="#">One more separated link</a></li>-->
+                          </ul>
+                    </li>                   
+                    <li class="dropdown">
+                        <a href="#" id="dLabel" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                           {{ Auth::user()->name }} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dLabel">
+                            <li>
+                                <a href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                    <span class="glyphicon glyphicon-off"></span>  Cerrar Session
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="dLabel">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
                             </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
+                        </ul>
+                    </li>
+                @endguest
+            </ul>
+        </div>
+        </div>
         </nav>
         @yield('content')
     </div>

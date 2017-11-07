@@ -292,7 +292,7 @@ class Course extends Model
         $query->where('courses.status','true'); 
         $query->join('courses_users', 'courses.id', '=', 'courses_users.course_id');
         $query->select('courses.id','courses.name');        
-        $data=$query->get()->groupBy('courses.id');      
+        $data=$query->get();      
         return $data;
     }
 
