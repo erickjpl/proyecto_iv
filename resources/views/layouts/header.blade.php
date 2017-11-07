@@ -84,7 +84,7 @@
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ url('aulavirtual/list') }}">Streamings</a></li>
                             <li><a href="{{ url('aulavirtual/files') }}">Gestor de Archivos</a></li>
-                            <li><a href="#">Examenes</a></li>                          
+                            <li><a href="{{ url('exams/list') }}">Examenes</a></li>                          
                              <!--<li class="dropdown-header">Nav header</li>-->
                             <!--<li><a href="#">One more separated link</a></li>-->
                           </ul>
