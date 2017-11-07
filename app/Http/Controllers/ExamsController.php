@@ -28,7 +28,7 @@ class ExamsController extends Controller
      */
     public function create()
     {
-        //
+        return View::make('exams.create');
     }
 
     /**
