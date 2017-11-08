@@ -80,7 +80,7 @@
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Mis Cursos <span class="caret"></span></a>
                           <ul class="dropdown-menu">
-                            <li class="dropdown-header">Aula Virtuales</li>
+                            <li class="dropdown-header">Aula Virtual</li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ url('aulavirtual/list') }}">Streamings</a></li>
                             <li><a href="{{ url('aulavirtual/files') }}">Gestor de Archivos</a></li>

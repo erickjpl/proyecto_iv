@@ -9,7 +9,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12">
-                            <button type="button" class="btn btn-success btn-md" data-toggle="modal" id="btnRegistry" >Crear Examen</button>
+                            <button type="button" class="btn btn-success btn-md"  id="btnRegistry" >Crear Examen</button>
                         </div>
                     </div>
                     <br>

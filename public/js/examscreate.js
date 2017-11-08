@@ -14,6 +14,12 @@
       this.fnChosen();
       this.getCourses();
       this.sendExam();
+      this.exitExam();
+    }
+    ,exitExam:function(){
+      $("#exit-exam").on('click',function(){
+          window.location.href = "./list";
+      });
     },
     getCourses:function(){
       var courses = this.consult("listcourses",{},"GET",false),data,r=$("#course");

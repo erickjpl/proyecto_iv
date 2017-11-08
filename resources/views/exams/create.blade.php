@@ -61,6 +61,7 @@
                     </form>
                     <div class="row">
                         <div class="col-xs-12 text-center">
+                             <button type="button" class="btn btn-danger" id='exit-exam' >Cancelar</button>
                             <button id="send-exam" class="btn btn-success">Enviar</button>
                         </div>
                     </div>
