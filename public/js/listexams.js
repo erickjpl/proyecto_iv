@@ -6,6 +6,7 @@
     table_id:'#tblexamsn',
     launch: function(){
       this.createView();
+      this.dataTable(this.table_id);
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -27,6 +28,30 @@
       $("#btnRegistry").on('click',function(){
           window.location.href = "./create";
       });
+    },dataTable:function(idtable){
+        this.table=$(idtable).DataTable( {
+            "ajax": './getexams',
+            "language": {
+              "lengthMenu": "Total de registros:_MENU_ ",
+              "zeroRecords": "No se encontraron registros que mostrar",
+              "info": "Total de p&aacute;ginas _PAGE_ de _PAGES_",
+              "infoEmpty": "",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "sSearch" :"Buscar: ",
+              "sProcessing": "",
+              "paginate": {
+                  "previous": "Anterior",
+                  "next": "Siguiente"
+               }
+             },
+             "columns": [
+                { "data": "name","sClass": 'namecoursetable'},
+                { "data": "start_date","sClass": 'text-center'  },
+                { "data": "end_date","sClass": 'text-center'  },
+                { "data": "status","sClass": 'text-center'  },            
+                { "data": "actions","sClass": 'text-center' }
+            ]
+        },);
     }
   }
   $(document).ready(function(){

@@ -157,3 +157,9 @@ input.error,select.error,textarea.error{
   scroll-behavior: smooth;
 }
 
+.namecoursetable{
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+}
+

@@ -7,6 +7,7 @@
     textQuestionSimple:"Pregunta Simple",
     textQuestionSelection:"Seleccion Multiple",
     row:"",
+    contador:0,
     launch: function(){
       this.createForm();
       this.typeQuestion();
@@ -15,6 +16,7 @@
       this.getCourses();
       this.sendExam();
       this.exitExam();
+      this.validForm();
     }
     ,exitExam:function(){
       $("#exit-exam").on('click',function(){
@@ -43,7 +45,7 @@
       var row="";
       this.row=$("<div>",{"class":"rowquestion form-group"}).append($("<label>",{"class":""}).append($("<div>",{"class":"question-number"})).text("Pregunta"),[$("<div>",{"class":"row"}).append(
           $("<div>",{"class":"col-xs-8"}).append(
-              $("<input>",{"name":"question[]","type":"text","class":"description form-control","placeholder":"Question"}).val("")
+              $("<input>",{"name":"question[]","type":"text","class":"description form-control required_exam","placeholder":"Question"}).val("")
           ),
           [
             $("<div>",{"class":"col-xs-2"}).append(
@@ -71,13 +73,14 @@
     typeQuestion:function(){
       $(".select-question").off("change");
       $(".select-question").on("change",function(e){
+        courses.contador++;
         e.preventDefault(),e.stopPropagation();
         if($(this).val()==="on"){
           $(this).parents().eq(2).append(
             $("<div>",{"class":"row option-title"}).append($("<div>",{"class":"col-xs-12"}).append($("<label>",{"class":""}).text("Opciones"))),[
             $("<div>",{"class":"row option-row"}).append(
               $("<div>",{"class":"col-xs-10"}).append(
-                  $("<input>",{"name":"option[]","class":"form-control","type":"text","placeholder":"Option"})
+                  $("<input>",{"name":"option-"+courses.contador+"[]","class":"form-control required_exam","type":"text","placeholder":"Option"})
                 ),
                 $("<div>",{"class":"col-xs-2"}).append(
                   $("<button>",{"class":"btn btn-success addOption col-xs-6"}).append($("<span>",{'class':'glyphicon glyphicon-plus-sign'})),[
@@ -85,11 +88,12 @@
                   ]
                 )
             )]
-          )
+          )         
+          $(this).parent().siblings().children('.description').attr('name','question-'+courses.contador+'[]');//aqui
           courses.addOption();
           courses.deleteOption();
         }else{
-          $(this).parents().eq(2).find(".option-row").remove();
+          $(this).parent().eq(2).find(".option-row").remove();
         }
       });
     },
@@ -100,7 +104,7 @@
         $(this).parents().eq(2).append(
           $("<div>",{"class":"row option-row"}).append(
           $("<div>",{"class":"col-xs-10"}).append(
-            $("<input>",{"name":"option[]","class":"form-control","type":"text","placeholder":"Option"})
+            $("<input>",{"name":"option-"+courses.contador+"[]","class":"form-control required_exam","type":"text","placeholder":"Option"})
           ),[
             $("<div>",{"class":"col-xs-2"}).append(
               $("<button>",{"class":"btn btn-success addOption col-xs-6"}).append($("<span>",{'class':'glyphicon glyphicon-plus-sign'})),[
@@ -159,44 +163,91 @@
           data: data,
           dataType: 'json',
           async: a,
-          headers: (method=="POST"?{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}:"")
+         
         });
       }
     },sendExam:function(){
       $("#send-exam").on('click',function(){
-        var course=$("#course").val(), 
-        type=$("#type-exam").val(),
-        f_inicio=$("#fecha_inicio").val(),
-        h_inicio=$("#hora_inicio").val(),
-        f_fin=$("#fecha_fin").val(),
-        h_fin=$("#hora_final").val(),
-        preguntas = [],opciones=[],tipos=[]
-        $('input[name="question[]"]').each(function(){
-          preguntas+=(preguntas.length<=0?$(this).val():"|"+$(this).val());
-        }).val();
-        $('input[name="option[]"]').each(function(){
-          opciones+=(opciones.length<=0?$(this).val():"|"+$(this).val());
-        });
-        $('select[name="type[]"]').each(function(){
-          tipos+=(tipos.length<=0?$(this).val():"|"+$(this).val())
-        })
-        var create=courses.consult('./save',
-            {'course':course,'type':type,'f_inicio':f_inicio,
-             'f_fin':f_fin,'h_inicio':h_inicio,'h_fin':h_fin,
-             'preguntas':preguntas,'opciones':opciones,'tipos':tipos
-            },'POST');
-          create.done(function(d){ 
-            /*var msj='Operacion realizada con éxito';
-            var title='Mensaje!';
-            var error='';
-            if(d.oper==false){
-               msj='Error comuniquese con el Administrador';
-               title='Error!';
-               error=(d.error!='')?d.error:'';
-            }
-            courses.Modaloper('#modal_operacion',msj,title,error);*/
+        if($("#form-exam").valid()){
+          var formData = new FormData($("#form-exam")[0]);
+          $.ajax({
+              type: "POST",
+              url: './save',
+              data: formData,
+              cache: false,
+              processData: false,
+              contentType: false,
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              success: function(value)
+              {
+                  var msj='Operacion realizada con éxito';
+                  var title='Mensaje!';
+                  var error='';
+                  if(value.oper==false){
+                     msj='Error comuniquese con el Administrador';
+                     title='Error!';
+                     error=(value.error!='')?value.error:'';
+                  }
+                  courses.Modaloper('#modal_operacion',msj,title,error);
+              }
           });
+          }
       }); 
+
+    },validForm:function(){
+        $("#form-exam").validate({
+          ignore: '*:not([name])', //Fixes your name issue*/
+        });
+        $( "#hora_inicio" ).rules( "add", {
+            required: true,
+            messages: {
+                required: ""
+            }
+        });
+        $( "#hora_final" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+        $( "#fecha_inicio" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+        $( "#fecha_fin" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+        $( ".required_exam" ).rules( "add", {
+            required: true,
+            messages: {
+                required: "",
+            }
+        });
+    },Modaloper:function(modal,msj,title,error){
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").text(msj);
+              }
+              if(typeof title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(typeof error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
+        })
+        if(typeof error!==undefined || error!='' || error!=null ){
+          $(modal).on('hidden.bs.modal', function () {
+              window.history.back();
+          });
+        }
     },
   }
   $(document).ready(function(){

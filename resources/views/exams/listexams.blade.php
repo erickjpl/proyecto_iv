@@ -17,8 +17,8 @@
                         <thead>
                             <tr>
                                 <th>Curso</th>
-                                <th>Nombre</th>
-                                <th>Descripcion</th>
+                                <th>Fecha de Inicio</th>
+                                <th>Fecha de Finalizacion</th>
                                 <th>Estatus</th>
                                 <th>Acciones</th>
                             </tr>

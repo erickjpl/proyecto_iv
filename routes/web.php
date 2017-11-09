@@ -87,6 +87,7 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 	Route::get('exams/list', 'ExamsController@index');
 	Route::get('exams/create', 'ExamsController@create');
 	Route::get('exams/listcourses', 'CoursesController@listCourseExams');
+	Route::get('exams/getexams', 'ExamsController@listExams');
 	Route::post('exams/save', 'ExamsController@store');
 });
 

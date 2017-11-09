@@ -1,4 +1,5 @@
 @extends('layouts.header')
+@include('modals.modals')
 @section('content')
 <div class="container">
     <div class="row">
@@ -6,14 +7,14 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Examenes</div>
                 <div class="panel-body">
-                    <form class="data-render">
+                    <form class="data-render" id="form-exam">
                         <div class="form-group">
                             <label for="course">Curso</label>
                             <select name="course" id="course" class="form-control chosen-select"></select>
                         </div>
                         <div class="form-group">
                             <label for="type-exam">Tipo de Examen</label>
-                            <select name="type-exam" id="type-exam" class="form-control chosen-select">
+                            <select name="type_exam" id="type-exam" class="form-control chosen-select">
                                 <option value="p">Parcial</option>
                                 <option value="f">Final</option>
                             </select>
@@ -61,6 +62,7 @@
                     </form>
                     <div class="row">
                         <div class="col-xs-12 text-center">
+                             {{ csrf_field() }}
                              <button type="button" class="btn btn-danger" id='exit-exam' >Cancelar</button>
                             <button id="send-exam" class="btn btn-success">Enviar</button>
                         </div>
