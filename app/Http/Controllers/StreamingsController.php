@@ -20,7 +20,6 @@ class StreamingsController extends Controller
         return View::make('streamings.liststreamings')->with(['user'=>$user]);
     }
 
-    
     /**
      * [saveEvent funcion que guarda el streaming]
      * @param  Request $request [objeto del formulario]
@@ -144,9 +143,10 @@ class StreamingsController extends Controller
         $user=Session::get('id');
         $course_id=base64_decode($course);
         $data=$objStreaming->listStreamingStudent($course_id,$user);
+        $data=$data[""];
         if(count($data)>0){
-            foreach ($data as $value) {
-                $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date));
+            foreach ($data as $val) {
+                $val->start_date=date("d/m/Y h:i:s A",strtotime($val->start_date));
             }
         }
         return response()->json($data);

@@ -75,7 +75,7 @@
                     <li class="hide nav-app nav-stu"><a href="{{ url('academicoffer') }}">Oferta de Cursos<span class="sr-only"></span></a></li>
                     <li class="hide nav-app nav-stu"><a href="{{ url('mycourses') }}">Mis Cursos<span class="sr-only"></span></a></li>
                     <!--Menu profesor-->
-                    <li class="hide nav-app nav-tea"><a href="">Evaluaciones<span class="sr-only"></span></a></li>
+                    <li class="hide nav-app nav-tea"><a href="#">Evaluaciones<span class="sr-only"></span></a></li>
                     <li class="dropdown hide nav-app nav-tea">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Mis Cursos <span class="caret"></span></a>
@@ -88,10 +88,10 @@
                              <!--<li class="dropdown-header">Nav header</li>-->
                             <!--<li><a href="#">One more separated link</a></li>-->
                           </ul>
-                    </li>                   
+                    </li>                
                     <li class="dropdown">
                         <a href="#" id="dLabel" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                           {{ Auth::user()->name }} <span class="caret"></span>
+                          Bienvenido(a) <b>{{ Auth::user()->name }}</b> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dLabel">
                             <li>

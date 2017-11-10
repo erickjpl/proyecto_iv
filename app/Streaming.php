@@ -125,7 +125,7 @@ class Streaming extends Model
         $query->join('courses', 'courses.id', '=', 'streamings.course_id');
         $query->select('streamings.id','streamings.url','streamings.start_date','courses.name',
         'streamings.status');
-        $data=$query->get();      
+        $data=$query->get()->groupBy('streamings.id');      
         return $data; 
     }
 

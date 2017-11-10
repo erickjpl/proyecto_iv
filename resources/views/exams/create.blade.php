@@ -64,7 +64,7 @@
                         <div class="col-xs-12 text-center">
                              {{ csrf_field() }}
                              <button type="button" class="btn btn-danger" id='exit-exam' >Cancelar</button>
-                            <button id="send-exam" class="btn btn-success">Enviar</button>
+                            <button type="button" id="send-exam" class="btn btn-success">Enviar</button>
                         </div>
                     </div>
                 </div>

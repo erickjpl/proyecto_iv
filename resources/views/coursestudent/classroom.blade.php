@@ -40,7 +40,7 @@
                             <button id="refresh" class="btn btn-primary"><i class="glyphicon glyphicon-refresh" title="Refrescar"></i></button></div>
                             <table class="table table-striped table-hover">
                                 <thead>
-                                    <tr>
+                                    <tr class="text-center">
                                         <th>Fecha</th>
                                         <th>Url</th>
                                         <th>Estatus</th>
