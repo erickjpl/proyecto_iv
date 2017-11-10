@@ -60,10 +60,12 @@ class ExamsController extends Controller
         $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_final))); 
         $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_inicio))); 
         $f_fin=date("Y-m-d",strtotime(str_replace('/', '-',$request->f_fin))); 
+        $user=Session::get('id');
         $insert["start_date"]=$f_inicio.' '.$h_inicio;
         $insert["end_date"]=$f_fin.' '.$h_fin;
         $insert["course"]=$request->course;
         $insert["type"]=$request->type_exam;
+        $insert["user_id"]=$user;
         $id_exam=$objExam->insertExam($insert);
         if(is_int($id_exam)){
             if(!empty($arr_simples)){
@@ -111,8 +113,8 @@ class ExamsController extends Controller
                      //$value->status=($value->status=='true')?'Si':'No';
                      $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date)); 
                      $value->end_date=date("d/m/Y h:i:s A",strtotime($value->end_date)); 
-                     $actions='<button type="button" class="acc_mod btn btn-primary btn-xs" data-course="'.$id.'">Modificar</button>
-                              <button type="button" class="acc_del btn btn-danger btn-xs" data-course="'.$id.'">Eliminar</button>';
+                     $actions='<button type="button" class="acc_mod btn btn-primary btn-xs" data-exam="'.$id.'">Modificar</button>
+                              <button type="button" class="acc_del btn btn-danger btn-xs" data-exam="'.$id.'">Eliminar</button>';
 
                     $value->actions=$actions;
                     $resp["data"][]=$value;
@@ -133,8 +135,42 @@ class ExamsController extends Controller
      */
     public function show($id)
     {
-        //
+        $id_exam=base64_decode($id);
+        $objExam=new Exam();
+        $objExam=$objExam::find($id_exam);
+        $this->authorize('view', $objExam);
+        return View::make('exams.create',['exam' =>$id]);
     }
+
+    /**
+     * [consultExam description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function consultExam(Request $request){
+        $objExam=new Exam();
+        $id_exam=base64_decode($request->exam_id);
+        $data_exam=$objExam->consultExam($id_exam);
+        $result=array();
+        if(count($data_exam)>0){
+            $data_exam=$data_exam[0];
+            $start_date=explode(' ',$data_exam->start_date);
+            $end_date=explode(' ',$data_exam->end_date);
+            $data_exam->start_date=date("d/m/Y",strtotime($start_date[0]));
+            $data_exam->h_inicio=date("h:i:s A",strtotime($start_date[1])); 
+            $data_exam->end_date=date("d/m/Y",strtotime($end_date[0])); 
+            $data_exam->h_fin=date("h:i:s A",strtotime($end_date[1]));            
+            $id=$data_exam->id;
+            $data_questions=$objExam->consultOptions($id);
+            $arr=array();
+            foreach ($data_questions as $value) {
+                $arr[]=$value;
+            }
+            $data_exam->questions=$arr;          
+            $result=$data_exam;
+        }
+        return response()->json($result);
+    }   
 
     /**
      * Show the form for editing the specified resource.

@@ -7,7 +7,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Examenes</div>
                 <div class="panel-body">
-                    <form class="data-render" id="form-exam">
+                    <form class="data-render" id="form-exam" data-exam={{isset($exam)?$exam:null}}>
                         <div class="form-group">
                             <label for="course">Curso</label>
                             <select name="course" id="course" class="form-control chosen-select"></select>

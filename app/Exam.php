@@ -85,4 +85,31 @@ class Exam extends Model
         $data=$query->get()->groupBy('exams.id');   
         return $data;
     }
+
+    /**
+     * [consultExam description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    function consultExam($id){
+        $query=DB::table('exams');
+        $query->where('exams.id',$id); 
+        $query->join('courses', 'courses.id', '=', 'exams.course_id');
+        $query->select('exams.id','exams.type','exams.start_date','exams.end_date','exams.status','exams.course_id','courses.name');
+        $data=$query->get();
+        return $data;
+    }
+
+
+    /**
+     * [consultOptions description]
+     * @return [type] [description]
+     */
+    function consultOptions($id){
+       $query=DB::table('questions');
+       $query->where('questions.exam_id',$id); 
+       $query->select('questions.id','questions.description','questions.type','questions.options');
+       $data=$query->get();
+       return $data; 
+    }
 }

@@ -7,6 +7,7 @@
     launch: function(){
       this.createView();
       this.dataTable(this.table_id);
+      this.editExam();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -52,6 +53,12 @@
                 { "data": "actions","sClass": 'text-center' }
             ]
         },);
+    },editExam:function(){
+      $("body").on("click",".acc_mod", function(){
+          var course=$(this).attr('data-exam');
+          window.location.href = "./"+course;
+
+      });
     }
   }
   $(document).ready(function(){

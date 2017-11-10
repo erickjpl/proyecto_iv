@@ -8,6 +8,7 @@
     textQuestionSelection:"Seleccion Multiple",
     row:"",
     contador:0,
+    exam_id:'',
     launch: function(){
       this.createForm();
       this.typeQuestion();
@@ -17,6 +18,11 @@
       this.sendExam();
       this.exitExam();
       this.validForm();
+      var exammod=$("#form-exam").attr('data-exam');
+      if(exammod!=null){
+        courses.exam_id=exammod;
+        courses.consuldataMod();
+      }
     }
     ,exitExam:function(){
       $("#exit-exam").on('click',function(){
@@ -163,7 +169,7 @@
           data: data,
           dataType: 'json',
           async: a,
-         
+          headers: (method=="POST"?{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}:"")
         });
       }
     },sendExam:function(){
@@ -248,7 +254,41 @@
               window.history.back();
           });
         }
-    },
+    },consuldataMod:function(){
+      var data = this.consult("./consultexam",{'exam_id':courses.exam_id},"POST");
+      data.done(function(d){
+         var arrcourse=[];
+         var arrtype=[];
+         arrcourse.push(d.course_id);
+         arrcourse.push(d.type);
+         $("#course").val(arrcourse).trigger("liszt:updated");
+         $("#course").trigger('chosen:updated');
+         $("#type-exam").val(arrcourse).trigger("liszt:updated");
+         $("#type-exam").trigger('chosen:updated');
+         $("#fecha_inicio").val(d.start_date);
+         $("#fecha_fin").val(d.end_date);
+         $("#hora_inicio").val(d.h_inicio);
+         $("#hora_final").val(d.h_fin);
+         $("#send-exam").attr('id','update-exam');
+         var questios=d.questions;
+         var row=$('<div>');
+         $.each(questios, function( k, v ) {
+            switch(v.type){
+              case 'c': //preguntas libres                
+                courses.row.find("input[name='question[]']").val(v.description);
+                row.add(courses.row);
+              break;
+
+              case 'o': //preguntas libres
+
+              break;
+            }
+            //console.log(v);
+         });
+        $(".data-render").append(row);
+
+      });
+    }
   }
   $(document).ready(function(){
     courses.launch();
