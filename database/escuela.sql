@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `escuela` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `escuela`;
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: escuela
 -- ------------------------------------------------------
--- Server version	5.6.28-log
+-- Server version	5.7.5-m15-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -96,10 +96,11 @@ CREATE TABLE `exams` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `course_id` int(11) NOT NULL,
   `status` enum('B','P','F') DEFAULT 'B' COMMENT 'B=>Borrador P=>presentar F=>finalizado',
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_exams_courses1_idx` (`course_id`),
   CONSTRAINT `fk_exams_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +109,7 @@ CREATE TABLE `exams` (
 
 LOCK TABLES `exams` WRITE;
 /*!40000 ALTER TABLE `exams` DISABLE KEYS */;
-INSERT INTO `exams` VALUES (15,'p','2017-11-09 18:29:00','1970-01-01 18:29:00','2017-11-09 19:30:19',NULL,9,'B');
+INSERT INTO `exams` VALUES (19,'p','2017-11-10 13:46:00','2017-11-10 12:47:00','2017-11-11 07:47:15','2017-11-11 07:48:04',9,'B',37);
 /*!40000 ALTER TABLE `exams` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,7 +287,7 @@ CREATE TABLE `questions` (
   PRIMARY KEY (`id`),
   KEY `fk_questions_exams1_idx` (`exam_id`),
   CONSTRAINT `fk_questions_exams1` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -295,7 +296,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (12,'hola','c',NULL,15),(13,'chao','c',NULL,15),(14,'opciones','o','1,2',15);
+INSERT INTO `questions` VALUES (25,'hola','o','chao,como estas',19),(26,'perros','o','hola',19);
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -330,7 +331,7 @@ CREATE TABLE `streamings` (
 
 LOCK TABLES `streamings` WRITE;
 /*!40000 ALTER TABLE `streamings` DISABLE KEYS */;
-INSERT INTO `streamings` VALUES (5,'https://stackoverflow.com/questions/22207377/disable-click-outside-of-bootstrap-modal-area-to-close-modal','2017-11-02 14:28:57','2017-11-02 18:28:53',NULL,9,'tes',37,'true'),(6,'https://trello.com/b/upcDZw8G/sistema-de-contrato-digital','1970-01-01 00:00:00','2017-11-03 00:25:10',NULL,9,'tests',37,'true');
+INSERT INTO `streamings` VALUES (5,'https://stackoverflow.com/questions/22207377/disable-click-outside-of-bootstrap-modal-area-to-close-modal','2017-11-02 14:28:57','2017-11-02 18:28:53','2017-11-11 03:50:47',9,'tes',37,'true'),(6,'https://trello.com/b/upcDZw8G/sistema-de-contrato-digital','1970-01-01 00:00:00','2017-11-03 00:25:10','2017-11-11 03:50:50',9,'tests',37,'true');
 /*!40000 ALTER TABLE `streamings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -367,7 +368,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (37,'Carla','carla@gmail.com','$2y$10$dDY8dnfFu9DdK69G1l5Ko.mJCFJVm0kesDR7eEsPo60H0bFuZ8TV.','sKngoKzz17neub1z8FOvhBWG0TiR215q0hWTZwpmyjaaz9GydUmAD38TWxWu','2017-10-05 06:44:35','2017-10-05 06:47:38','Ramirez','true',1,'18713843'),(38,'Jorge','jlobo@gmail.com','$2y$10$j9QOT9dI/rlxxgjVcoPR8.A8GlI9ixgqhNQhjEJMz/tvfJU2GaV3.','lWZSwaSxrQdxMgzEAEhHHb7O6C5BfNcyExm3K5cIWipKlD4LluEX5VtL6CkB','2017-10-10 23:10:11','2017-10-10 23:32:17','Logo','true',1,'555674564'),(46,'Adrian','adrian@gmail.com','$2y$10$NqKyPfctZU/qfzdDcakukOSzkVRpuv7aQBSXHzMSsxAkKqrfE6RBu','d9C9gizlHsIWV147vp0Ml0oVcjX2zbb7tDDNAftONKAY1t892B0988sFkwAj','2017-10-26 00:10:34',NULL,'Narvaez','true',1,'187135469');
+INSERT INTO `users` VALUES (37,'Carla','carla@gmail.com','$2y$10$dDY8dnfFu9DdK69G1l5Ko.mJCFJVm0kesDR7eEsPo60H0bFuZ8TV.','TtcNTKHv7tGFB2iD9VXW9i6RdF48s64Wzg7AILA9pem6YZe4v8yhkzHaUoUW','2017-10-05 06:44:35','2017-10-05 06:47:38','Ramirez','true',1,'18713843'),(38,'Jorge','jlobo@gmail.com','$2y$10$j9QOT9dI/rlxxgjVcoPR8.A8GlI9ixgqhNQhjEJMz/tvfJU2GaV3.','lWZSwaSxrQdxMgzEAEhHHb7O6C5BfNcyExm3K5cIWipKlD4LluEX5VtL6CkB','2017-10-10 23:10:11','2017-10-10 23:32:17','Logo','true',1,'555674564'),(46,'Adrian','adrian@gmail.com','$2y$10$NqKyPfctZU/qfzdDcakukOSzkVRpuv7aQBSXHzMSsxAkKqrfE6RBu','d9C9gizlHsIWV147vp0Ml0oVcjX2zbb7tDDNAftONKAY1t892B0988sFkwAj','2017-10-26 00:10:34',NULL,'Narvaez','true',1,'187135469');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -417,4 +418,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-09 12:54:55
+-- Dump completed on 2017-11-11  0:14:22

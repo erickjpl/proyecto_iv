@@ -21,7 +21,8 @@ class Exam extends Model
                 'start_date'=>$request["start_date"],
                 'end_date'=>$request["end_date"],
                 'created_at'=>date("Y-m-d H:i:s"),
-                'course_id'=>$request["course"],   
+                'course_id'=>$request["course"],
+                'user_id'=>$request["user_id"],   
                 ]
             );
             return $query;
@@ -111,5 +112,42 @@ class Exam extends Model
        $query->select('questions.id','questions.description','questions.type','questions.options');
        $data=$query->get();
        return $data; 
+    }
+
+    /**
+     * [delteOptions description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    function delteOptions($id){
+        try {          
+            $query=DB::table('questions');
+            $query->where('questions.exam_id',$id); 
+            $delete=$query->delete();
+            return true; 
+        } catch(\Illuminate\Database\QueryException $ex){         
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $this->returnOper(false,$ex->errorInfo[0]); 
+        }      
+    }
+
+    /**
+     * [updateExam description]
+     * @param  [type] $id   [description]
+     * @param  [type] $data [description]
+     * @return [type]       [description]
+     */
+    function updateExam($id,$data){
+        try {          
+            $update=DB::table('exams');
+            $update->where('id',$id);
+            foreach ($data as $key => $value) {
+                $update->update([$key=>$value]);
+            }
+            return $this->returnOper(true);
+        } catch(\Illuminate\Database\QueryException $ex){         
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $this->returnOper(false,$ex->errorInfo[0]); 
+        }
     }
 }

@@ -4,10 +4,13 @@
     btoaFieldsAjax:false,
     typeAjax:"GET",
     table_id:'#tblexamsn',
+    exam:'',
     launch: function(){
       this.createView();
       this.dataTable(this.table_id);
       this.editExam();
+      this.statusExam();
+      this.accEstatus();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -59,6 +62,31 @@
           window.location.href = "./"+course;
 
       });
+    },statusExam:function(){
+      $("body").on("click",".acc_status", function(){  
+        listExams.exam=$(this).attr('data-exam'); 
+        listExams.ModalEstatus('#modal_status_exam','Estatus Examen');
+      });
+    },ModalEstatus:function(modal,title){
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {             
+            $("#titulo_modal_exam").text(title);   
+            $("#form_estatus_exam").validate({
+              ignore: '*:not([name])', //Fixes your name issue*/
+            });
+            $( "#selectstatus_exam" ).rules( "add", {
+                required: true,
+                messages: {
+                    required: ""
+                }
+            });        
+        });
+    },accEstatus:function(){
+        $("body").on("click","#savestatus", function(){  
+            if($("#form_estatus_exam").valid()){
+
+            }
+        });
     }
   }
   $(document).ready(function(){

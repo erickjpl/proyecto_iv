@@ -162,7 +162,7 @@
             <div class="form-group">
                 <label for="nombre">Fecha de Inicio: <span class="requerido">(*)</span></label>
                 <div class="input-group date" data-provide="datepicker">
-                  <input type="text" class="form-control datepicker col-xs-12 input-modal"
+                  <input type="text" readonly class="no-edit form-control datepicker col-xs-12 input-modal"
                   id="fecha_inicio_streaming" name="fecha_inicio" placeholder="dd/mm/yyyy">
                   <div class="input-group-addon">
                       <span class="glyphicon glyphicon-th"></span>
@@ -172,8 +172,8 @@
             <div class="form-group">
                     <label for="nombre">Hora de Inicio: <span class="requerido">(*)</span></label>
                     <div class="input-group  clockpicker">
-                    <input type="text" class="form-control clockpicker col-xs-12"
-                    id="hora_inicio_streaming" name="hora_inicio" placeholder="00:00:00">
+                    <input type="text" class="no-edit form-control clockpicker col-xs-12"
+                    id="hora_inicio_streaming" readonly name="hora_inicio" placeholder="00:00:00">
                   <span class="input-group-addon">
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
@@ -214,6 +214,36 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal_status_exam" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <form action="" id="form_estatus_exam">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="titulo_modal_exam"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <div class="row">
+            <div class="col-xs-12">
+                <select class="form-control" name="selectstatus_exam" id="selectstatus_exam">
+                  <option value="">Seleccione</option>
+                  <option value="B">Borrador</option>
+                  <option value="P">Activo para Presentar</option>
+                  <option value="`F">Finalizado</option>
+                </select>
+            </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+        <button type="button" class="btn btn-primary" id="savestatus">Guardar</button>
+      </div>
+      </form>
     </div>
   </div>
 </div>

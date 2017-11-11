@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 	Route::post('exams/save', 'ExamsController@store');
 	Route::get('exams/{id}', 'ExamsController@show');
 	Route::post('exams/consultexam', 'ExamsController@consultExam');
+	Route::post('exams/update', 'ExamsController@update');
 });
 
 /*profesores y administradores*/

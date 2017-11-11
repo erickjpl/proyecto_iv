@@ -162,3 +162,7 @@ input.error,select.error,textarea.error{
     text-transform: uppercase;
     text-align: center;
 }
+
+.no-edit[readonly]{
+    background-color: #fff;
+}

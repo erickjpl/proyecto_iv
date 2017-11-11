@@ -15,8 +15,8 @@
 				          <div class="form-group">
 				          		<label for="nombre">Fecha de Inicio: <span class="requerido">(*)</span></label>
 				          		<div class="input-group date" data-provide="datepicker">
-							    	<input type="text" class="form-control datepicker col-xs-12"
-							    	id="fecha_inicio" name="fecha_inicio" placeholder="dd/mm/yyyy">
+							    	<input type="text" class="no-edit form-control datepicker col-xs-12"
+							    	id="fecha_inicio" readonly name="fecha_inicio" placeholder="dd/mm/yyyy">
 							 		<div class="input-group-addon">
 								        <span class="glyphicon glyphicon-th"></span>
 								    </div>
@@ -25,7 +25,7 @@
 				          <div class="form-group">
 				          		<label for="nombre">Hora de Inicio: <span class="requerido">(*)</span></label>
 				          		<div class="input-group date" data-provide="datepicker">
-								    	<input type="text" class="form-control clockpicker col-xs-12"
+								    	<input type="text" class="no-edit form-control clockpicker col-xs-12" readonly 
 								    	id="hora_inicio" name="hora_inicio" placeholder="00:00:00">
 										<span class="input-group-addon">
 									        <span class="glyphicon glyphicon-time"></span>
@@ -35,7 +35,7 @@
 				          <div class="form-group">
 				          		<label for="nombre">Fecha de Finalizacion: <span class="requerido">(*)</span></label>
 				          		<div class="input-group date" data-provide="datepicker">
-							    	<input type="text" class="form-control datepicker col-xs-12"
+							    	<input type="text" readonly class="no-edit form-control datepicker col-xs-12"
 							    	id="fecha_fin" name="fecha_fin" placeholder="dd/mm/yyyy">
 							 		<div class="input-group-addon">
 								        <span class="glyphicon glyphicon-th"></span>
@@ -45,7 +45,7 @@
 				          <div class="form-group">
 				          		<label for="nombre">Hora de Finalizacion: <span class="requerido">(*)</span></label>
 				          		<div class="input-group date" data-provide="datepicker">
-								    	<input type="text" class="form-control clockpicker col-xs-12"
+								    	<input type="text" readonly class="no-edit form-control clockpicker col-xs-12"
 								    	id="hora_final" name="hora_final" placeholder="00:00:00">
 										<span class="input-group-addon">
 									        <span class="glyphicon glyphicon-time"></span>

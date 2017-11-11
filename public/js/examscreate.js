@@ -10,15 +10,16 @@
     rowquestion:"",
     contador:0,
     exam_id:'',
+    valid:false,
     launch: function(){
       this.createForm();
       this.typeQuestion();
       this.addQuestion();
       this.fnChosen();
       this.getCourses();
-      this.sendExam();
       this.exitExam();      
       this.updateExam();
+      this.sendExam();
       this.validForm();
       var exammod=$("#form-exam").attr('data-exam');
       if(exammod!=null){
@@ -180,20 +181,18 @@
         });
       }
     },fnValidateQuestions:function(){
-
       $('.required_exam').each(function(){
-           if($(this).val()==''){
-             console.log($(this).get(0));
+           //if($(this).val()==''){
               $(this).css('border','1px solid  #a94442 !important');
               $(this).css('box-shadow','inset 0 1px 1px rgba(0,0,0,.075) !important');
-            }
+            //}
       });
 
     },sendExam:function(){
       //$("body").off("click","#send-exam");
       $("body").on("click","#send-exam", function(){
          //courses.fnValidateQuestions();
-        if($("#form-exam").valid()){
+         //if($("#form-exam").valid() /*&& courses.valid*/){
           var formData = new FormData($("#form-exam")[0]);
           $.ajax({
               type: "POST",
@@ -218,7 +217,7 @@
                   courses.Modaloper('#modal_operacion',msj,title,error);
               }
           });
-          }
+          //}
       });
 
     },validForm:function(){
@@ -249,12 +248,12 @@
                 required: "",
             }
         });
-        $( ".required_exam" ).rules( "add", {
+        /*$( ".required_exam" ).rules( "add", {
             required: true,
             messages: {
                 required: "",
             }
-        });
+        });*/
     },Modaloper:function(modal,msj,title,error){
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() {
@@ -268,7 +267,7 @@
                 $("#oper_error").text(error);
               }       
         })
-        if(typeof error!==undefined || error!='' || error!=null ){
+        if(error==''){
           $(modal).on('hidden.bs.modal', function () {
               window.history.back();
           });
@@ -337,9 +336,33 @@
       });
     },updateExam:function(){
        $("body").on("click","#update-exam", function(){
-          if($("#form-exam").valid()){
-              console.log('hola');
-          }
+          //if($("#form-exam").valid()){
+              var formData = new FormData($("#form-exam")[0]);
+              formData.append('exam',courses.exam_id);
+              $.ajax({
+                  type: "POST",
+                  url: './update',
+                  data: formData,
+                  cache: false,
+                  processData: false,
+                  contentType: false,
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+                  success: function(value)
+                  {
+                      var msj='Operacion realizada con éxito';
+                      var title='Mensaje!';
+                      var error='';
+                      if(value.oper==false){
+                         msj='Error comuniquese con el Administrador';
+                         title='Error!';
+                         error=(value.error!='')?value.error:'';
+                      }
+                      courses.Modaloper('#modal_operacion',msj,title,error);
+                  }
+              });
+          //}
        });
     }
   }
