@@ -63,7 +63,8 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 	Route::get('coursestudent/listStreaming/{id}', 'StreamingsController@listStreamingStudent');
 	Route::get('coursestudent/getFiles/{idcourse}', 'FilesController@getFilesCourse');
 	Route::get('coursestudent/getExams/{idcourse}','ExamsController@listExamsStudent');
-	Route::get('getQuestions/{idcourse}','ExamsController@listQuestions');	
+	Route::get('getQuestions/{idcourse}','ExamsController@listQuestions');
+	Route::post('coursestudent/saveQuestions','AnswersController@store');	
 });
 
 /*vista examen*/

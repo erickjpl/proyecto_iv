@@ -101,10 +101,11 @@
             $('#tbexams').empty();
             if(d.length>0){
               $.each(d, function( k, v ) {
+                console.log(v);
                 var exam=btoa(v.id)
                 var course=btoa(v.name);
                 var url='<a target="blank" class="btn btn-success" title="Presentar Examen" href="./exam/'+exam+'/'+course+'"><i class="glyphicon glyphicon-list-alt"></a>';
-                if(new Date(v.end_date) <= new Date(myClassRoom.getLocalDate()) || v.status=='F'){
+                if(new Date(v.end_date) <= new Date(myClassRoom.getLocalDate()) || v.status=='F' || v.examen_finalizado==false){
                   url='<a class="btn btn-danger" title="Examen Finalizado" disabled href=""><i class="glyphicon glyphicon-list-alt"></a>';
                 }
                 $('#tbexams').append(

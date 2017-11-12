@@ -1,8 +1,15 @@
+snippet lista de cursos 
+https://bootsnipp.com/snippets/featured/call-to-action-with-dark-background
+
+
 Modulo de Usuarios 
 revisar modificacion nivel de perfiles 
 autenticar con gmail (actualmente mailtrap) 
 
-snippet lista de cursos 
-https://bootsnipp.com/snippets/featured/call-to-action-with-dark-background
-
+Rutas
 crear middleware profesores y administradores
+
+Modulo Examen
+validar formulario de examen campos preguntas
+validar si hay un examen presentado no se puede cambiar estatus a borrador
+validar si hay un examen presentado no se puede eliminar el examen

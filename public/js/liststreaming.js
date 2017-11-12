@@ -183,7 +183,7 @@
         $(modal).on('shown.bs.modal', function() {             
               aulaVirtual.clearInputs();
               if(typeof msj!==undefined || msj!='' || msj!=null ){
-                $(".oper_mensaje").text(msj);
+                $(".oper_mensaje").text(msj).addClass('bold');
               }
               if(typeof title!==undefined || title!='' || title!=null ){
                 $("#oper_titulo").text(title);

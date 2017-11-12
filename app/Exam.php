@@ -106,9 +106,12 @@ class Exam extends Model
      * [consultOptions description]
      * @return [type] [description]
      */
-    function consultOptions($id){
+    function consultOptions($id_exam,$id=null){
        $query=DB::table('questions');
-       $query->where('questions.exam_id',$id); 
+       if(!empty($id)){
+        $query->where('questions.id',$id); 
+       }
+       $query->where('questions.exam_id',$id_exam); 
        $query->select('questions.id','questions.description','questions.type','questions.options');
        $data=$query->get();
        return $data; 

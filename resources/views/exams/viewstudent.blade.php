@@ -6,17 +6,17 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">Examen <strong>{{strtoupper($type)}} {{strtoupper($namecourse)}} </strong>  </div>
-                <div class="panel-body" id="body-exam" data-exam='{{base64_encode($exam)}}' data-fecha='{{$f_fin}}'>
+                <div class="panel-body" id="body-exam" data-exam='{{base64_encode($exam)}}' data-fecha='{{$f_fin}}' data-course='{{base64_encode($course_id)}}'>
                     <div class="alert alert-info">
                         <b>Instrucciones:</b>
                         <ul>
-                            <li>El examen finalizará <span id="f_enddate" class="bold"></span>.</li>
+                            <li>El examen finalizará <i class="glyphicon glyphicon-time"></i> <span id="f_enddate" class="bold"></span>.</li>
                         </ul>
                         <ul>
-                            <li>Las preguntas de selección pueden ser una opción o varias opciones segun el contexto de la pregunta.</li>
+                            <li>Las preguntas de selección (<i class="glyphicon glyphicon-ok"></i>)&nbsp;se pueden responder con una opción o varias opciones, según el contexto de la pregunta.</li>
                         </ul>
                         <ul>
-                            <li>Las preguntas abiertas se contestaran libremente segun el contexto de la pregunta.</li>
+                            <li>Las preguntas abiertas se contestarán libremente segun el contexto de la pregunta.</li>
                         </ul>
                     </div>
                     <form action="" id="form_questions">

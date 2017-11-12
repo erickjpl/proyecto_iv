@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use View;
 use App\Exam;
 use App\Course;
+use App\Answer;
 use Session;
 use Log;
 
@@ -313,13 +314,16 @@ class ExamsController extends Controller
      */
     public function listExamsStudent(){
         $objExam= new Exam();
+        $objAnswer=new Answer();
         $user=Session::get('id');
         $data_exam=$objExam->listExamStudent($user);
         if(count($data_exam)>0){
             $data_exam=$data_exam[""];
             foreach ($data_exam as $value) {
+                $validExam=$objAnswer->validExam($value->course_id,$value->id,$user);
+                $value->examen_finalizado=$validExam;
                 $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date)); 
-                $value->end_date=date("d/m/Y h:i:s A",strtotime($value->end_date)); 
+                $value->end_date=date("d/m/Y h:i:s A",strtotime($value->end_date));    
             }
         }
         return response()->json($data_exam);
@@ -341,7 +345,7 @@ class ExamsController extends Controller
         $f_fin=date("d/m/Y h:i:s A",strtotime($data_exam->end_date));
         $type=($type=='P'?'Parcial':'Final');
 
-        return View::make('exams.viewstudent',['exam'=>$exam_id,'namecourse'=>$course,'type'=>$type,'f_fin'=>$f_fin]);
+        return View::make('exams.viewstudent',['exam'=>$exam_id,'namecourse'=>$course,'type'=>$type,'f_fin'=>$f_fin,'course_id'=>$data_exam->course_id]);
     }
 
     /**

@@ -9,8 +9,6 @@ use Session;
 
 class Course extends Model
 {
-
-
     /**
      * [saveCourse description]
      * @param  [type] $request [description]

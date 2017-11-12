@@ -59,7 +59,7 @@
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() {             
               if(typeof msj!==undefined || msj!='' || msj!=null ){
-                $(".oper_mensaje").html(msj);
+                $(".oper_mensaje").html(msj).addClass('bold');
               }
               if(typeof title!==undefined || title!='' || title!=null ){
                 $("#oper_titulo").text(title);

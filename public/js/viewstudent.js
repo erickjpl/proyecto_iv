@@ -4,10 +4,15 @@
     btoaFieldsAjax:false,
     typeAjax:"GET",
     exam_id:'',
+    course_id:'',
     launch: function(){
       $("#f_enddate").text($("#body-exam").attr('data-fecha'));
       this.exam_id=$("#body-exam").attr('data-exam');
+      this.course_id=$("#body-exam").attr('data-course');
       this.listQuestions();
+      this.sendExam();
+      this.confirmExam();
+      this.salirExam();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -51,6 +56,61 @@
                }
                
           });
+      });
+    },sendExam:function(){
+      $("body").on("click","#saveexam", function(){
+        viewExam.Modaloper('#modal_confirmacion','¿Esta seguro de finalizar el examen?','','',false);
+      }); 
+    },Modaloper:function(modal,msj,title,error,cierre){
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").text(msj).addClass('bold');
+              }
+              if(typeof title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(typeof error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
+        })
+        if(error=='' && cierre==true){
+          $(modal).on('hidden.bs.modal', function () {
+              window.close();
+          });
+        }
+    },confirmExam:function(){
+        $("body").on("click","#go_oper", function(){
+            var formData = new FormData($("#form_questions")[0]);
+            formData.append('exam_id',viewExam.exam_id);
+            formData.append('course_id',viewExam.course_id);
+            $.ajax({
+                type: "POST",
+                url: '../../saveQuestions',
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(value)
+                {
+                    var msj='El examen fue enviado con exito. La Calificación la podra visualizar en su Aula Virtual';
+                    var title='Mensaje!';
+                    var error='';
+                    if(value.oper==false){
+                       msj='Error comuniquese con el Administrador';
+                       title='Error!';
+                       error=(value.error!='')?value.error:'';
+                    }
+                    viewExam.Modaloper('#modal_operacion',msj,title,error,true);
+                }
+            });
+        });
+    },salirExam:function(){
+      $("body").on("click","#salirexam", function(){
+        window.close();
       });
     }
   }
