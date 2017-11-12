@@ -61,9 +61,13 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 	Route::get('listmycourses', 'CoursesController@detailCoursesStudent');	
 	Route::get('coursestudent/{id}', 'CoursesController@viewCourseDetail');	
 	Route::get('coursestudent/listStreaming/{id}', 'StreamingsController@listStreamingStudent');
-	Route::get('coursestudent/getFiles/{idcourse}', 'FilesController@getFilesCourse');	
-
+	Route::get('coursestudent/getFiles/{idcourse}', 'FilesController@getFilesCourse');
+	Route::get('coursestudent/getExams/{idcourse}','ExamsController@listExamsStudent');
+	Route::get('getQuestions/{idcourse}','ExamsController@listQuestions');	
 });
+
+/*vista examen*/
+Route::get('coursestudent/exam/{idexam}/{course}','ExamsController@viewExamStudent')->middleware('auth','validexam','validstudent');
 
 Route::group(['middleware' => ['auth','validteacher']], function () {
 
@@ -92,8 +96,11 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 	Route::get('exams/{id}', 'ExamsController@show');
 	Route::post('exams/consultexam', 'ExamsController@consultExam');
 	Route::post('exams/update', 'ExamsController@update');
+	Route::post('exams/updatestatus', 'ExamsController@setEstatus');
+	Route::delete('exams/deletexam/{id}', 'ExamsController@destroy');
 });
 
+/*PENDIENTE*/
 /*profesores y administradores*/
 Route::group(['middleware' => ['auth']], function () {
 	Route::post('course/liststudents', 'CoursesController@getStudents');

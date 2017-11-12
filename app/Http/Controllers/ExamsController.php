@@ -8,7 +8,7 @@ use View;
 use App\Exam;
 use App\Course;
 use Session;
-
+use Log;
 
 class ExamsController extends Controller
 {
@@ -41,33 +41,44 @@ class ExamsController extends Controller
     public function store(Request $request)
     {
         $objExam=new Exam();
-        $user=Session::get('id');
-        $arr_simples=$request->question; //preguntas simples
-        $arr_multiples=array(); //preguntas multiples
-        foreach ($request->all() as $key => $value) {
-            $data=array();
-            $pos = strstr($key,'question-');
-            if(!empty($pos)){
-                $data["question"]=$value[0];
-                $keypregunta=explode('-',$key);
-                $idopcion=$keypregunta[1];
-                $v='option-'.$idopcion;
-                $data["opciones"]=$request->$v;
-                array_push($arr_multiples,$data);
+        //valid tipo de curso
+        if($request->type_exam=='f')
+            $validCreate=$objExam->validTypeExam($request->course);
+        else
+            $validCreate=true;
+
+        if($validCreate==true){
+            $user=Session::get('id');
+            $arr_simples=$request->question; //preguntas simples
+            $arr_multiples=array(); //preguntas multiples
+            foreach ($request->all() as $key => $value) {
+                $data=array();
+                $pos = strstr($key,'question-');
+                if(!empty($pos)){
+                    $data["question"]=$value[0];
+                    $keypregunta=explode('-',$key);
+                    $idopcion=$keypregunta[1];
+                    $v='option-'.$idopcion;
+                    $data["opciones"]=$request->$v;
+                    array_push($arr_multiples,$data);
+                }
             }
+            $insert=array();
+            $h_inicio=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_inicio))); 
+            $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_final))); 
+            $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_inicio))); 
+            $f_fin=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_fin)));        
+            $insert["start_date"]=$f_inicio.' '.$h_inicio;
+            $insert["end_date"]=$f_fin.' '.$h_fin;
+            $insert["course"]=$request->course;
+            $insert["type"]=$request->type_exam;
+            $insert["user_id"]=$user;
+            $id_exam=$objExam->insertExam($insert);
+            return $this->insertExam($request,$id_exam);
+        }else{
+            return $objExam->returnOper(false,'Solo se permite un solo examen Final por curso'); 
         }
-        $insert=array();
-        $h_inicio=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_inicio))); 
-        $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_final))); 
-        $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_inicio))); 
-        $f_fin=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_fin)));        
-        $insert["start_date"]=$f_inicio.' '.$h_inicio;
-        $insert["end_date"]=$f_fin.' '.$h_fin;
-        $insert["course"]=$request->course;
-        $insert["type"]=$request->type_exam;
-        $insert["user_id"]=$user;
-        $id_exam=$objExam->insertExam($insert);
-        return $this->insertExam($request,$id_exam);    
+            
     }
 
     /**
@@ -136,6 +147,7 @@ class ExamsController extends Controller
             foreach ($data as $key => $val) {
                 foreach ($val as $k => $value) {
                      $id=base64_encode($value->id);
+                     $estatus=$value->status;
                      switch ($value->status) {
                          case 'B':
                              $value->status='Borrador';
@@ -149,8 +161,7 @@ class ExamsController extends Controller
                      }
                      $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date)); 
                      $value->end_date=date("d/m/Y h:i:s A",strtotime($value->end_date)); 
-                     $actions='<button type="button" class="acc_mod btn btn-primary btn-xs" data-exam="'.$id.'">Modificar</button>
-                              <button type="button" class="acc_del btn btn-danger btn-xs" data-exam="'.$id.'">Eliminar</button><button type="button" class="acc_status btn btn-warning btn-xs" data-exam="'.$id.'">Estatus Examen</button>';
+                     $actions='<button type="button" class="acc_mod btn btn-primary btn-xs" data-exam="'.$id.'">Modificar</button>&nbsp;<button type="button" class="acc_status btn btn-warning btn-xs" data-exam="'.$id.'" data-estatus="'.$estatus.'" >Estatus Examen</button>&nbsp;<button type="button" class="acc_del btn btn-danger btn-xs" data-exam="'.$id.'">Eliminar</button>';
 
                     $value->actions=$actions;
                     $resp["data"][]=$value;
@@ -217,40 +228,132 @@ class ExamsController extends Controller
     public function update(Request $request)
     {   
         $objExam=new Exam();
-        $user=Session::get('id');
         $exam_id=base64_decode($request->exam);
-        $exam_id=(int) $exam_id;
-        $delete=$objExam->delteOptions($exam_id);
-        if($delete==true){
-            $questions=$this->insertExam($request,$exam_id);
-            if($questions["oper"]==true){
-                $update=array();
-                $h_inicio=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_inicio))); 
-                $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_final))); 
-                $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_inicio))); 
-                $f_fin=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_fin))); 
-                $update["start_date"]=$f_inicio.' '.$h_inicio;
-                $update["end_date"]=$f_fin.' '.$h_fin;
-                $update["course_id"]=$request->course;
-                $update["type"]=$request->type_exam;
-                $update["user_id"]=$user;
-                $update['updated_at']=date("Y-m-d H:i:s");
-                $updateexam=$objExam->updateExam($exam_id,$update);
-                return $updateexam;
+
+        //valid tipo de curso
+        if($request->type_exam=='f')
+            $validUpdate=$objExam->validTypeExam($request->course,$exam_id);
+        else
+            $validUpdate=true;
+
+        if($validUpdate==true){
+            $user=Session::get('id');
+            $exam_id=(int) $exam_id;
+            $delete=$objExam->delteOptions($exam_id);
+            if($delete==true){
+                $questions=$this->insertExam($request,$exam_id);
+                if($questions["oper"]==true){
+                    $update=array();
+                    $h_inicio=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_inicio))); 
+                    $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->hora_final))); 
+                    $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_inicio))); 
+                    $f_fin=date("Y-m-d",strtotime(str_replace('/', '-',$request->fecha_fin))); 
+                    $update["start_date"]=$f_inicio.' '.$h_inicio;
+                    $update["end_date"]=$f_fin.' '.$h_fin;
+                    $update["course_id"]=$request->course;
+                    $update["type"]=$request->type_exam;
+                    $update["user_id"]=$user;
+                    $update['updated_at']=date("Y-m-d H:i:s");
+                    $updateexam=$objExam->updateExam($exam_id,$update);
+                    return $updateexam;
+                }
+            }else{
+                return $delete;
             }
         }else{
-            return $delete;
+            return $objExam->returnOper(false,'Solo se permite un solo examen Final por curso');
+        }
+        
+    }
+
+    function setEstatus(Request $request){
+        $id_exam=base64_decode($request->exam);
+        $objExam=new Exam();
+        
+        try {
+            $objExam=$objExam::find($id_exam);
+            $objExam->status=$request->est;
+            $objExam->update();
+            return $objExam->returnOper(true);
+        } catch (Exception $e) {
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $objExam->returnOper(false,$ex->errorInfo[0]); 
         }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * [destroy description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
      */
     public function destroy($id)
-    {
-        //
+    {   
+       $arrexam=array('P','F');
+       $objExam=new Exam(); 
+       $id_exam=base64_decode($id); 
+       try {
+            $objExam=$objExam::find($id_exam);
+            if(!in_array($objExam->status,$arrexam)){
+                $objExam->delete();
+                Log::info('Examen ID: '.$id_exam.' eliminado por: '.Session::get('email'));
+                return $objExam->returnOper(true);
+            }else{
+                return $objExam->returnOper(false,'El examen debe estar en Estatus Borrador para poder eliminarlo'); 
+            }
+            
+        } catch (Exception $e) {
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $objExam->returnOper(false,$ex->errorInfo[0]); 
+        }
     }
+
+    /**
+     * [listExamsStudent description]
+     * @return [type] [description]
+     */
+    public function listExamsStudent(){
+        $objExam= new Exam();
+        $user=Session::get('id');
+        $data_exam=$objExam->listExamStudent($user);
+        if(count($data_exam)>0){
+            $data_exam=$data_exam[""];
+            foreach ($data_exam as $value) {
+                $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date)); 
+                $value->end_date=date("d/m/Y h:i:s A",strtotime($value->end_date)); 
+            }
+        }
+        return response()->json($data_exam);
+    }
+
+    /**
+     * [viewExamStudent description]
+     * @param  [type] $id     [description]
+     * @param  [type] $course [description]
+     * @param  [type] $type   [description]
+     * @return [type]         [description]
+     */
+    public function viewExamStudent($id,$course){
+        $objExam=new Exam();
+        $exam_id=base64_decode($id);
+        $course=base64_decode($course);
+        $data_exam=$objExam::find($exam_id);
+        $type=$data_exam->type;
+        $f_fin=date("d/m/Y h:i:s A",strtotime($data_exam->end_date));
+        $type=($type=='P'?'Parcial':'Final');
+
+        return View::make('exams.viewstudent',['exam'=>$exam_id,'namecourse'=>$course,'type'=>$type,'f_fin'=>$f_fin]);
+    }
+
+    /**
+     * [listQuestions description]
+     * @return [type] [description]
+     */
+    public function listQuestions($exam_id){
+        $objExam= new Exam();
+        $exam_id=base64_decode($exam_id);
+        $questions=$objExam->consultOptions($exam_id);
+        return response()->json($questions);
+    }
+
+
 }

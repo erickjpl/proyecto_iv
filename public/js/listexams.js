@@ -5,12 +5,15 @@
     typeAjax:"GET",
     table_id:'#tblexamsn',
     exam:'',
+    estatus_exam:'',
     launch: function(){
       this.createView();
       this.dataTable(this.table_id);
       this.editExam();
       this.statusExam();
       this.accEstatus();
+      this.deleteExam();
+      this.confirDeleteExam();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -65,11 +68,16 @@
     },statusExam:function(){
       $("body").on("click",".acc_status", function(){  
         listExams.exam=$(this).attr('data-exam'); 
+        listExams.estatus_exam=$(this).attr('data-estatus');
         listExams.ModalEstatus('#modal_status_exam','Estatus Examen');
       });
     },ModalEstatus:function(modal,title){
+        $(modal).modal({backdrop: 'static', keyboard: false}); 
         $(modal).modal('show');
         $(modal).on('shown.bs.modal', function() {             
+            if(listExams.estatus_exam!='' || listExams.estatus_exam!=null ){
+              $("#selectstatus_exam").val(listExams.estatus_exam);
+            }
             $("#titulo_modal_exam").text(title);   
             $("#form_estatus_exam").validate({
               ignore: '*:not([name])', //Fixes your name issue*/
@@ -83,10 +91,67 @@
         });
     },accEstatus:function(){
         $("body").on("click","#savestatus", function(){  
+            var estatus=$("#selectstatus_exam").val();
             if($("#form_estatus_exam").valid()){
-
+               var setestatus = listExams.consult("./updatestatus",{'est':estatus,'exam':listExams.exam},"POST",false);
+               setestatus.done(function(d){
+                  var msj='Operacion realizada con éxito';
+                  var title='Mensaje!';
+                  var error='';
+                  if(d.oper==false){
+                     msj='Error comuniquese con el Administrador';
+                     title='Error!';
+                     error=(d.error!='')?d.error:'';
+                  }
+                  listExams.Modaloper('#modal_operacion',msj,title,error);
+                });
             }
         });
+    },Modaloper:function(modal,msj,title,error){
+        $('.modal').modal('hide');
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").text(msj);
+              }
+              if(typeof title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(typeof error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
+        })
+        if(error==''){
+          $(modal).on('hidden.bs.modal', function () {
+              var id=listExams.table;
+              id.ajax.reload();
+                
+          });
+        }
+    },deleteExam:function(){
+        $("body").on("click",".acc_del", function(){ 
+            listExams.exam=$(this).attr('data-exam'); 
+            listExams.Modaloper('#modal_confirmacion','¿Desea realizar esta operación?','','');
+        }); 
+    },confirDeleteExam:function(){
+      $("body").on("click","#go_oper", function(){ 
+          var delet=listExams.consult('./deletexam/'+listExams.exam,{_method:'DELETE'},'POST');
+           delet.done(function(d){
+                var msj='Operacion realizada con éxito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }else{
+                  var id=listExams.table;
+                  id.ajax.reload();
+                }
+                listExams.Modaloper('#modal_operacion',msj,title,error);
+           });
+      });
+      
     }
   }
   $(document).ready(function(){

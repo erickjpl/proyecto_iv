@@ -42,11 +42,36 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th>Fecha</th>
-                                        <th>Url</th>
                                         <th>Estatus</th>
+                                        <th>Evento</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbstreamings"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Examenes</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="alert alert-info">A continuacion se listan los proximos <b><i>"Examenes"</i></b> del Curso&nbsp;&nbsp;
+                            <button id="refresh_exam" class="btn btn-primary"><i class="glyphicon glyphicon-refresh" title="Refrescar"></i></button></div>
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Final</th>
+                                        <th>Examen</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbexams"></tbody>
                             </table>
                         </div>
                     </div>

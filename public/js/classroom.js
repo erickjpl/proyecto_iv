@@ -10,6 +10,8 @@
       this.listStreaming();
       this.refresh();
       this.getFiles();
+      this.listExams();
+      this.refreshExam();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -65,8 +67,8 @@
                     $('#tbstreamings').append(
                       $('<tr>').append(
                           $('<td>').text(v.start_date),
-                          $('<td>').html(url),
-                          $('<td>').html(est)
+                          $('<td>').html(est),
+                          $('<td>').html(url)
                       ));
                 });
               }else{
@@ -78,7 +80,6 @@
       var data=this.consult('./getFiles/'+myClassRoom.course_id,[],'GET');
       data.done(function(d){
           if(d.files.length>0){
-             //$('#descripcionfile').text(d[0].description);
              $.each(d.files, function( k, v ) {
                 var url='<a target="blank" href="'+v.route+'">'+v.name+'</a>';
                 $('#tbfiles').append(
@@ -93,6 +94,34 @@
             $('#tbfiles').append(
                 $('<tr>').append('<td>',{colspan:1}).text('No se encontraron Registros'));
           }
+      });
+    },listExams:function(){
+      var data=this.consult('./getExams/'+myClassRoom.course_id,[],'GET');
+      data.done(function(d){
+            $('#tbexams').empty();
+            if(d.length>0){
+              $.each(d, function( k, v ) {
+                var exam=btoa(v.id)
+                var course=btoa(v.name);
+                var url='<a target="blank" class="btn btn-success" title="Presentar Examen" href="./exam/'+exam+'/'+course+'"><i class="glyphicon glyphicon-list-alt"></a>';
+                if(new Date(v.end_date) <= new Date(myClassRoom.getLocalDate()) || v.status=='F'){
+                  url='<a class="btn btn-danger" title="Examen Finalizado" disabled href=""><i class="glyphicon glyphicon-list-alt"></a>';
+                }
+                $('#tbexams').append(
+                  $('<tr>').append(
+                      $('<td>',{class:'bold'}).text(v.start_date),
+                      $('<td>',{class:'bold'}).text(v.end_date),
+                      $('<td>').html(url)));
+                });
+            }else{
+                $('#tbexams').append(
+                $('<tr>').append('<td>',{colspan:1}).text('No se encontraron Registros'));
+            }
+            
+      });
+    },refreshExam:function(){
+      $("#refresh_exam").on("click",function(){
+        myClassRoom.listExams();  
       });
     }
   }

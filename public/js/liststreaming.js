@@ -209,7 +209,7 @@
                }
              },
             "columns": [
-                { "data": "name","sClass": 'text-center'  },
+                { "data": "name","sClass": 'namecoursetable'  },
                 { "data": "description","sClass": 'text-center'  },
                 { "data": "url","sClass": ''  },
                 { "data": "start_date","sClass": 'text-center'  },           

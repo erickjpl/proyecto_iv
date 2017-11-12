@@ -150,4 +150,42 @@ class Exam extends Model
             return $this->returnOper(false,$ex->errorInfo[0]); 
         }
     }
+
+    /**
+     * [listExamStudent description]
+     * @param  [type] $id_user [description]
+     * @return [type]          [description]
+     */
+    function listExamStudent($id_user){
+        $query=DB::table('courses_users');
+        $query->where('exams.status','<>','B'); 
+        $query->where('courses_users.user_id',$id_user); 
+        $query->join('exams', 'exams.course_id', '=', 'courses_users.course_id');
+        $query->join('courses', 'courses.id', '=', 'courses_users.course_id');
+        $query->select('exams.id','exams.type','exams.start_date','exams.end_date','exams.status','exams.course_id','courses.name');
+        $data=$query->get()->groupBy('exams.id');
+        return $data;
+    }
+
+    /**
+     * [validTypeExam description]
+     * @param  [type] $course [description]
+     * @return [type]         [description]
+     */
+    function validTypeExam($course,$exam_id=null){
+        $query=DB::table('exams');
+        if(!empty($exam_id)){
+            $query->where('exams.id','<>',$exam_id); 
+        }
+        $query->where('exams.type','f'); 
+        $query->where('exams.course_id',$course);
+        $query->select('exams.id','exams.type');
+        $data=$query->get();
+        if(count($data)>0){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
 }

@@ -56,7 +56,7 @@
                }
              },
             "columns": [
-                { "data": "name","sClass": 'text-center'  },
+                { "data": "name","sClass": 'namecoursetable'  },
                 { "data": "start_date","sClass": 'text-center'  },
                 { "data": "end_date","sClass": 'text-center'  },
                 { "data": "status","sClass": 'text-center'  },            
