@@ -5,14 +5,17 @@
     typeAjax:"GET",
     table_id:'#tblevaluations',
     table:'',
-    course:'',
-    exam:'',
+    course:'a',
+    exam:'b',
+    user_eva:'',
+    answer_eva:'',
     launch: function(){
       this.fnChosen();
       this.listCourses();
       this.listExams();
       this.dataTable(this.table_id);
       this.selectExam();
+      this.accEvaluar();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -45,7 +48,7 @@
     },listExams:function(){
       $("body").on("change","#list_courses_eva", function(){
           if($(this).val()!=''){
-              var course=$(this).val();
+              var course=$("#list_courses_eva option:selected").val();;
               evaluations.course=course;
               var select_exam=$("#list_exams_eva");
               var data_exam=evaluations.consult('evaluations/listexams/'+btoa(course),[],'GET');
@@ -73,12 +76,9 @@
     },dataTable:function(idtable){
         this.table=$(idtable).DataTable( {
           "ajax": {
-                'type': 'POST',
-                'url': 'evaluations/listevaluations',
-                'data': {
-                   course: evaluations.course,
-                   exam:evaluations.exam,
-                },
+                'type': 'GET',
+                'url': 'evaluations/listevaluations/'+btoa(evaluations.course)+'/'+btoa(evaluations.exam),
+                'data': {},
                 headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
@@ -96,23 +96,33 @@
                   "next": "Siguiente"
                }
              },
-            /*"columns": [
+             "columns": [
                 { "data": "name","sClass": 'namecoursetable'  },
-                { "data": "start_date","sClass": 'text-center'  },
-                { "data": "end_date","sClass": 'text-center'  },
-                { "data": "status","sClass": 'text-center'  },            
-                { "data": "actions","sClass": 'text-center' }
-            ]*/
+                { "data": "email","sClass": 'text-center'  },
+                { "data": "qualification","sClass": 'namecoursetable'  }
+            ]
         },);
     },selectExam:function(){
         $("body").on("change","#list_exams_eva", function(){
           if($(this).val()!=''){
-              evaluations.exam=$(this).val();
-              console.log(evaluations.course);
-              console.log(evaluations.exam);
-              //var id=evaluations.table;
-              //id.ajax.reload({'course':evaluations.course});
+              evaluations.exam=$("#list_exams_eva option:selected").val();
+              evaluations.table.ajax.url( "evaluations/listevaluations/"+btoa(evaluations.course)+"/"+btoa(evaluations.exam) ).load();
           }
+        });
+    },accEvaluar:function(){
+       $("body").on("click",".acc-eva", function(){
+            evaluations.answer_eva=$(this).attr('data-answer'); 
+            evaluations.user_eva=$(this).attr('data-user'); 
+            evaluations.modalEva();
+       });
+    },modalEva:function(){
+        $("#modal_eva_exam").modal({backdrop: 'static', keyboard: false})  
+        $("#modal_eva_exam").modal('show');
+        $("#modal_eva_exam").on('shown.bs.modal', function() {
+              var answers=evaluations.consult('evaluations/getAnswer/'+btoa(evaluations.answer_eva),[],'GET');
+              answers.done(function(d){
+
+              });
         });
     }
   }

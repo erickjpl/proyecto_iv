@@ -1,4 +1,5 @@
 @extends('layouts.header')
+@include('modals.modals')
 @section('content')
 <div class="container">
     <div class="row">
@@ -35,7 +36,7 @@
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Examen</th>
+                                    <th>Email</th>
                                     <th>Calificación</th>
                                 </tr>
                             </thead>

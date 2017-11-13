@@ -88,6 +88,36 @@ class Answer extends Model
         }else{
             return true;
         }
-
     }
+
+    /**
+     * [dataAnswers description]
+     * @param  [type] $exam_id [description]
+     * @param  [type] $user_id [description]
+     * @param  [type] $course  [description]
+     * @return [type]          [description]
+     */
+    function dataAnswer($exam_id,$user_id,$course){
+        $query=DB::table('exam_answers');
+        $query->where('exam_answers.exam_id',$exam_id);
+        $query->where('exam_answers.user_id',$user_id); 
+        $query->where('exam_answers.course_id',$course); 
+        $query->select('exam_answers.id','exam_answers.coment','exam_answers.qualification');  
+        $data=$query->get();
+        return $data;
+    }
+
+    /**
+     * [getAnswerRel description]
+     * @param  [type] $answer_id [description]
+     * @return [type]            [description]
+     */
+    function getAnswersRel($answer_id){
+        $query=DB::table('answers_rel');
+        $query->where('answers_rel.id',$answer_id); 
+        $query->select('answers_rel.question','answers_rel.answer');  
+        $data=$query->get();
+        return $data;
+    }
+
 }

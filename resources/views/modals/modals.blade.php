@@ -233,7 +233,7 @@
                   <option value="">Seleccione</option>
                   <option value="B">Borrador</option>
                   <option value="P">Activo para Presentar</option>
-                  <option value="`F">Finalizado</option>
+                  <option value="F">Finalizado</option>
                 </select>
             </div>
             </div>
@@ -242,6 +242,25 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
         <button type="button" class="btn btn-primary" id="savestatus">Guardar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal_eva_exam" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <form action="" id="form_estatus_exam">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="titulo_modal_exam"></h4>
+      </div>
+      <div class="modal-body">
+        <div id="body_exam_eva"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="savestatus">Reprobar</button>
+        <button type="button" class="btn btn-primary" id="savestatus">Aprobar</button>
       </div>
       </form>
     </div>

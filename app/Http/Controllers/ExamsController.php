@@ -232,7 +232,7 @@ class ExamsController extends Controller
         $exam_id=base64_decode($request->exam);
 
         //valid tipo de curso
-        if($request->type_exam=='f')
+        if($request->type_exam=='F')
             $validUpdate=$objExam->validTypeExam($request->course,$exam_id);
         else
             $validUpdate=true;
@@ -255,6 +255,7 @@ class ExamsController extends Controller
                     $update["type"]=$request->type_exam;
                     $update["user_id"]=$user;
                     $update['updated_at']=date("Y-m-d H:i:s");
+                    $update['status']=$request->status;
                     $updateexam=$objExam->updateExam($exam_id,$update);
                     return $updateexam;
                 }
