@@ -11,5 +11,3 @@ crear middleware profesores y administradores
 
 Modulo Examen
 validar formulario de examen campos preguntas
-validar si hay un examen presentado no se puede cambiar estatus a borrador
-validar si hay un examen presentado no se puede eliminar el examen

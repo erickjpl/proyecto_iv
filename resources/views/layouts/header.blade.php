@@ -75,7 +75,7 @@
                     <li class="hide nav-app nav-stu"><a href="{{ url('academicoffer') }}">Oferta de Cursos<span class="sr-only"></span></a></li>
                     <li class="hide nav-app nav-stu"><a href="{{ url('mycourses') }}">Mis Cursos<span class="sr-only"></span></a></li>
                     <!--Menu profesor-->
-                    <li class="hide nav-app nav-tea"><a href="#">Evaluaciones<span class="sr-only"></span></a></li>
+                    <li class="hide nav-app nav-tea"><a href="{{url('evaluations')}}">Evaluaciones<span class="sr-only"></span></a></li>
                     <li class="dropdown hide nav-app nav-tea">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             Mis Cursos <span class="caret"></span></a>

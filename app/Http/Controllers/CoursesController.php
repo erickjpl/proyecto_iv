@@ -354,6 +354,17 @@ class CoursesController extends Controller
             return response()->json($data_courses);
         }
 
+        /**
+         * [listCoursesTeacher description]
+         * @return [type] [description]
+         */
+        function listCoursesTeacher(){
+            $user=Session::get('id');
+            $objCourse=new Course();
+            $data=$objCourse->listCoursesTeacher($user);
+            return response()->json($data[""]);
+        }
+
 
         /**
          * [coursesViewStudent vista de Cursos 

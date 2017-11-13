@@ -18,6 +18,37 @@ USE `escuela`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `answers_rel`
+--
+
+DROP TABLE IF EXISTS `answers_rel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `answers_rel` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `question` text NOT NULL,
+  `answer` text,
+  `exam_answer_id` bigint(20) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_answers_rel_exam_answers1_idx` (`exam_answer_id`),
+  KEY `fk_answers_rel_questions1_idx` (`question_id`),
+  CONSTRAINT `fk_answers_rel_exam_answers1` FOREIGN KEY (`exam_answer_id`) REFERENCES `exam_answers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_answers_rel_questions1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `answers_rel`
+--
+
+LOCK TABLES `answers_rel` WRITE;
+/*!40000 ALTER TABLE `answers_rel` DISABLE KEYS */;
+INSERT INTO `answers_rel` VALUES (11,'nombre','carlos',23,31),(12,'animales','perro',23,32);
+/*!40000 ALTER TABLE `answers_rel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `courses`
 --
 
@@ -81,6 +112,42 @@ INSERT INTO `courses_users` VALUES (3,37,9,'T','true'),(7,46,9,'S','true');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `exam_answers`
+--
+
+DROP TABLE IF EXISTS `exam_answers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `exam_answers` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `exam_id` int(11) NOT NULL,
+  `coment` text,
+  `qualification` enum('A','R') DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_exam_answers_users1_idx` (`user_id`),
+  KEY `fk_exam_answers_courses1_idx` (`course_id`),
+  KEY `fk_exam_answers_exams1_idx` (`exam_id`),
+  CONSTRAINT `fk_exam_answers_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_exam_answers_exams1` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_exam_answers_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `exam_answers`
+--
+
+LOCK TABLES `exam_answers` WRITE;
+/*!40000 ALTER TABLE `exam_answers` DISABLE KEYS */;
+INSERT INTO `exam_answers` VALUES (23,'2017-11-12 20:55:18',NULL,46,9,22,NULL,NULL);
+/*!40000 ALTER TABLE `exam_answers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `exams`
 --
 
@@ -100,7 +167,7 @@ CREATE TABLE `exams` (
   PRIMARY KEY (`id`),
   KEY `fk_exams_courses1_idx` (`course_id`),
   CONSTRAINT `fk_exams_courses1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +176,7 @@ CREATE TABLE `exams` (
 
 LOCK TABLES `exams` WRITE;
 /*!40000 ALTER TABLE `exams` DISABLE KEYS */;
-INSERT INTO `exams` VALUES (19,'p','2017-11-10 13:46:00','2017-11-10 12:47:00','2017-11-11 07:47:15','2017-11-11 07:48:04',9,'B',37);
+INSERT INTO `exams` VALUES (22,'p','2017-11-12 18:53:00','2017-11-12 23:00:00','2017-11-13 00:54:20','2017-11-13 00:54:31',9,'F',37);
 /*!40000 ALTER TABLE `exams` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +354,7 @@ CREATE TABLE `questions` (
   PRIMARY KEY (`id`),
   KEY `fk_questions_exams1_idx` (`exam_id`),
   CONSTRAINT `fk_questions_exams1` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,7 +363,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (25,'hola','o','chao,como estas',19),(26,'perros','o','hola',19);
+INSERT INTO `questions` VALUES (31,'nombre','c',NULL,22),(32,'animales','o','perro,gato',22);
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,7 +398,7 @@ CREATE TABLE `streamings` (
 
 LOCK TABLES `streamings` WRITE;
 /*!40000 ALTER TABLE `streamings` DISABLE KEYS */;
-INSERT INTO `streamings` VALUES (5,'https://stackoverflow.com/questions/22207377/disable-click-outside-of-bootstrap-modal-area-to-close-modal','2017-11-02 14:28:57','2017-11-02 18:28:53','2017-11-11 03:50:47',9,'tes',37,'true'),(6,'https://trello.com/b/upcDZw8G/sistema-de-contrato-digital','1970-01-01 00:00:00','2017-11-03 00:25:10','2017-11-11 03:50:50',9,'tests',37,'true');
+INSERT INTO `streamings` VALUES (5,'https://stackoverflow.com/questions/22207377/disable-click-outside-of-bootstrap-modal-area-to-close-modal','2017-11-02 14:28:57','2017-11-02 18:28:53','2017-11-12 23:26:11',9,'tes',37,'false'),(6,'https://trello.com/b/upcDZw8G/sistema-de-contrato-digital','1970-01-01 00:00:00','2017-11-03 00:25:10','2017-11-12 23:26:16',9,'tests',37,'false');
 /*!40000 ALTER TABLE `streamings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -368,7 +435,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (37,'Carla','carla@gmail.com','$2y$10$dDY8dnfFu9DdK69G1l5Ko.mJCFJVm0kesDR7eEsPo60H0bFuZ8TV.','TtcNTKHv7tGFB2iD9VXW9i6RdF48s64Wzg7AILA9pem6YZe4v8yhkzHaUoUW','2017-10-05 06:44:35','2017-10-05 06:47:38','Ramirez','true',1,'18713843'),(38,'Jorge','jlobo@gmail.com','$2y$10$j9QOT9dI/rlxxgjVcoPR8.A8GlI9ixgqhNQhjEJMz/tvfJU2GaV3.','lWZSwaSxrQdxMgzEAEhHHb7O6C5BfNcyExm3K5cIWipKlD4LluEX5VtL6CkB','2017-10-10 23:10:11','2017-10-10 23:32:17','Logo','true',1,'555674564'),(46,'Adrian','adrian@gmail.com','$2y$10$NqKyPfctZU/qfzdDcakukOSzkVRpuv7aQBSXHzMSsxAkKqrfE6RBu','d9C9gizlHsIWV147vp0Ml0oVcjX2zbb7tDDNAftONKAY1t892B0988sFkwAj','2017-10-26 00:10:34',NULL,'Narvaez','true',1,'187135469');
+INSERT INTO `users` VALUES (37,'Carla','carla@gmail.com','$2y$10$dDY8dnfFu9DdK69G1l5Ko.mJCFJVm0kesDR7eEsPo60H0bFuZ8TV.','p77r06YeqhyEKs9dJTGIQ7BcaWOPBAvXnN1BGuTyPbvHwo2aDqqXKgUZXzQL','2017-10-05 06:44:35','2017-11-13 06:00:04','Ramirez','true',1,'18713843'),(38,'Jorge','jlobo@gmail.com','$2y$10$j9QOT9dI/rlxxgjVcoPR8.A8GlI9ixgqhNQhjEJMz/tvfJU2GaV3.','igA7trZ6TfzA01Tlkej6EVMVBWLPfv9bz1fVq4fxW2iT3czbhjp6A6doIJ65','2017-10-10 23:10:11','2017-10-10 23:32:17','Logo','true',1,'555674564'),(46,'Adrian','adrian@gmail.com','$2y$10$NqKyPfctZU/qfzdDcakukOSzkVRpuv7aQBSXHzMSsxAkKqrfE6RBu','dmg3zAF1lnwGim82CRaa8K2G1vE1YvzJEVaEeQBtdtshShTd1ozIvCp30EX5','2017-10-26 00:10:34',NULL,'Narvaez','true',1,'187135469');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -418,4 +485,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-11  0:14:22
+-- Dump completed on 2017-11-12 22:23:53

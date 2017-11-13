@@ -270,12 +270,23 @@ class ExamsController extends Controller
     function setEstatus(Request $request){
         $id_exam=base64_decode($request->exam);
         $objExam=new Exam();
-        
+        $objAnswer=new Answer();
         try {
             $objExam=$objExam::find($id_exam);
             $objExam->status=$request->est;
-            $objExam->update();
-            return $objExam->returnOper(true);
+            if($request->est=='B'){
+                $valid=$objAnswer->validExam($objExam->course_id,$objExam->id);
+                if($valid==true){
+                    $objExam->update();
+                    return $objExam->returnOper(true);
+                }else{
+                    return $objExam->returnOper(false,'No se puede cambiar de Estatus a Borrador. Ya se presentó el examen por un estudiante.');
+                }
+            }else{
+                $objExam->update();
+                return $objExam->returnOper(true);
+            }
+              
         } catch (Exception $e) {
             Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
             return $objExam->returnOper(false,$ex->errorInfo[0]); 
@@ -291,10 +302,12 @@ class ExamsController extends Controller
     {   
        $arrexam=array('P','F');
        $objExam=new Exam(); 
+       $objAnswer=new Answer(); 
        $id_exam=base64_decode($id); 
        try {
             $objExam=$objExam::find($id_exam);
-            if(!in_array($objExam->status,$arrexam)){
+            $valid=$objAnswer->validExam($objExam->course_id,$objExam->id);
+            if(!in_array($objExam->status,$arrexam) && $valid==true){
                 $objExam->delete();
                 Log::info('Examen ID: '.$id_exam.' eliminado por: '.Session::get('email'));
                 return $objExam->returnOper(true);
@@ -357,6 +370,13 @@ class ExamsController extends Controller
         $exam_id=base64_decode($exam_id);
         $questions=$objExam->consultOptions($exam_id);
         return response()->json($questions);
+    }
+
+    public function listExamsEvaluations($course){
+        $objExam= new Exam();
+        $course=base64_decode($course);
+        $exams=$objExam->listExams($course);
+        return response()->json($exams);
     }
 
 

@@ -99,6 +99,15 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 	Route::post('exams/update', 'ExamsController@update');
 	Route::post('exams/updatestatus', 'ExamsController@setEstatus');
 	Route::delete('exams/deletexam/{id}', 'ExamsController@destroy');
+
+	/*evaluaciones*/
+	Route::get('evaluations', 'EvaluationsController@index');
+	Route::get('evaluations/listcourses', 'CoursesController@listCoursesTeacher');
+	Route::get('evaluations/listexams/{id}', 'ExamsController@listExamsEvaluations');
+	Route::post('evaluations/listevaluations', 'EvaluationsController@listEvaluations');
+
+	
+
 });
 
 /*PENDIENTE*/

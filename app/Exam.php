@@ -101,6 +101,21 @@ class Exam extends Model
         return $data;
     }
 
+   
+   /**
+    * [listExams description]
+    * @param  [type] $id [description]
+    * @return [type]     [description]
+    */
+    function listExams($id){
+       $query=DB::table('exams');
+        $query->where('exams.course_id',$id); 
+        $query->where('exams.status','F'); 
+        $query->select('exams.id','exams.type','exams.start_date','exams.end_date','exams.status','exams.course_id');
+        $data=$query->get(); 
+        return $data;
+    }
+
 
     /**
      * [consultOptions description]

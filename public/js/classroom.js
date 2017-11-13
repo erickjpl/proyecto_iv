@@ -53,13 +53,13 @@
                 $('#tbstreamings').empty();
                 $.each(d, function( k, v ) {
                     var est='';
-                    if(v.status=='true'){
-                      if(new Date(v.start_date) <= new Date(myClassRoom.getLocalDate())){
-                        est='<span class="label label-warning label-status">En Curso</span>';
-                      }else{
-                        est='<span class="label label-success label-status">Por Iniciar</span>';
-                      }                   
                     var url='<a target="blank" class="btn btn-danger" href="'+v.url+'"><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>';
+                    if(v.status=='true'){
+                      est='<span class="label label-warning label-status">Por Iniciar</span>';
+                      if(new Date(v.start_date) <= new Date(myClassRoom.getLocalDate()))
+                      {
+                        est='<span class="label label-warning label-status">En Curso</span>';
+                      }                 
                     }else if(v.status=='false'){
                      est='<span class="label label-danger label-status">Finalizado</span>'; 
                      url='<a target="blank" disabled class="btn btn-danger" ><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>';

@@ -74,11 +74,13 @@ class Answer extends Model
      * @param  [type] $user_id [description]
      * @return [type]          [description]
      */
-    function validExam($course,$exam_id,$user_id){
+    function validExam($course,$exam_id,$user_id=null){
         $query=DB::table('exam_answers');
+        if(!empty($user_id)){
+            $query->where('exam_answers.user_id',$user_id); 
+        }
         $query->where('exam_answers.exam_id',$exam_id);
         $query->where('exam_answers.course_id',$course); 
-        $query->where('exam_answers.user_id',$user_id); 
         $query->select('exam_answers.id');
         $data=$query->get();
         if(count($data)>0){
