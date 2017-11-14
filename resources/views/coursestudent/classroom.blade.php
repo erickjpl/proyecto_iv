@@ -1,4 +1,5 @@
 @extends('layouts.header')
+@include('modals.modals')
 @section('content')
 <div class="container">
     <div class="row">
@@ -24,6 +25,7 @@
                                 <div class="panel-heading bold">Descripción</div>
                                 <div id="descripcionfile" ></div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,6 +71,8 @@
                                         <th>Fecha Inicio</th>
                                         <th>Fecha Final</th>
                                         <th>Examen</th>
+                                        <th>Comentarios</th>
+                                        <th>Calificación</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbexams"></tbody>

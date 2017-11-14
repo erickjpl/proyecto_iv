@@ -114,10 +114,30 @@ class Answer extends Model
      */
     function getAnswersRel($answer_id){
         $query=DB::table('answers_rel');
-        $query->where('answers_rel.id',$answer_id); 
+        $query->where('answers_rel.exam_answer_id',$answer_id); 
         $query->select('answers_rel.question','answers_rel.answer');  
         $data=$query->get();
         return $data;
+    }
+
+    /**
+     * [updateAnswer description]
+     * @param  [type] $data [description]
+     * @param  [type] $id   [description]
+     * @return [type]       [description]
+     */
+    function updateAnswer($data,$id){
+        try {          
+            $update=DB::table('exam_answers');
+            $update->where('id',$id);
+            foreach ($data as $key => $value) {
+                $update->update([$key=>$value]);
+            }
+            return $this->returnOper(true);
+        } catch(\Illuminate\Database\QueryException $ex){         
+            Log::error('COD: '.$ex->errorInfo[0].' ERROR: '.$ex->errorInfo[2].' LINE: '.$ex->getLine().' FILE: '.$ex->getFile());
+            return $this->returnOper(false,$ex->errorInfo[0]); 
+        }
     }
 
 }

@@ -12,6 +12,7 @@
       this.getFiles();
       this.listExams();
       this.refreshExam();
+      this.viewComent();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -40,6 +41,7 @@
       hourNumber = (objdate.getHours() <= 12? objdate.getHours() : objdate.getHours()-12);
       meridiem = (objdate.getHours() <= 12? "AM" : "PM");
       ret +=" "+hourNumber+":"+min+":"+seg+" "+meridiem;
+      console.log(ret);
       return ret;
     },refresh:function(){
       $("#refresh").on("click",function(){
@@ -101,18 +103,31 @@
             $('#tbexams').empty();
             if(d.length>0){
               $.each(d, function( k, v ) {
-                console.log(v);
                 var exam=btoa(v.id)
                 var course=btoa(v.name);
                 var url='<a target="blank" class="btn btn-success" title="Presentar Examen" href="./exam/'+exam+'/'+course+'"><i class="glyphicon glyphicon-list-alt"></a>';
-                if(new Date(v.end_date) <= new Date(myClassRoom.getLocalDate()) || v.status=='F' || v.examen_finalizado==false){
+                if(new Date(v.end_date) >= new Date(myClassRoom.getLocalDate()) || v.status=='F' || v.examen_finalizado==false){
                   url='<a class="btn btn-danger" title="Examen Finalizado" disabled href=""><i class="glyphicon glyphicon-list-alt"></a>';
+                }
+                var cali='<span class="bold">Sin Evaluar</span>';
+                var coment='<button  disabled class="btn btn-warning acc_coment" title="Sin Comentarios"><i class="glyphicon glyphicon-comment"></i></button>';
+                if(typeof v.calificacion.qualification != "undefined"){         
+                  if(v.calificacion.qualification=='A'){
+                    cali='<i title="Aprobado" class="glyphicon glyphicon-ok aprobexam"></i>';
+                  }else if(v.calificacion.qualification=='R'){  
+                    cali='<i title="Reprobado" class="glyphicon glyphicon-remove rechazexam"></i>';
+                  }
+                }
+                if(typeof v.calificacion.coment != "undefined"){ 
+                  coment='<button class="btn btn-warning acc_coment" title="Comentarios" data-coment="'+v.calificacion.coment+'"><i class="glyphicon glyphicon-comment"></i></button>';
                 }
                 $('#tbexams').append(
                   $('<tr>').append(
                       $('<td>',{class:'bold'}).text(v.start_date),
                       $('<td>',{class:'bold'}).text(v.end_date),
-                      $('<td>').html(url)));
+                      $('<td>').html(url),
+                      $('<td>',{class:''}).html(coment),
+                      $('<td>',{class:''}).html(cali)));
                 });
             }else{
                 $('#tbexams').append(
@@ -124,6 +139,17 @@
       $("#refresh_exam").on("click",function(){
         myClassRoom.listExams();  
       });
+    },viewComent:function(){
+      $("body").on("click",".acc_coment", function(){
+          console.log('aqui');
+          var text=$(this).attr('data-coment');
+          $("#modal_informacion").modal('show');
+          $("#modal_informacion").on('shown.bs.modal', function() { 
+              $("#titulo_informacion").text('Información del Evaluador').css('font-weight','bold'); 
+              $("#mensaje_informacion").html(text).css('font-weight','bold').css('text-aling','justify');                 
+          })
+      });
+      
     }
   }
   $(document).ready(function(){

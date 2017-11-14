@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use View;
 use App\Course;
 use App\Answer;
+use Log;
 
 class EvaluationsController extends Controller
 {
@@ -37,9 +38,9 @@ class EvaluationsController extends Controller
                $data_exam=$objAnswer->dataAnswer($exam,$user_id,$course);
                if(!empty($data_exam)){
                    if($data_exam[0]->qualification=='A'){
-                        $qualification='<i title="Aprobado" class="glyphicon glyphicon-ok"></i>';
+                        $qualification='<i title="Aprobado" class="glyphicon glyphicon-ok aprobexam"></i>';
                    }else if($data_exam[0]->qualification=='R'){
-                        $qualification='<i title="Reprobado" class="glyphicon glyphicon-remove"></i>';
+                        $qualification='<i title="Reprobado" class="glyphicon glyphicon-remove rechazexam"></i>';
                    }else{
                         $qualification='<button type="button" class="btn btn-primary acc-eva" title="Evaluar" data-user="'.$user_id.'" data-answer="'.$data_exam[0]->id.'"><i class="glyphicon glyphicon-list-alt"></i></button>';
                    }    
@@ -61,25 +62,24 @@ class EvaluationsController extends Controller
         return response()->json($respuestas);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * [saveEvaluation description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
      */
-    public function store(Request $request)
+    public function saveEvaluation(Request $request)
     {
-        //
+        $objAnswer=new Answer();
+        $idanswer=$request->answer_id;
+        $data=array();
+        $data["qualification"]=$request->resultado;
+        $data["updated_at"]=date("Y-m-d H:i:s");
+        if(!empty($request->coemntarios)){
+            $data["coment"]=$request->coemntarios;
+        }
+        $update=$objAnswer->updateAnswer($data,$idanswer);
+        return response()->json($update);
     }
 
     /**

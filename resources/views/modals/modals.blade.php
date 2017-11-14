@@ -80,7 +80,6 @@
 </div>
 
 
-<!--modal_confirmacion-->
 <div class="modal fade" id="modal_estatus_usuario" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -114,8 +113,6 @@
   </div>
 </div>
 
-
-<!--modal_confirmacion-->
 <div class="modal fade" id="modal_list_students" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -253,14 +250,20 @@
     <form action="" id="form_estatus_exam">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="titulo_modal_exam"></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Examen</h4>
       </div>
       <div class="modal-body">
         <div id="body_exam_eva"></div>
+        <div class="form-group">
+          <label for="">Comentarios sobre la Evaluación</label>
+          <textarea name="comentarios_exam" class="form-control" id="comentarios_exam"
+          placeholder='Escriba los comentarios que desea que el alumno visualice sobre la evaluación'></textarea>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" id="savestatus">Reprobar</button>
-        <button type="button" class="btn btn-primary" id="savestatus">Aprobar</button>
+        <button type="button" class="btn btn-danger evaluacion" data-resultado='R'>Reprobar</button>
+        <button type="button" class="btn btn-primary evaluacion" data-resultado='A'>Aprobar</button>
       </div>
       </form>
     </div>

@@ -166,3 +166,11 @@ input.error,select.error,textarea.error{
 .no-edit[readonly]{
     background-color: #fff;
 }
+
+.aprobexam{
+    color:#4cae4c;
+}
+
+.rechazexam{
+    color:red;
+}

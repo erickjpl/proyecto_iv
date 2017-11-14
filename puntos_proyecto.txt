@@ -11,3 +11,6 @@ crear middleware profesores y administradores
 
 Modulo Examen
 validar formulario de examen campos preguntas
+
+Modulo Aula virtual
+revisar comparacion de fechas javascript classrrom exam y streaming 

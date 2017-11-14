@@ -28,8 +28,7 @@
     },listNav:function(){
       $('.nav-app').addClass('hide');
       switch (profileNav.profile_id) {
-        case 1: //administrador       
-          console.log('hola');   
+        case 1: //administrador         
           $('.nav-stu').removeClass('hide');
         break;
         case 2: //administrador       

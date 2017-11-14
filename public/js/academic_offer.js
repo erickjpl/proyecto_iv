@@ -94,7 +94,6 @@
            var data_course=ofertaCursos.consult('course/datacourse',{'id':ofertaCursos.course.id},'POST');         
             data_course.done(function(d){ 
               var data_course=d.course[0];
-              console.log(data_course);
               $("#titulo_informacion").text('Descripción del Temario').css('font-weight','bold'); 
               $("#mensaje_informacion").html(data_course.temary);  
             });            

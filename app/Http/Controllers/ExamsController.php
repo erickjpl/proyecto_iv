@@ -334,10 +334,16 @@ class ExamsController extends Controller
         if(count($data_exam)>0){
             $data_exam=$data_exam[""];
             foreach ($data_exam as $value) {
+                $data_eva=$objAnswer->dataAnswer($value->id,$user,$value->course_id);
+                $value->calificacion=array();
+                if(!empty($data_eva[0]->qualification)){
+                    $value->calificacion=$data_eva[0];
+                }
                 $validExam=$objAnswer->validExam($value->course_id,$value->id,$user);
                 $value->examen_finalizado=$validExam;
                 $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date)); 
-                $value->end_date=date("d/m/Y h:i:s A",strtotime($value->end_date));    
+                $value->end_date=date("d/m/Y h:i:s A",strtotime($value->end_date));
+
             }
         }
         return response()->json($data_exam);
