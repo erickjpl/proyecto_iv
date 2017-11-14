@@ -108,7 +108,8 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 	Route::get('evaluations/getAnswer/{answer}', 'EvaluationsController@getExamAnswer');
 	Route::post('evaluations/sendexam', 'EvaluationsController@saveEvaluation');
 
-	
+	/*certificados*/
+	Route::get('evaluations/certificates', 'CertificatesController@index');	
 
 });
 

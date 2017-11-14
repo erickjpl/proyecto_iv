@@ -43,24 +43,20 @@
               if(d.length!=0){
                 $("#title_course").text(d[0].name.toUpperCase());
                 $('#tbstreamings').empty();
-                $.each(d, function( k, v ) {
-                    var start_date=moment(v.start_date_val).format("YYYY/MM/DD HH:MM:ss");
-                    var est='<span class="label label-success label-status">Por Iniciar</span>';
-                    var url='<a target="blank" class="btn btn-danger" href="'+v.url+'"><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>';
-                    if(new Date(v.start_date_val).getTime() <= new Date(myClassRoom.getLocalDate()).getTime() && v.status=='true'){
-                      est='<span class="label label-warning label-status">En Curso</span>';
-                    }else if(v.status=='false'){
-                      est='<span class="label label-danger label-status">Finalizado</span>';
-                      url='<a target="blank" disabled class="btn btn-danger" ><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>';
-                    }                 
-
-                    $('#tbstreamings').append(
-                      $('<tr>').append(
-                          $('<td>').text(v.start_date),
-                          $('<td>').html(est),
-                          $('<td>').html(url)
-                      ));
-                });
+                for(var i in d){
+                  var v=d[i],
+                  estatus_streaming='',
+                  estatus_streaming='<span class="label label-success label-status">Por Iniciar</span>',
+                  url='<a target="blank" class="btn btn-danger" href="'+v.url+'"><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>'; 
+                  if(new Date(v.start_date_val).getTime() <= new Date(myClassRoom.getLocalDate()).getTime()){
+                    estatus_streaming='<span class="label label-warning label-status">En Curso</span>'; 
+                  }
+                  if(v.status=='false'){
+                    estatus_streaming='<span class="label label-danger label-status">Finalizado</span>';
+                    url='<a target="blank" disabled class="btn btn-danger" ><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>';
+                  }        
+                  $('#tbstreamings').append($('<tr>').append($('<td>').text(v.start_date),[$('<td>').html(estatus_streaming),$('<td>').html(url)]));
+                }
               }else{
                 $('#tbstreamings').append(
                     $('<tr>').append('<td>',{colspan:3}).text('No se encontraron Registros'));
@@ -91,7 +87,6 @@
             $('#tbexams').empty();
             if(d.length>0){
               $.each(d, function( k, v ) {
-                console.log(v);
                 var exam=btoa(v.id)
                 var course=btoa(v.name);
                 var cali='<span class="bold">Sin Evaluar</span>';
