@@ -146,6 +146,7 @@ class StreamingsController extends Controller
         $data=$data[""];
         if(count($data)>0){
             foreach ($data as $val) {
+                $val->start_date_val=$val->start_date;
                 $val->start_date=date("d/m/Y h:i:s A",strtotime($val->start_date));
             }
         }

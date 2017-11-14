@@ -36,6 +36,8 @@
     <script src="{{ asset('js/lib/jquery.validate.js') }}"></script>
     <script src="{{ asset('js/lib/additional-methods.min.js') }}"></script>
     <script src="{{ asset('js/lib/fn_validate.js') }}"></script>
+    <script src="{{ asset('js/moment.js') }}"></script>
+    <script src="{{ asset('js/moment-with-locales.js') }}"></script>
 
     <script src="{{ asset('js/nav.js') }}"></script>
 

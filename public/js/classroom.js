@@ -32,17 +32,7 @@
       }
     },
     getLocalDate: function(){
-      var ret="",from="",objdate="",month="", date="", objhour="", hour="",seg="",hourNumber="", meridiem="",min="";
-      objdate = new Date();
-      month = (objdate.getMonth() < 10? "0"+objdate.getMonth() : objdate.getMonth()+1);
-      ret = objdate.getDate()+"/"+month+"/"+objdate.getFullYear();
-      min = (objdate.getMinutes() < 10? "0"+objdate.getMinutes() : objdate.getMinutes());
-      seg = (objdate.getSeconds() < 10? "0"+objdate.getSeconds() : objdate.getSeconds());
-      hourNumber = (objdate.getHours() <= 12? objdate.getHours() : objdate.getHours()-12);
-      meridiem = (objdate.getHours() <= 12? "AM" : "PM");
-      ret +=" "+hourNumber+":"+min+":"+seg+" "+meridiem;
-      console.log(ret);
-      return ret;
+      return moment().format("YYYY/MM/DD HH:MM:ss");
     },refresh:function(){
       $("#refresh").on("click",function(){
         myClassRoom.listStreaming();  
@@ -54,18 +44,16 @@
                 $("#title_course").text(d[0].name.toUpperCase());
                 $('#tbstreamings').empty();
                 $.each(d, function( k, v ) {
-                    var est='';
+                    var start_date=moment(v.start_date_val).format("YYYY/MM/DD HH:MM:ss");
+                    var est='<span class="label label-success label-status">Por Iniciar</span>';
                     var url='<a target="blank" class="btn btn-danger" href="'+v.url+'"><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>';
-                    if(v.status=='true'){
-                      est='<span class="label label-warning label-status">Por Iniciar</span>';
-                      if(new Date(v.start_date) <= new Date(myClassRoom.getLocalDate()))
-                      {
-                        est='<span class="label label-warning label-status">En Curso</span>';
-                      }                 
+                    if(new Date(v.start_date_val).getTime() <= new Date(myClassRoom.getLocalDate()).getTime() && v.status=='true'){
+                      est='<span class="label label-warning label-status">En Curso</span>';
                     }else if(v.status=='false'){
-                     est='<span class="label label-danger label-status">Finalizado</span>'; 
-                     url='<a target="blank" disabled class="btn btn-danger" ><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>';
-                    }
+                      est='<span class="label label-danger label-status">Finalizado</span>';
+                      url='<a target="blank" disabled class="btn btn-danger" ><i class="glyphicon glyphicon-facetime-video"></i>&nbsp;Youtube</a>';
+                    }                 
+
                     $('#tbstreamings').append(
                       $('<tr>').append(
                           $('<td>').text(v.start_date),
@@ -103,14 +91,15 @@
             $('#tbexams').empty();
             if(d.length>0){
               $.each(d, function( k, v ) {
+                console.log(v);
                 var exam=btoa(v.id)
                 var course=btoa(v.name);
-                var url='<a target="blank" class="btn btn-success" title="Presentar Examen" href="./exam/'+exam+'/'+course+'"><i class="glyphicon glyphicon-list-alt"></a>';
-                if(new Date(v.end_date) >= new Date(myClassRoom.getLocalDate()) || v.status=='F' || v.examen_finalizado==false){
-                  url='<a class="btn btn-danger" title="Examen Finalizado" disabled href=""><i class="glyphicon glyphicon-list-alt"></a>';
-                }
                 var cali='<span class="bold">Sin Evaluar</span>';
                 var coment='<button  disabled class="btn btn-warning acc_coment" title="Sin Comentarios"><i class="glyphicon glyphicon-comment"></i></button>';
+                var url='<a target="blank" class="btn btn-success" title="Presentar Examen" href="./exam/'+exam+'/'+course+'"><i class="glyphicon glyphicon-list-alt"></a>';
+                if(new Date(v.end_date_val).getTime() <= new Date(myClassRoom.getLocalDate()).getTime() || v.status=='F' || v.examen_finalizado==false){
+                  url='<a class="btn btn-danger" title="Examen Finalizado" disabled href=""><i class="glyphicon glyphicon-list-alt"></a>';
+                }
                 if(typeof v.calificacion.qualification != "undefined"){         
                   if(v.calificacion.qualification=='A'){
                     cali='<i title="Aprobado" class="glyphicon glyphicon-ok aprobexam"></i>';

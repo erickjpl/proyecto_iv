@@ -339,6 +339,7 @@ class ExamsController extends Controller
                 if(!empty($data_eva[0]->qualification)){
                     $value->calificacion=$data_eva[0];
                 }
+                $value->end_date_val=$value->end_date;
                 $validExam=$objAnswer->validExam($value->course_id,$value->id,$user);
                 $value->examen_finalizado=$validExam;
                 $value->start_date=date("d/m/Y h:i:s A",strtotime($value->start_date)); 
