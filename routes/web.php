@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth','validteacher']], function () {
 
 	/*certificados*/
 	Route::get('evaluations/certificates', 'CertificatesController@index');	
+	Route::get('evaluations/certificates/liscourses', 'CertificatesController@listCourses');	
 
 });
 

@@ -43,5 +43,5 @@
         </div>
     </div>
 </div>
-<!--<script src="js/evaluations.js"></script>-->
+<script src="../js/list_exams.js"></script>
 @endsection

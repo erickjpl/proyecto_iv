@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use View; 
+use App\Course;
+
 
 class CertificatesController extends Controller
 {
@@ -15,6 +17,13 @@ class CertificatesController extends Controller
     public function index()
     {
         return View::make('certificates.list_exams');
+    }
+
+
+    public function listCourses(){
+        $objCourse=new Course();
+        $data=$objCourse->listCourseCertificates();
+        return response()->json($data[""]);
     }
 
     /**

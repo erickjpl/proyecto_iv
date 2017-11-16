@@ -324,6 +324,21 @@ class Course extends Model
         return $data;
     }
 
+    /**
+     * [listCourseCertific description]
+     * @return [type] [description]
+     */
+    public function listCourseCertificates(){
+        $query=DB::table('exams');
+        $query->where('exams.type','f'); 
+        $query->where('exams.status','F'); 
+        //$query->where('exam_answers.qualification','A'); 
+        $query->join('courses', 'courses.id', '=', 'exams.course_id');
+        //$query->join('exam_answers', 'exam_answers.exam_id', '=', 'exams.id');
+        $query->select('courses.id','courses.name');
+        $data=$query->get()->groupBy('courses.id'); 
+        return $data;
+    }
 
 
 }
