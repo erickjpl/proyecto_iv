@@ -5,22 +5,21 @@
     <div class="row">
         <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
-                <div class="panel-heading">Usuarios</div>
+                <div class="panel-heading">Examenes</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12">
-                            <button type="button" class="btn btn-success btn-md" data-toggle="modal" id="btnRegistry" >Registrar Usuario</button>
+                            <button type="button" class="btn btn-success btn-md" data-toggle="modal" id="btnRegistry" >Crear Examen</button>
                         </div>
                     </div>
                     <br>
-                    <table id="tblusers" class="display" cellspacing="0" width="100%">
+                    <table id="tblexamsn" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>Curso</th>
                                 <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Email</th>
+                                <th>Descripcion</th>
                                 <th>Estatus</th>
-                                <th>Activo</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -31,5 +30,5 @@
         </div>
     </div>
 </div>
-<script src="js/users.js"></script>
+<script src="../js/listexams.js"></script>
 @endsection

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
                 <div class="panel-heading">Evaluaciones</div>
                 <div class="panel-body">
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
                 <div class="panel-heading">Lista de Estudiantes</div>
                 <div class="panel-body">

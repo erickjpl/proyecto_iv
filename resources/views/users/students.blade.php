@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
                 <div class="panel-heading">Estudiantes</div>
                 <div class="panel-body">

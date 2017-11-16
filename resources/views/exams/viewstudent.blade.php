@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
                 <div class="panel-heading">Examen <strong>{{strtoupper($type)}} {{strtoupper($namecourse)}} </strong>  </div>
                 <div class="panel-body" id="body-exam" data-exam='{{base64_encode($exam)}}' data-fecha='{{$f_fin}}' data-course='{{base64_encode($course_id)}}'>

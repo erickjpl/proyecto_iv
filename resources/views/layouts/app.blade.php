@@ -13,7 +13,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/lib/jquery-3.2.1.min.js') }}"></script>
@@ -22,7 +22,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-default navbar-static-top appheader">
             <div class="container">
                 <div class="navbar-header">
 
@@ -36,7 +36,8 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        <!--{{ config('app.name', 'Laravel') }}-->
+                        Escuela del Software
                     </a>
                 </div>
 

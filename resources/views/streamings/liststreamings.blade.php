@@ -3,12 +3,12 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
                 <div class="panel-heading" id="title_aula" data-user='{{ $user }}'>Aula Virtual</div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-12 text-right">
                             <button type="button" class="btn btn-success btn-md" data-toggle="modal" id="btnRegistry" >Registrar Evento</button>
                         </div>
                     </div>
