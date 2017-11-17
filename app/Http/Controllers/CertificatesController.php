@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use View; 
 use App\Course;
+use App\Answer;
 
 
 class CertificatesController extends Controller
@@ -24,6 +25,28 @@ class CertificatesController extends Controller
         $objCourse=new Course();
         $data=$objCourse->listCourseCertificates();
         return response()->json($data[""]);
+    }
+
+
+    public function listStudents($course){
+       $objAnswer=new Answer();
+       $course=base64_decode($course);
+       $data["data"]='';
+       if($course!='a'){
+          $list_students=$objAnswer->listStudentCertif($course);
+          foreach ($list_students as $value) {
+                foreach ($value as $val) {
+                    $val->name=$val->name.' '.$val->lastname;
+                    
+                    $val->actions='<input type="checkbox" name=users[] value='.$val->id.' class="select-users" />';
+                    $val->qualification='<i title="Aprobado" class="glyphicon glyphicon-ok aprobexam"></i>';
+                }
+              
+          }
+          $data["data"]=$list_students[""];
+       }
+       
+       return response()->json($data);
     }
 
     /**

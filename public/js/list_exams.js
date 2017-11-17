@@ -4,10 +4,14 @@
     btoaFieldsAjax:false,
     typeAjax:"GET",
     data:[],
-    course:'',
+    course:'a',
+    table_id:'#tblstudents',
+    table:'',
     launch: function(){
-      certif.fnChosen();
-      certif.listCourses();
+      this.fnChosen();
+      this.listCourses();
+      this.dataTable(this.table_id);
+      this.consultCourse();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -37,6 +41,44 @@
             select.append($('<option>',{'value':val.id}).text(val.name));
         });
         select.trigger('chosen:updated');
+      });
+    },dataTable:function(idtable){
+        this.table=$(idtable).DataTable( {
+          "ajax": {
+                'type': 'GET',
+                'url': 'certificates/liscourses/'+btoa(certif.course),
+                'data': {},
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+            },
+            "language": {
+              "lengthMenu": "Total de registros:_MENU_ ",
+              "zeroRecords": "No se encontraron registros que mostrar",
+              "info": "Total de p&aacute;ginas _PAGE_ de _PAGES_",
+              "infoEmpty": "",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "sSearch" :"Buscar: ",
+              "sProcessing": "",
+              "paginate": {
+                  "previous": "Anterior",
+                  "next": "Siguiente"
+               }
+             },
+             "columns": [
+                { "data": "name","sClass": 'namecoursetable'  },
+                { "data": "email","sClass": 'text-center'  },
+                { "data": "qualification","sClass": 'text-center'  },
+                { "data": "actions","sClass": 'text-center'  }
+            ]
+        },);
+    },consultCourse:function(){
+      $("body").on("change","#list_courses_eva", function(){
+        if($(this).val()!=''){
+            console.log('aqui');
+            certif.course=$("#list_courses_eva option:selected").val();
+            certif.table.ajax.url( "certificates/liscourses/"+btoa(certif.course)).load();
+        }
       });
     }
   }

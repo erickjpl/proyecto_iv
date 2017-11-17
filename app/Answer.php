@@ -140,4 +140,19 @@ class Answer extends Model
         }
     }
 
+    /**
+     * [listStudentCertif description]
+     * @param  [type] $course [description]
+     * @return [type]         [description]
+     */
+    function listStudentCertif($course){
+        $query=DB::table('exam_answers');
+        $query->where('exam_answers.qualification','A'); 
+        $query->where('exam_answers.course_id',$course); 
+        $query->join('users', 'users.id', '=', 'exam_answers.user_id');
+        $query->select('users.id','users.name','users.lastname','users.email','exam_answers.qualification');  
+        $data=$query->get()->groupBy('users.id');
+        return $data;
+    }
+
 }
