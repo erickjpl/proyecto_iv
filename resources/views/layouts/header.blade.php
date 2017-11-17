@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Escuela del Software</title>
-    <link rel="icon" href="images/logo.png">
+    <link rel="shortcut icon" href="{{{ asset('images/logo.png') }}}">
     
     <!-- Styles -->
     <!--<link href="{{ asset('css/app.css') }}" rel="stylesheet">-->
@@ -58,7 +58,7 @@
             
             <nav class="navbar navbar-light bg-faded">
               <a class="navbar-brand" href="{{ url('home') }}">
-                <img  src="images/logo.png"  class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela del Software</span>
+                <img  src="{{ asset('images/logo.png')}}"  class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela del Software</span>
               </a>
             </nav>
         </div>

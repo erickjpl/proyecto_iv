@@ -19,7 +19,7 @@
     <script src="{{ asset('js/lib/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('js/lib/datatables.min.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>
-    <link rel="icon" href="images/logo.png">
+    <link rel="icon" href="{{ asset('images/logo.png')}}">
 </head>
 <body>
     <div id="app">
@@ -37,7 +37,7 @@
 
                     <nav class="navbar navbar-light bg-faded">
                       <a class="navbar-brand" href="{{ url('home') }}">
-                        <img  src="images/logo.png"  class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela del Software</span>
+                        <img  src="{{ asset('images/logo.png')}}" class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela del Software</span>
                       </a>
                     </nav>
                 </div>
