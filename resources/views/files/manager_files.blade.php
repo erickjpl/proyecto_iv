@@ -4,7 +4,9 @@
     <div class="row">
         <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
-                <div class="panel-heading">Gestor de Archivos</div>
+                <div class="panel-heading relative">Gestor de Archivos
+                    <button style='padding-bottom: 3px;' type="button" onclick="window.history.go(-1); return false;" class="btn btn-default btn-atras" ><i class="glyphicon glyphicon-arrow-left"></i></button>
+                </div>
                 <div class="panel-body" id="body-files" data-user={{$user}} >
                     <form id="form-files" enctype="multipart/form-data" >
                     <div class="alert alert-success">Debe seleccionar el curso e ingresar la descripción de la documentación del mismo</div>

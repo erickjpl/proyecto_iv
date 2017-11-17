@@ -5,7 +5,9 @@
     <div class="row">
         <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
-                <div class="panel-heading" id="title_aula" data-user='{{ $user }}'>Aula Virtual</div>
+                <div class="panel-heading relative" id="title_aula" data-user='{{ $user }}'>Aula Virtual
+                    <button type="button" onclick="window.history.go(-1); return false;" class="btn btn-default btn-atras" ><i class="glyphicon glyphicon-arrow-left"></i></button>
+                </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12 text-right">

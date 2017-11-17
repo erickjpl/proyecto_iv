@@ -9,8 +9,12 @@ autenticar con gmail (actualmente mailtrap)
 Rutas
 crear middleware profesores y administradores
 
-Modulo Examen
+--------------------------------------------
 validar formulario de examen campos preguntas
+menu responsivo 
+emails certificado 
+hover menu 
+imagen certificado 
 
-Modulo Aula virtual
-revisar comparacion de fechas javascript classrrom exam y streaming 
+
+

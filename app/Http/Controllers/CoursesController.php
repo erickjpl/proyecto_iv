@@ -10,6 +10,7 @@ use \App\Course;
 use Illuminate\Support\Facades\Mail;
 use \App\Mail\SendMail;
 use Session;
+use App\certificate;
 
 class CoursesController extends Controller
 {
@@ -384,6 +385,7 @@ class CoursesController extends Controller
          */
         function detailCoursesStudent(){
             $objCourse=new Course();
+            $objCertificate=new Certificate();
             $objUser= new User();
             $user=Session::get('id');
             $data=$objCourse->listCoursesStudent($user);
@@ -402,6 +404,10 @@ class CoursesController extends Controller
                             array_push($teachers,$nombre);                   
                         }
                         $val->teacher=implode(',',$teachers);
+                        //validar certificado
+                        $certificate=$objCertificate->validCertificate($user,$val->id);
+                        $val_certf=($certificate==true)?'true':'false';
+                        $val->certificate=$val_certf;
                         $resp[]=$val;
                     }
                 }

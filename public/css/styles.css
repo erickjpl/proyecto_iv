@@ -1,3 +1,15 @@
+.navbar-brand{
+    padding: 0!important;
+}
+
+.logo-nav{
+    display: inline-block!important;
+}
+
+.navbar-nav>li>a{
+    padding-top:24px!important;
+}
+
 /**errores formulario**/
 label.error{ color: #a94442; }
 
@@ -39,10 +51,10 @@ body {
     font-size: 14px;
     line-height: 1.42857143;
     color: #25262c;
-    background-color: #585858;
+    background-color: #85a6b7;
 }
 .appheader{
-    background-color: #151519;
+    background-color: #31708f;
     color: #808393;
     margin: 0 auto;
     height: 50px;
@@ -53,16 +65,16 @@ body {
     color: #FFF !important;
 }
 .appheader .open{
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(67, 89, 101, 1);
 }
 .appheader .open >a{
-    background-color: rgba(0, 0, 0, .8)!important;
+    background-color: rgba(67, 89, 101, 1)!important;
 }
 .appheader .open .dropdown-menu{
-    background-color: rgba(0, 0, 0, .8)!important;
+    background-color: rgba(67, 89, 101, 1)!important;
 }
 .appheader .open .dropdown-menu>li>a:focus.dropdown-menu>li>a:focus,.appheader .open .dropdown-menu>li>a:hover{
-    background-color: rgba(0, 0, 0, .8)!important;
+    background-color: rgba(67, 89, 101, 1)!important;
 }
 .appheader .open .dropdown-menu .dropdown-header{
     text-align: center;
@@ -83,7 +95,7 @@ body {
     margin-bottom: 0px;
 }
 .applogin .panel-heading,.appdashboard .panel-heading,.chosen-container .chosen-results li.highlighted,.modal-content>.modal-header{
-    background-color: #25262c;
+    background-color: #31708f;
     background-image: none;
     color: #FFF;
     border-radius: 3px 3px 0 0;
@@ -109,7 +121,7 @@ body {
     font-size: 12px;
 }
 table.dataTable thead{
-    background: #151519;
+    background: #31708f;
 }
 table.dataTable thead th{
     border-bottom: 5px solid #343436;
@@ -272,4 +284,22 @@ table.dataTable.no-footer {
 
 .rechazexam{
     color:red;
+}
+
+.btn-classroom{
+    background-color: #9bd8a0;
+}
+
+.btn-certf{
+    background-color: #c3d5de;
+}
+
+.btn-atras{
+    position: absolute;
+    top: 5px;
+    right: 3px;
+}
+
+.relative{
+    position: relative;
 }

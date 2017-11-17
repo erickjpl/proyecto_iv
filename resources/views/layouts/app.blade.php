@@ -19,6 +19,7 @@
     <script src="{{ asset('js/lib/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('js/lib/datatables.min.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>
+    <link rel="icon" href="images/logo.png">
 </head>
 <body>
     <div id="app">
@@ -34,11 +35,11 @@
                         <span class="icon-bar"></span>
                     </button>
 
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        <!--{{ config('app.name', 'Laravel') }}-->
-                        Escuela del Software
-                    </a>
+                    <nav class="navbar navbar-light bg-faded">
+                      <a class="navbar-brand" href="{{ url('home') }}">
+                        <img  src="images/logo.png"  class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela del Software</span>
+                      </a>
+                    </nav>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">

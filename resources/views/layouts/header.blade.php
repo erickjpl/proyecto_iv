@@ -7,8 +7,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Escuela del Software</title>
+    <link rel="icon" href="images/logo.png">
     
-
     <!-- Styles -->
     <!--<link href="{{ asset('css/app.css') }}" rel="stylesheet">-->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
@@ -55,11 +55,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-
-            <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('home') }}">
-               Escuela del Software
-            </a>
+            
+            <nav class="navbar navbar-light bg-faded">
+              <a class="navbar-brand" href="{{ url('home') }}">
+                <img  src="images/logo.png"  class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela del Software</span>
+              </a>
+            </nav>
         </div>
         <div class="collapse navbar-collapse" id="app-navbar-collapse" data-profile='{{ base64_encode(Session::get('profile_id'))  }}'>
             <!-- Right Side Of Navbar -->

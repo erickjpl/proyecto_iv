@@ -147,8 +147,12 @@ class Answer extends Model
      */
     function listStudentCertif($course){
         $query=DB::table('exam_answers');
+
+        $query->whereNull('certificates.course_id'); 
+        $query->whereNull('certificates.user_id'); 
         $query->where('exam_answers.qualification','A'); 
         $query->where('exam_answers.course_id',$course); 
+        $query->leftJoin('certificates', 'certificates.user_id', '=',DB::raw('exam_answers.user_id AND exam_answers.course_id = certificates.course_id '));
         $query->join('users', 'users.id', '=', 'exam_answers.user_id');
         $query->select('users.id','users.name','users.lastname','users.email','exam_answers.qualification');  
         $data=$query->get()->groupBy('users.id');

@@ -40,7 +40,7 @@
                           [$('<div>',{class:'cta-desc'}).append(
                               $('<p>').text('Fecha de Inicio: '+v.start_date),
                               $('<p>').text('Fecha Final: '+v.end_date),
-                              $('<p>').text('Profesores: '+v.teacher)
+                              $('<p>').text('Profesores: '+v.teacher).addClass('bold')
                           )]),
                             $('<div>',{class:'col-md-3 cta-button'}).append(
                                 $('<a>',{class:'btn btn-lg btn-block btn-info add-course','data-course':btoa(v.id),'data-course-name':v.name}).text('Inscribirse'),

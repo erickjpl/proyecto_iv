@@ -12,6 +12,7 @@
       this.listCourses();
       this.dataTable(this.table_id);
       this.consultCourse();
+      this.Emitircertif();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -37,7 +38,6 @@
       data.done(function(d){
         var select=$("#list_courses_eva");
         $.each( d, function( i, val ) {
-            console.log(val);
             select.append($('<option>',{'value':val.id}).text(val.name));
         });
         select.trigger('chosen:updated');
@@ -75,12 +75,59 @@
     },consultCourse:function(){
       $("body").on("change","#list_courses_eva", function(){
         if($(this).val()!=''){
-            console.log('aqui');
             certif.course=$("#list_courses_eva option:selected").val();
             certif.table.ajax.url( "certificates/liscourses/"+btoa(certif.course)).load();
         }
       });
-    }
+    },Emitircertif:function(){
+      $("body").on("click","#btncertif", function(){
+          certif.listUsers();
+          if(certif.data.length>0){
+             var data=certif.consult('./certificates/savecertif',{'users':certif.data,'course':btoa(certif.course)},'POST');
+             data.done(function(d){
+                var msj='Certificados Emitidos con exito';
+                var title='Mensaje!';
+                var error='';
+                if(d.oper==false){
+                   msj='Error comuniquese con el Administrador';
+                   if(d.error='COD: 400'){
+                    msj='Ya se encuentra inscrito en el curso <b>'+ofertaCursos.course.name.toUpperCase()+'</b>';
+                   }
+                   title='Error!';
+                   error=(d.error!='')?d.error:'';
+                }else{
+                  var id=certif.table;
+                   id.ajax.reload();
+                }
+                certif.Modaloper('#modal_operacion',msj,title,error);
+             });
+          }else{
+             certif.Modaloper('#modal_operacion','Debe seleccionar al menos un alumno','Error!','');
+          }
+      });
+    },listUsers:function(){
+        var unique=[];
+        $('.select-users').each(function (a,b) {
+          if($(this).is(':checked')){
+            if($.inArray($(this).val(), unique) === -1) unique.push(btoa($(this).val()));
+          }
+        });
+        console.log(unique);
+        certif.data=unique;
+    },Modaloper:function(modal,msj,title,error){
+        $(modal).modal('show');
+        $(modal).on('shown.bs.modal', function() {             
+              if(typeof msj!==undefined || msj!='' || msj!=null ){
+                $(".oper_mensaje").html(msj).addClass('bold');
+              }
+              if(typeof title!==undefined || title!='' || title!=null ){
+                $("#oper_titulo").text(title);
+              }
+              if(typeof error!==undefined || error!='' || error!=null ){
+                $("#oper_error").text(error);
+              }       
+        })
+    },
   }
   $(document).ready(function(){
     certif.launch();

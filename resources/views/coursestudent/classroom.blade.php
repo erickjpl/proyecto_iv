@@ -5,7 +5,9 @@
     <div class="row">
         <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
-                <div class="panel-heading" id="panel-clasroom" data-course="{{$id}}">Aula Virtual <span id="title_course" class="bold"></span></div>
+                <div class="panel-heading relative" id="panel-clasroom" data-course="{{$id}}">Aula Virtual <span id="title_course" class="bold"></span>
+                    <button type="button" onclick="window.history.go(-1); return false;" class="btn btn-default btn-atras" ><i class="glyphicon glyphicon-arrow-left"></i></button>
+                </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-5">

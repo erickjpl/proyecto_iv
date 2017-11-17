@@ -15,8 +15,8 @@
                 </div>
             @endif
                 <div class="row">
-                    <div class="col-xs-12 text-center">
-                        Escuela del Software
+                    <div class="col-xs-12 text-center bold">
+                        Escuela del Software C.A
                     </div>
                 </div>
             </div>

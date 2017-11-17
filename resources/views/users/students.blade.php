@@ -6,7 +6,9 @@
     <div class="row">
         <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
-                <div class="panel-heading">Estudiantes</div>
+                <div class="panel-heading relative" >Estudiantes
+                	<button type="button" onclick="window.history.go(-1); return false;" class="btn btn-default btn-atras" ><i class="glyphicon glyphicon-arrow-left"></i></button>
+                </div>
                 <div class="panel-body">
 					<table id="tblstudents" class="display" cellspacing="0" width="100%">
 				        <thead>

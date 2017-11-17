@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use View; 
 use App\Course;
 use App\Answer;
+use App\Certificate;
 
 
 class CertificatesController extends Controller
@@ -24,7 +25,10 @@ class CertificatesController extends Controller
     public function listCourses(){
         $objCourse=new Course();
         $data=$objCourse->listCourseCertificates();
-        return response()->json($data[""]);
+        if(count($data)>0){
+            $data=$data[""];
+        }
+        return response()->json($data);
     }
 
 
@@ -34,29 +38,24 @@ class CertificatesController extends Controller
        $data["data"]='';
        if($course!='a'){
           $list_students=$objAnswer->listStudentCertif($course);
-          foreach ($list_students as $value) {
+          if(count($list_students)>0){
+                foreach ($list_students as $value) {
                 foreach ($value as $val) {
                     $val->name=$val->name.' '.$val->lastname;
-                    
-                    $val->actions='<input type="checkbox" name=users[] value='.$val->id.' class="select-users" />';
+                     $val->actions='<div class="btn-group" data-toggle="buttons">
+                          <label class="btn btn-warning ">
+                            <i class="glyphicon glyphicon-saved"></i>&nbsp;
+                            <input name="users[]" class="select-users" value="'.$val->id.'" type="checkbox" autocomplete="off" >
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </label>
+                     </div>';
                     $val->qualification='<i title="Aprobado" class="glyphicon glyphicon-ok aprobexam"></i>';
-                }
-              
+                }              
+              }
+              $data["data"]=$list_students[""];
           }
-          $data["data"]=$list_students[""];
        }
-       
        return response()->json($data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -67,7 +66,28 @@ class CertificatesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $objCertif=new Certificate();
+        $course=base64_decode($request->course);
+        $users=explode(',',$request->users);
+        if(is_array($users)){
+            foreach ($users as $key => $value) {
+                $data=array();
+                $user=base64_decode($value);
+                $data["user_id"]=$user;
+                $data["course_id"]=$course;
+                $data["certificate"]='true';
+                $data["created_at"]=date("Y-m-d H:i:s");
+                $insert=$objCertif->insertCertificates($data);
+                if($insert==true){
+                    //envio de email;
+                }else{
+                    return response()->json($insert);
+                }
+            }
+            return $objCertif->returnOper(true); 
+        }else{
+            return $objCertif->returnOper(false,'Error en el tipo de Usuario a ingresar'); 
+        }        
     }
 
     /**

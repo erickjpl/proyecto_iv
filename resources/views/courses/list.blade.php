@@ -5,7 +5,9 @@
     <div class="row">
         <div class="col-md-12 appdashboard">
             <div class="panel panel-default">
-                <div class="panel-heading">Lista de Cursos</div>
+                <div class="panel-heading relative">Lista de Cursos
+                    <button type="button" onclick="window.history.go(-1); return false;" class="btn btn-default btn-atras" ><i class="glyphicon glyphicon-arrow-left"></i></button>
+                </div>
                 <div class="panel-body">
 					<div class="row">
                         <div class="col-xs-12">

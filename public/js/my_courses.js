@@ -29,6 +29,11 @@
        data.done(function(d){
          this.data=d;
           $.each(this.data, function( i, v ) {
+              console.log(v);
+              var certif='';
+              if(v.certificate=='true'){
+                 certif=$('<button>',{class:'btn btn-default btn-certf'}).append($('<img>',{src:'images/002-interfaz.png','title':'Desacargar Certificado'}));
+              }
               $("#body_courses_student").append(
                   $('<div>',{class:'bs-calltoaction bs-calltoaction-info'}).append(
                     $('<div>',{class:'row'}).append(
@@ -36,10 +41,12 @@
                           [$('<div>',{class:'cta-desc'}).append(
                               $('<p>').text('Fecha de Inicio: '+v.start_date),
                               $('<p>').text('Fecha Final: '+v.end_date),
-                              $('<p>').text('Profesores: '+v.teacher)
+                              $('<p>').text('Profesores: '+v.teacher).addClass('bold')
                           )]),
                             $('<div>',{class:'col-md-3 cta-button'}).append(
-                              $('<a>',{class:'btn btn-lg btn-block btn-info view-course','data-course':btoa(v.id)}).html('<i class="glyphicon glyphicon-dashboard"></i>&nbsp;Ver Aula'))
+                              $('<a>',{class:'btn btn-lg btn-block btn-default view-course btn-classroom','title':'Ingresar al Aula','data-course':btoa(v.id)}).html('<img src="images/001-escritorio.png" />')),
+                             $('<div>',{class:'col-md-3 cta-button'}).append(certif),
+                              
                         )));
           });
       });
