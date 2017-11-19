@@ -5,7 +5,15 @@
 .logo-nav{
     display: inline-block!important;
 }
-
+.appheader .navbar-nav>li>a{
+    padding-bottom: 6px;
+}
+.appheader .navbar{
+    z-index: 1;
+}
+.appheader .navbar-toggle{
+    z-index: 2;
+}
 .navbar-nav>li>a{
     padding-top:24px!important;
 }
@@ -189,7 +197,6 @@ table.dataTable.no-footer {
                 padding-top: 10px;
                 padding-bottom: 10px;
             }
-
 @media (max-width: 991px){
     .bs-calltoaction > .row{
         display:block;
@@ -207,9 +214,24 @@ table.dataTable.no-footer {
         .cta-contents{
             text-align: center;
         }
+        
 }
-
-
+@media (min-width: 768px) && (max-width: 893px)){
+        .applogin,.appdashboard{
+            margin-top: 20px;
+        }
+        .appheader .navbar-collapse{
+            background-color: rgba(0,0,0,0);        
+        }
+        .appheader .navbar-brand span{
+            display: none;
+        }
+}
+@media (max-width: 768px){
+    .appheader .navbar-collapse{
+        background-color: rgba(49, 112, 143, 0.9);
+    }
+}
 
 .bs-calltoaction.bs-calltoaction-default{
     color: #333;

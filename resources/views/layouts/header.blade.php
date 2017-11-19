@@ -18,7 +18,6 @@
     <link href="{{ asset('css/summernote/summernote.css') }}" rel="stylesheet">
     <link href="{{ asset('css/chosen/chosen.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/fileinput/fileinput.css') }}" rel="stylesheet">
-
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
     
     <!-- Scripts -->

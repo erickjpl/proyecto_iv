@@ -1,5 +1,4 @@
 @extends('layouts.header')
-@include('modals.modals')
 @section('content')
 <div class="container">
     <div class="row">
@@ -89,6 +88,7 @@
             </div>
         </div>
     </div>
+	@include('modals.modals')
     <script src="{{ asset('js/createcourses.js') }}"></script>
 	<!--<script src="js/createcourses.js"></script>-->
 @endsection

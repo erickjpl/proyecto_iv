@@ -77,6 +77,13 @@ class SendMail extends Mailable
                 ])->from($this->remitente,$this->name_rem)->subject('Inscripción del Curso '.$data_user["name_course"]);
         break;
 
+        case 'msg_certificate':
+            return $this->view($file)
+                ->with(['name_course'=>$data_user["name_course"],
+                        'name_user'=>$data_user["name_user"],
+                ])->from($this->remitente,$this->name_rem)->subject('Certificado Aprobacioón del Curso '.$data_user["name_course"]);
+        break;
+
         default:
             return false;
         break;

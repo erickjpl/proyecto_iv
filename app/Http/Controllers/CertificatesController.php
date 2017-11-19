@@ -7,6 +7,9 @@ use View;
 use App\Course;
 use App\Answer;
 use App\Certificate;
+use App\User;
+use Illuminate\Support\Facades\Mail;
+use \App\Mail\SendMail;
 
 
 class CertificatesController extends Controller
@@ -66,20 +69,37 @@ class CertificatesController extends Controller
      */
     public function store(Request $request)
     {
+        $objUser=new User();
         $objCertif=new Certificate();
+        $objCourse= new Course();
         $course=base64_decode($request->course);
+        $data_course=$objCourse::find($course);
         $users=explode(',',$request->users);
+
         if(is_array($users)){
             foreach ($users as $key => $value) {
                 $data=array();
                 $user=base64_decode($value);
+                $data_user=$objUser::find($user);
+                $name=$data_user->name.' '.$data_user->lastname;
+                $mail=$data_user->email;
                 $data["user_id"]=$user;
                 $data["course_id"]=$course;
                 $data["certificate"]='true';
                 $data["created_at"]=date("Y-m-d H:i:s");
                 $insert=$objCertif->insertCertificates($data);
                 if($insert==true){
-                    //envio de email;
+                    try {
+                    $data_mail["name_course"]=strtoupper($data_course->name);
+                    $data_mail["name_user"]=$name;
+                     Mail::to($mail,$name)->send(new SendMail($data_mail,'msg_certificate'));
+                     $insert=$objCourse->returnOper(true);
+                    }catch (Exception $e) {
+                        Log::error('COD: Falla Mail LINE: '.$ex->getLine().' FILE: '.$ex->getFile()); 
+                        $error['cod']='Falla Mail';
+                        $error['oper']=false;
+                        return response()->json($error);
+                    }     
                 }else{
                     return response()->json($insert);
                 }
@@ -90,48 +110,4 @@ class CertificatesController extends Controller
         }        
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

@@ -1,5 +1,4 @@
 @extends('layouts.header')
-@include('modals.modals')
 @section('content')
 
 <div class="container">
@@ -28,5 +27,6 @@
         </div>
     </div>
 </div>
+@include('modals.modals')
 <script src="js/students.js"></script>
 @endsection

@@ -11,11 +11,10 @@ crear middleware profesores y administradores
 
 --------------------------------------------
 validar formulario de examen campos preguntas
-menu responsivo 
-emails certificado 
-hover menu 
+menu responsivo (listo) 
+hover menu (listo)
 imagen certificado 
-icon title no agarra en todas las ventanas
+icon title no agarra en todas las ventanas (listo)
 
 
 

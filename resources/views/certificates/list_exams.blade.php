@@ -1,5 +1,4 @@
 @extends('layouts.header')
-@include('modals.modals')
 @section('content')
 <style>
 .btn span.glyphicon {               
@@ -59,5 +58,6 @@
         </div>
     </div>
 </div>
+@include('modals.modals')
 <script src="../js/list_exams.js"></script>
 @endsection
