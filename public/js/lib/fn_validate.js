@@ -21,4 +21,25 @@
             }
             return r;
         });   
+
+        $.validator.addMethod("validMail", function(val, element){
+              var test=false;
+              $.ajax({
+                type: "GET",
+                url: 'validajax/validmail/'+val,
+                data: {},
+                async:false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(value)
+                {
+                    var val=$.parseJSON(value);
+                    if(val===true){
+                      test=true;
+                    }
+                }
+            });
+            return test;
+        });
   });

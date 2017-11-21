@@ -44,7 +44,7 @@ class SendMail extends Mailable
             if($data_user["active"]=='true'){
                 $txt_comple='Puede Autenticarse en la Plataforma. Bienvenido!'; 
             }
-            $txt_active=($data_user["active"]=='true')?'Active':'Inactivo';
+            $txt_active=($data_user["active"]=='true')?'Activa':'Inactivo';
             return $this->view($file)
                 ->with(['name'=>$data_user["name"],
                         'active'=>$txt_active,

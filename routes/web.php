@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth','validmoduser']], function () {
 	Route::put('moduser/{id}', 'UsersController@updateUser');
 	Route::delete('deluser/{id}', 'UsersController@destroy');
 	Route::post('setuser', 'UsersController@setEstatusUser');
+	Route::get('validajax/{act}/{value}', 'ValidAjaxController@valid');
 
 	/*Modulo de Cursos*/
 	Route::get('course/createcourse', 'CoursesController@index');

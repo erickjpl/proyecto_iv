@@ -102,9 +102,11 @@
         $( "#email" ).rules( "add", {
             required: true,
             email:true,
+            validMail:true,
             messages: {
                 required: "",
                 email:"",
+                validMail:"Email registrado en el sistema"
             }
         });
         $( "#perfil" ).rules( "add", {
@@ -121,10 +123,8 @@
         });
           $( "#identification_document" ).rules( "add", {
             required: true,
-            integer:true,
             messages: {
                 required: "",
-                integer: "",
             }
         });
     },saveUser:function(){
