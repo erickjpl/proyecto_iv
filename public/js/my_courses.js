@@ -7,6 +7,7 @@
     launch: function(){
       this.optionsViews();
       this.redirectCourse();
+      this.getCertif();
     },
     consult: function(url,params,type,async,btoa){
       if (url!=undefined && url.length>0 && typeof params === 'object') {
@@ -32,7 +33,7 @@
               console.log(v);
               var certif='';
               if(v.certificate=='true'){
-                 certif=$('<button>',{class:'btn btn-default btn-certf'}).append($('<img>',{src:'images/002-interfaz.png','title':'Desacargar Certificado'}));
+                 certif=$('<button>',{class:'btn btn-default btn-certf','data-course':btoa(v.id)}).append($('<img>',{src:'images/002-interfaz.png','title':'Desacargar Certificado'}));
               }
               $("#body_courses_student").append(
                   $('<div>',{class:'bs-calltoaction bs-calltoaction-info'}).append(
@@ -54,6 +55,11 @@
       $("body").on("click",".view-course", function(){
           var course=$(this).attr('data-course');
           window.location="coursestudent/"+course;
+      });
+    },getCertif:function(){
+      $("body").on("click",".btn-certf", function(){
+          var course=$(this).attr('data-course');
+          window.open("mycourses/donwloadCertifi/"+course, "blank"); 
       });
     }
   }

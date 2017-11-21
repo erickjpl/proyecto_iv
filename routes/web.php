@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth','validstudent']], function () {
 	Route::get('coursestudent/getExams/{idcourse}','ExamsController@listExamsStudent');
 	Route::get('getQuestions/{idcourse}','ExamsController@listQuestions');
 	Route::post('coursestudent/saveQuestions','AnswersController@store');	
+	Route::get('mycourses/donwloadCertifi/{course}', 'CertificatesController@donwloadCertifi');
 });
 
 /*vista examen*/
