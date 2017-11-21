@@ -10,6 +10,7 @@ use App\Certificate;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use \App\Mail\SendMail;
+use Session;
 
 
 class CertificatesController extends Controller
@@ -108,6 +109,44 @@ class CertificatesController extends Controller
         }else{
             return $objCertif->returnOper(false,'Error en el tipo de Usuario a ingresar'); 
         }        
+    }
+
+    /**
+     * [donwloadCertifi description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function donwloadCertifi($course){
+        $objCertif=new Certificate();
+        $objUser=new User();
+        $objCourse=new Course();
+        $user=Session::get('id');
+        $course=base64_decode($course);
+        $dataUser=$objUser::find($user);
+        $dataCourse=$objCourse::find($course);
+        $datacertf=$objCertif->validCertificate($user,$course);
+        if($datacertf==true){
+            $name_student = $dataUser->name.' '.$dataUser->lastname;
+            $di_student = $dataUser->identification_document;
+            $course = strtoupper($dataCourse->name);
+            header('Content-type: image/jpeg');
+            $jpg_image = imagecreatefromjpeg('certif/certf.jpg');
+            $black = imagecolorallocate($jpg_image, 0, 0, 0);
+            $helvetica = 'certif/fuente/CALIFB.TTF';
+            $image_width = imagesx($jpg_image);
+            $image_height = imagesy($jpg_image);
+            $text = $name_student." D.I. ".$di_student." a completado ".PHP_EOL." satisfactoriamente el Curso: ".$course;
+            $text_box = @imagettfbbox(40,45,$helvetica,$text);
+            $text_width = abs($text_box[2]-$text_box[0]);
+            $text_height = abs($text_box[1]-$text_box[0]);
+            $center = ($image_width-$text_width)/2;
+            $centery = (($image_height-$text_height)/2)+80 ;
+            imagettftext($jpg_image, 80, 0, $center/2, $centery, $black, $helvetica ,$text);
+            imagejpeg($jpg_image);
+            imagedestroy($jpg_image);
+        }else{
+            \App::abort(403);
+        }
     }
 
 }
