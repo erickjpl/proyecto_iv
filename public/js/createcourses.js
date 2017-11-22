@@ -24,7 +24,8 @@
           lang: 'es-ES',
           tabsize: 2,
           minHeight: null,          
-          maxHeight: null,          
+          maxHeight: null,
+          placeholder: 'Escriba el temario del Curso',          
           focus: true 
         });
     },fnDatepicker:function(){
@@ -120,18 +121,42 @@
             var f_fin=$("#fecha_fin").val();
             var h_fin=$("#hora_final").val();
             var profesor=$("#profesor").val();
-            var estatus_curso=$("input[name='estatus_curso']" ).val();
-            var temario=$("#temario").val();
+            var estatus_curso=$("input[name='estatus_curso']:checked" ).val();
+            var tem=$("#temario").val();
             var material=[];
             $('.material').each(function(){
                 if($(this).is(':checked')){
                   material.push($(this).val());
                 }
             })
-            var create=courses.consult('./savecourse',
+            $.ajax({
+              type: "POST",
+              url: './savecourse',
+              data: {'name_course':name_course,'f_inicio':f_inicio,'f_fin':f_fin,
+               'h_inicio':h_inicio,'h_fin':h_fin,'profesor':profesor,
+               'estatus_curso':estatus_curso,'temario':tem,'material':material
+              },
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              success: function(d)
+              {
+                 var msj='Operacion realizada con éxito';
+                  var title='Mensaje!';
+                  var error='';
+                  if(d.oper==false){
+                     msj='Error comuniquese con el Administrador';
+                     title='Error!';
+                     error=(d.error!='')?d.error:'';
+                  }
+                  courses.Modaloper('#modal_operacion',msj,title,error);
+              }
+            });
+
+            /*var create=courses.consult('./savecourse',
               {'name_course':name_course,'f_inicio':f_inicio,'f_fin':f_fin,
                'h_inicio':h_inicio,'h_fin':h_fin,'profesor':profesor,
-               'estatus_curso':estatus_curso,'temario':temario,'material':material
+               'estatus_curso':estatus_curso,'temario':tem,'material':material
               },'POST');
             create.done(function(d){ 
               var msj='Operacion realizada con éxito';
@@ -143,7 +168,7 @@
                  error=(d.error!='')?d.error:'';
               }
               courses.Modaloper('#modal_operacion',msj,title,error);
-            });
+            });*/
           }
       });
     },Modaloper:function(modal,msj,title,error){
@@ -225,7 +250,31 @@
                     material.push($(this).val());
                   }
               })
-              var update=courses.consult('./updatecourse/'+courses.course_id,
+              $.ajax({
+                  type: "POST",
+                  url: './updatecourse/'+courses.course_id,
+                  data: {'name_course':name_course,'f_inicio':f_inicio,'f_fin':f_fin,
+                   'h_inicio':h_inicio,'h_fin':h_fin,'profesor':profesor,
+                   'estatus_curso':estatus_curso,'temario':temario,'material':material,_method:'PUT'
+                  },
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+                  success: function(d)
+                  {
+                     var msj='Operacion realizada con éxito';
+                      var title='Mensaje!';
+                      var error='';
+                      if(d.oper==false){
+                         msj='Error comuniquese con el Administrador';
+                         title='Error!';
+                         error=(d.error!='')?d.error:'';
+                      }
+                      courses.Modaloper('#modal_operacion',msj,title,error);
+                  }
+                });
+
+              /*var update=courses.consult('./updatecourse/'+courses.course_id,
                 {'name_course':name_course,'f_inicio':f_inicio,'f_fin':f_fin,
                  'h_inicio':h_inicio,'h_fin':h_fin,'profesor':profesor,
                  'estatus_curso':estatus_curso,'temario':temario,'material':material,_method:'PUT'
@@ -240,7 +289,7 @@
                    error=(d.error!='')?d.error:'';
                 }
                 courses.Modaloper('#modal_operacion',msj,title,error);
-              });
+              });*/
           }
         });
       }

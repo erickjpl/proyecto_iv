@@ -20,10 +20,11 @@ class Course extends Model
         $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->h_fin))); 
         $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->f_inicio))); 
         $f_fin=date("Y-m-d",strtotime(str_replace('/', '-',$request->f_fin))); 
-        $material=explode(',',$request->material);
-        $profesores=explode(',',$request->profesor);
         $streaming='false';
         $exams='false';
+        $material=$request->material;
+        $profesores=array();
+        array_push($profesores,$request->profesor);
         if(in_array('mat_clvivo',$material)){
             $streaming='true';
         }
@@ -65,8 +66,9 @@ class Course extends Model
         $h_fin=date("H:i:s",strtotime(str_replace('/', '-',$request->h_fin))); 
         $f_inicio=date("Y-m-d",strtotime(str_replace('/', '-',$request->f_inicio))); 
         $f_fin=date("Y-m-d",strtotime(str_replace('/', '-',$request->f_fin))); 
-        $material=explode(',',$request->material);
-        $profesores=explode(',',$request->profesor);
+        $material=$request->material;
+        $profesores=array();
+        array_push($profesores,$request->profesor);
         $streaming='false';
         $exams='false';
         if(in_array('mat_clvivo',$material)){

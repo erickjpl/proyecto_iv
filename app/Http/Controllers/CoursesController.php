@@ -113,6 +113,7 @@ class CoursesController extends Controller
      */
     public function editCourse(Request $request)
     {     
+        
         $objCourse= new Course();
         $id_course=base64_decode($request->id);
         $data_course=$objCourse->getCourse($id_course);

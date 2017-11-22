@@ -142,9 +142,9 @@ class StreamingsController extends Controller
         $objStreaming= new Streaming();
         $user=Session::get('id');
         $course_id=base64_decode($course);
-        $data=$objStreaming->listStreamingStudent($course_id,$user);
-        $data=$data[""];
+        $data=$objStreaming->listStreamingStudent($course_id,$user);        
         if(count($data)>0){
+            $data=$data[""];
             foreach ($data as $val) {
                 $val->start_date_val=$val->start_date;
                 $val->start_date=date("d/m/Y h:i:s A",strtotime($val->start_date));

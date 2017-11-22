@@ -70,6 +70,7 @@
            initialPreviewAsData: true,
            allowedFileExtensions: ['jpg', 'png', 'docx','pptx','pdf','txt','xls','xlsx'],
            initialPreview: ipreview,
+           maxFileSize:'5120KB',
            initialPreviewConfig: ipreviewconfig,
           uploadExtraData:{'_token':$('#csrf_token').val(),'curso':course,'descripcion':descrip}
        });
