@@ -51,7 +51,7 @@
     },listExams:function(){
       $("body").on("change","#list_courses_eva", function(){
           if($(this).val()!=''){
-              var course=$("#list_courses_eva option:selected").val();;
+              var course=$("#list_courses_eva option:selected").val();
               evaluations.course=course;
               var select_exam=$("#list_exams_eva");
               var data_exam=evaluations.consult('evaluations/listexams/'+btoa(course),[],'GET');
@@ -124,10 +124,11 @@
         $("#modal_eva_exam").on('shown.bs.modal', function() {
               var answers=evaluations.consult('evaluations/getAnswer/'+btoa(evaluations.answer_eva),[],'GET');
               answers.done(function(d){
+                $("div").remove('.remove-each');
                 var a=1;
                 $.each( d, function( i, val ) {
                   $("#body_exam_eva").append(
-                    $('<div>',{class:'form-group'}).append(
+                    $('<div>',{class:'form-group remove-each'}).append(
                       $('<label>').text(a+') '+val.question),
                       $('<p>').text('R: '+val.answer)
                     ));

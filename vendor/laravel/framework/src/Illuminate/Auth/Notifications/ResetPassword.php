@@ -45,7 +45,7 @@ class ResetPassword extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->greeting('Bienvenido a Escuela del Software!')
+            ->greeting('Bienvenido a Escuela Digital!')
             ->line('Puedes registrar o actualizar tu contraseña dando click al siguiente botón')
             ->salutation('Hasta pronto!')
             ->action('Restablecer Contraseña', url(config('app.url').route('password.reset', $this->token, false)));

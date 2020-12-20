@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use View;
-use App\Exam;
-use App\Course;
-use App\Answer;
 use Session;
-use Log;
+use App\Exam;
+use App\Answer;
+use App\Course;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class ExamsController extends Controller
 {
@@ -383,6 +383,7 @@ class ExamsController extends Controller
     public function listExamsEvaluations($course){
         $objExam= new Exam();
         $course=base64_decode($course);
+        Log::debug("Course: {$course}");
         $exams=$objExam->listExams($course);
         return response()->json($exams);
     }

@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use DB;
 use Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
 class Exam extends Model
 {	
@@ -110,7 +110,8 @@ class Exam extends Model
     function listExams($id){
        $query=DB::table('exams');
         $query->where('exams.course_id',$id); 
-        $query->where('exams.status','F'); 
+        // $query->where('exams.status','F'); 
+        // $query->where('exams.status','P'); 
         $query->select('exams.id','exams.type','exams.start_date','exams.end_date','exams.status','exams.course_id');
         $data=$query->get(); 
         return $data;

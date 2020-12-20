@@ -37,7 +37,7 @@
 
                     <nav class="navbar navbar-light bg-faded">
                       <a class="navbar-brand" href="{{ url('home') }}">
-                        <img  src="{{ asset('images/logo.png')}}" class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela del Software</span>
+                        <img  src="{{ asset('images/logo.png')}}" class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela Digital</span>
                       </a>
                     </nav>
                 </div>

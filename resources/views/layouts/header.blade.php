@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Escuela del Software</title>
+    <title>Escuela Digital</title>
     <link rel="shortcut icon" href="{{{ asset('images/logo.png') }}}">
     
     <!-- Styles -->
@@ -57,7 +57,7 @@
             
             <nav class="navbar navbar-light bg-faded">
               <a class="navbar-brand" href="{{ url('home') }}">
-                <img  src="{{ asset('images/logo.png')}}"  class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela del Software</span>
+                <img  src="{{ asset('images/logo.png')}}"  class="d-inline-block align-top logo-nav"  alt=""> <span class="">Escuela Digital</span>
               </a>
             </nav>
         </div>

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use View;
-use \App\User;
-use \App\Profile;
-use \App\Course;
-use Illuminate\Support\Facades\Mail;
-use \App\Mail\SendMail;
 use Session;
-use App\certificate;
+use \App\User;
+use \App\Course;
+use \App\Profile;
+use App\Certificate;
+use \App\Mail\SendMail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class CoursesController extends Controller
 {
